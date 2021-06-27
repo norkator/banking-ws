@@ -8,11 +8,12 @@
 import * as moment from 'moment'
 import * as xmlBuilder from 'xmlbuilder';
 import {SoftwareIdInterface} from './interfaces';
-import {Operations, StatusValues} from './constants';
+import {Environment, Operations, StatusValues} from './constants';
 
 
 class ApplicationRequest {
 
+  environment: Environment;
   customerId: string; // Web service customer id
   command: string; // command, same as SOAP operation
   startDate: string; // startDate, only needed with DownloadFileList command
@@ -26,11 +27,12 @@ class ApplicationRequest {
   softwareId: SoftwareIdInterface;
   fileType: string; // fileType, selected fileType from fileTypes
 
-  constructor(customerId: string, command: string, startDate: string, endDate: string, status: string,
-              fileReferences: String[], userFilename: string,
+  constructor(environment: Environment, customerId: string, command: string, startDate: string, endDate: string,
+              status: string, fileReferences: String[], userFilename: string,
               compression: boolean, amountTotal: number, transactionCount: number,
               softwareId: SoftwareIdInterface, fileType: string
   ) {
+    this.environment = environment;
     this.customerId = customerId;
     this.command = command;
     this.startDate = startDate;
@@ -112,7 +114,7 @@ class ApplicationRequest {
   }
 
   getEnvironment(): string {
-    return String(process.env.SP_WS_ENVIRONMENT);
+    return String(this.environment);
   }
 
   getUserFilename() {

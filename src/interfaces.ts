@@ -1,10 +1,11 @@
-import {Bank} from './constants';
+import {Bank, Environment} from './constants';
 
 export interface UserParamsInterface {
-  bank: Bank,
-  signingPrivate_key: string,
+  bank: Bank;
+  environment: Environment;
+  signingPrivate_key: string;
   signingCertificate: string;
-  customerId: string
+  customerId: string;
 }
 
 export interface FileReferenceInterface {
