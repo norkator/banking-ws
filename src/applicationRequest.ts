@@ -8,7 +8,7 @@
 import * as moment from 'moment'
 import * as xmlBuilder from 'xmlbuilder';
 import {SoftwareIdInterface} from './interfaces';
-import {Environment, Operations, StatusValues} from './constants';
+import {Environment, FileType, Operations, Status, StatusValues} from './constants';
 
 
 class ApplicationRequest {
@@ -18,19 +18,19 @@ class ApplicationRequest {
   command: string; // command, same as SOAP operation
   startDate: string; // startDate, only needed with DownloadFileList command
   endDate: string; // endDate, only needed with DownloadFileList command
-  status: string; // status, only needed with DownloadFileList command (StatusValues)
+  status: Status; // status, only needed with DownloadFileList command (StatusValues)
   fileReferences: String[]; // fileReferences, names of created files wanted to be queried
   userFilename: string; // userFilename, when uploading file, this is the name it will be created with
   compression: boolean; // compression, defined is CompressionMethod GZIP in use
   amountTotal: number; // amountTotal, amount to be sent, is read only if UploadFile and XL fileType in use
   transactionCount: number;
   softwareId: SoftwareIdInterface;
-  fileType: string; // fileType, selected fileType from fileTypes
+  fileType: FileType; // fileType, selected fileType from fileTypes
 
   constructor(environment: Environment, customerId: string, command: string, startDate: string, endDate: string,
-              status: string, fileReferences: String[], userFilename: string,
+              status: Status, fileReferences: String[], userFilename: string,
               compression: boolean, amountTotal: number, transactionCount: number,
-              softwareId: SoftwareIdInterface, fileType: string
+              softwareId: SoftwareIdInterface, fileType: FileType
   ) {
     this.environment = environment;
     this.customerId = customerId;
@@ -102,7 +102,7 @@ class ApplicationRequest {
     return this.command === Operations.downloadFileList ? this.endDate : '';
   }
 
-  getStatus(): string {
+  getStatus(): Status {
     if (this.command === Operations.downloadFileList) {
       const c = Object.values(StatusValues).find((value) => {
         return value === this.status;
@@ -117,31 +117,31 @@ class ApplicationRequest {
     return String(this.environment);
   }
 
-  getUserFilename() {
+  getUserFilename(): string {
     return this.command === Operations.uploadFile ? this.userFilename : '';
   }
 
-  getCompression() {
+  getCompression(): boolean {
     return typeof this.compression === 'boolean' ? this.compression : false
   }
 
-  getCompressionMethod() {
+  getCompressionMethod(): string {
     return this.getCompression() ? 'GZIP' : ''
   }
 
-  getAmountTotal() {
+  getAmountTotal(): number {
     return this.amountTotal;
   }
 
-  getTransactionCount() {
+  getTransactionCount(): number {
     return this.command === Operations.uploadFile ? this.transactionCount : 0;
   }
 
-  getSoftwareId() {
+  getSoftwareId(): string {
     return this.softwareId.name + '-' + this.softwareId.version;
   }
 
-  getFileType() {
+  getFileType(): FileType {
     return this.fileType;
   }
 

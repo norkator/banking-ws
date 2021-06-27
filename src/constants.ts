@@ -1,7 +1,7 @@
 export type Environment = 'TEST' | 'PRODUCTION';
-export type Bank = 'samlink';
+export type Bank = 'Samlink';
 export type FileType = 'XL' | 'XP' | 'XT';
-export type Status = 'NEW' | 'DLD' | 'ALL';
+export type Status = 'NEW' | 'DLD' | 'ALL' | '';
 
 
 const Operations = {
