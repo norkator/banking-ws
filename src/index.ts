@@ -6,6 +6,7 @@ const soap = require('strong-soap').soap;
 import {ApplicationRequest} from './applicationRequest';
 import {Bank, Environment, FileTypes, Operations} from './constants';
 import {UserParamsInterface, SoftwareIdInterface} from './interfaces';
+import {GetWSDL} from './utils';
 
 // const applicationRequest = new ApplicationRequest(
 //   '123456', Operations.downloadFile, '', '', 'NEW',
@@ -26,7 +27,7 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
 }
 
 // @ts-ignore
-UploadFile({environment: 'TEST', bank: 'samlink'}).then(() => null);
+UploadFile({environment: 'TEST', bank: 'Samlink'}).then(() => null);
 
 async function DownloadFileList(userParams: UserParamsInterface, downloadFileListParams: any) {
 
@@ -38,15 +39,6 @@ async function DownloadFile(userParams: UserParamsInterface, downloadFileParams:
 
 async function DeleteFile(userParams: UserParamsInterface, deleteFileParams: any) {
 
-}
-
-
-/**
- * Get WSDL based on environment
- * @return {string} wsdl file path and name
- */
-function GetWSDL(environmnet: Environment, bank: Bank) {
-  return path.join(__dirname + '/wsdl/wsdl_' + bank + '_' + environmnet.toLowerCase() + '.xml');
 }
 
 
