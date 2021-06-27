@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "moment": "2.29.1",
+    "strong-soap": "3.2.1",
     "xmlbuilder": "15.1.1"
   }
 }

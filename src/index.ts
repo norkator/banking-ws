@@ -1,3 +1,5 @@
+'use strict';
+
 import {ApplicationRequest} from './applicationRequest';
 import {FileTypes, Operations} from './constants';
 import {SoftwareIdInterface} from "./interfaces";
