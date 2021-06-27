@@ -4,6 +4,7 @@
     "declaration": true,
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   }
 }
