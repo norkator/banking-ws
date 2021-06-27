@@ -15,7 +15,7 @@
   "types": "dist/lib/index.d.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "yarn build:cjs && yarn build:esm && yarn build:umd",
+    "build": "yarn build:cjs && yarn build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:umd": "webpack",
