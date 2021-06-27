@@ -1,3 +1,8 @@
+export type Bank = 'Samlink';
+export type FileType = 'XL' | 'XP' | 'XT';
+export type Status = 'NEW' | 'DLD' | 'ALL';
+
+
 const Operations = {
   uploadFile: 'uploadFile',
   downloadFileList: 'downloadFileList',
