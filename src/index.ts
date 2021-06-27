@@ -20,7 +20,7 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
   const WSDL = soap.WSDL;
   const options = {};
   WSDL.open(GetWSDL(userParams.environment, userParams.bank), options,
-    function (err, wsdl) {
+    function (err: any, wsdl: any) {
       const downloadFileOp = wsdl.definitions.bindings.CorporateFileServiceHttpBinding.operations.downloadFile;
       console.log(downloadFileOp.$name)
     });
