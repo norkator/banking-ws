@@ -2,6 +2,6 @@
   "extends": "./tsconfig.base",
   "compilerOptions": {
     "module": "ESNext",
-    "outDir": "./esm"
+    "outDir": "./dist/esm"
   }
 }

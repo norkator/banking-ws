@@ -4,9 +4,9 @@ module.exports = {
   mode: "production",
   entry: "./src/index.ts",
   output: {
-    path: path.resolve(__dirname, "umd"),
-    filename: "my-typescript-package.js",
-    library: "MyTsPackage",
+    path: path.resolve(__dirname + "/dist", "umd"),
+    filename: "banking-ws.js",
+    library: "BankingWS",
     libraryTarget: "umd"
   },
   module: {
