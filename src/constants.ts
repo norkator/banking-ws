@@ -1,6 +1,6 @@
 export type Environment = 'TEST' | 'PRODUCTION';
 export type Bank = 'Samlink';
-export type FileType = 'XL' | 'XP' | 'XT';
+export type FileType = 'XL' | 'XT';
 export type Status = 'NEW' | 'DLD' | 'ALL' | '';
 
 

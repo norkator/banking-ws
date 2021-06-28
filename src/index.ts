@@ -3,7 +3,7 @@
 import * as path from 'path';
 
 const soap = require('strong-soap').soap;
-import {ApplicationRequest} from './applicationRequest';
+import {ApplicationRequest} from './contents/applicationRequest';
 import {Bank, Environment, FileTypes, Operations} from './constants';
 import {UserParamsInterface, SoftwareIdInterface} from './interfaces';
 import {GetWSDL} from './utils';

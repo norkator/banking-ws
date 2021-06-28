@@ -7,8 +7,8 @@
 
 import * as moment from 'moment'
 import * as xmlBuilder from 'xmlbuilder';
-import {SoftwareIdInterface} from './interfaces';
-import {Environment, FileType, Operations, Status, StatusValues} from './constants';
+import {SoftwareIdInterface} from '../interfaces';
+import {Environment, FileType, Operations, Status, StatusValues} from '../constants';
 
 
 class ApplicationRequest {
