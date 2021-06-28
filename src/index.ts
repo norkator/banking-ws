@@ -26,7 +26,69 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
   // );
   // console.log(applicationRequest.createXmlBody());
 
-  const xl = new XL({} as XLInterface);
+  const xlValues: XLInterface = {
+    GrpHdr: {
+      MsgId: 'test',
+      CreDtTm: 'test',
+      Authstn: 'test',
+      BtchBookg: true,
+      NbOfTxs: 'test',
+      CtrlSum: 123,
+      Grpg: 'test',
+      InitgPty: {
+        Nm: 'test',
+        PstlAdr: {
+          AdrTp: 'test',
+          AdrLine: 'test',
+          StrtNm: 'test',
+          BldgNb: 'test',
+          PstCd: 'test',
+          TwnNm: 'test',
+          CtrySubDvsn: 'test',
+          Ctry: 'test',
+        },
+        Id: {
+          OrgId: {
+            BIC: 'test',
+            IBEI: 'test',
+            BEI: 'test',
+            EANGLN: 'test',
+            USCHU: 'test',
+            DUNS: 'test',
+            BkPtyId: 'test',
+            TaxIdNb: 'test',
+            PrtryId: {
+              Id: 'test',
+              Issr: 'test',
+            }
+          }
+        },
+        CtryOfRes: 'test',
+      },
+      FwdgAgt: {
+        FinInstnId: {
+          BIC: 'test',
+        },
+        BrnchId: {
+          Id: 'test',
+          Nm: 'test',
+          PstlAdr: {
+            AdrTp: 'test',
+            AdrLine: 'test',
+            StrtNm: 'test',
+            BldgNb: 'test',
+            PstCd: 'test',
+            TwnNm: 'test',
+            CtrySubDvsn: 'test',
+            Ctry: 'test',
+          }
+        }
+      }
+    },
+    PmtInf: {}
+  };
+
+  const xl = new XL(xlValues);
   console.log(xl.createXmlBody())
 
 }

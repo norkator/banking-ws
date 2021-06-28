@@ -18,12 +18,9 @@ class XL {
     this.xl = xl;
   }
 
-  createXmlBody(): string {
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create('Document', {version: '1.0', encoding: 'utf-8'})
-      .ele('pain.001.001.02')
-
-      // Group header part of the message
-      .ele('GrpHdr') // Group header
+  appendGroupHeaderElements(xml): xmlBuilder.XMLElement {
+    // Group header part of the message
+    return xml.ele('GrpHdr') // Group header
       .ele('MsgId', this.xl.GrpHdr.MsgId).up()
       .ele('CreDtTm', this.xl.GrpHdr.CreDtTm).up()
       .ele('Authstn', this.xl.GrpHdr.Authstn).up()
@@ -78,9 +75,11 @@ class XL {
       .ele('CtrySubDvsn', this.xl.GrpHdr.FwdgAgt.BrnchId.PstlAdr.CtrySubDvsn).up()
       .ele('Ctry', this.xl.GrpHdr.FwdgAgt.BrnchId.PstlAdr.Ctry).up()
       .up()
+  }
 
-
-      // Payment info part of the message
+  appendPaymentInfoElements(xml): xmlBuilder.XMLElement {
+    // Payment info part of the message
+    return xml
       .ele('PmtInf')
       .ele('PmtInfId', '').up()
       .ele('PmtMtd', '').up()
@@ -96,7 +95,6 @@ class XL {
       .up()
       .ele('ReqdExctnDt', '').up()
       .ele('PoolgAdjstmntDt', '').up()
-
       .ele('Dbtr')
       .ele('Nm', '').up()
       .ele('PstlAdr')
@@ -127,7 +125,6 @@ class XL {
       .up()
       .ele('CtryOfRes', '').up()
       .up()
-
       .ele('DbtrAcct')
       .ele('Id')
       .ele('IBAN', '').up()
@@ -138,7 +135,6 @@ class XL {
       .ele('Ccy', '').up()
       .ele('Nm', '').up()
       .up()
-
       .ele('DbtrAgt')
       .ele('FinInstnId')
       .ele('BIC', '').up()
@@ -158,7 +154,6 @@ class XL {
       .up()
       .up()
       .up()
-
       .ele('DbtrAgtAcct')
       .ele('Id')
       .ele('IBAN', '').up()
@@ -169,7 +164,6 @@ class XL {
       .ele('Ccy', '').up()
       .ele('Nm', '').up()
       .up()
-      
       .ele('UltmtDbtr')
       .ele('Nm', '').up()
       .ele('PstlAdr')
@@ -200,9 +194,7 @@ class XL {
       .up()
       .ele('CtryOfRes', '').up()
       .up()
-
       .ele('ChrgBr', '').up()
-
       .ele('ChrgsAcct')
       .ele('Id')
       .ele('IBAN', '').up()
@@ -213,7 +205,6 @@ class XL {
       .ele('Ccy', '').up()
       .ele('Nm', '').up()
       .up()
-
       .ele('ChrgsAcctAgt')
       .ele('FinInstnId')
       .ele('BIC', '').up()
@@ -231,14 +222,11 @@ class XL {
       .ele('CtrySubDvsn', '').up()
       .ele('Ctry', '').up()
       .up()
-
       .ele('CdtTrfTxInf')
       .ele('PmtId')
       .ele('InstrId', '').up()
       .ele('EndToEndId', '').up()
       .up()
-
-
       .ele('PmtTpInf')
       .ele('InstrPrty', 'HIGH').up()
       .ele('SvcLvl')
@@ -309,8 +297,6 @@ class XL {
       .ele('CtrySubDvsn', '').up()
       .ele('Ctry', '').up()
       .up()
-
-
       .ele('Id')
       .ele('OrgId')
       .ele('BIC', '').up()
@@ -337,7 +323,6 @@ class XL {
       .ele('Id', '').up()
       .ele('Nm', '').up()
       .ele('PstlAdr')
-
       .ele('AdrTp', '').up()
       .ele('AdrLine', '').up()
       .ele('StrtNm', '').up()
@@ -349,7 +334,6 @@ class XL {
       .up()
       .up()
       .up()
-
       .ele('IntrmyAgt1Acct')
       .ele('Id')
       .ele('IBAN', '').up()
@@ -379,7 +363,6 @@ class XL {
       .up()
       .up()
       .up()
-
       .ele('IntrmyAgt2Acct')
       .ele('Id')
       .ele('IBAN', '').up()
@@ -513,8 +496,6 @@ class XL {
       .ele('PrtryId').up()
       .ele('Id', '').up()
       .ele('Issr', '').up()
-
-
       .up()
       .up()
       .up()
@@ -558,7 +539,6 @@ class XL {
       .up()
       .up()
       .up()
-
       .ele('RltdRmtInf')
       .ele('RmtId', '').up()
       .ele('RmtLctnMtd', '').up()
@@ -661,8 +641,13 @@ class XL {
       .ele('AddtlRmtInf', '').up()
       .up()
       .up()
-      */
+  }
 
+  createXmlBody(): string {
+    let xml: xmlBuilder.XMLElement = xmlBuilder.create('Document', {version: '1.0', encoding: 'utf-8'})
+      .ele('pain.001.001.02');
+    xml = this.appendGroupHeaderElements(xml);
+    xml = this.appendPaymentInfoElements(xml);
     return xml.end({pretty: true});
   }
 
