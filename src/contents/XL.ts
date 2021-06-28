@@ -240,24 +240,23 @@ class XL {
       .up()
 
 
-
       .ele('PmtTpInf')
       .ele('InstrPrty', 'HIGH').up()
-    .ele('SvcLvl')
-    .ele('Cd', 'SEPA').up()
-    .up()
+      .ele('SvcLvl')
+      .ele('Cd', 'SEPA').up()
+      .up()
       .ele('LclInstrm')
       .ele('Cd', '').up()
-    .up()
+      .up()
       .ele('CtgyPurp', 'CORT').up()
-    .up()
+      .up()
       .ele('Amt')
       .ele('InstdAmt', 123.45, {Ccy: 'EUR'}).up()
       .up()
       .ele('XchgRateInf')
-      .ele('XchgRate',123.45).up()
+      .ele('XchgRate', 123.45).up()
       .ele('RateTp', 'SPOT').up()
-      .ele('CtrctId','').up()
+      .ele('CtrctId', '').up()
       .up()
       .ele('ChrgBr', 'DEBT').up()
       .ele('ChqInstr')
@@ -274,387 +273,391 @@ class XL {
       .ele('TwnNm', '').up()
       .ele('CtrySubDvsn', '').up()
       .ele('Ctry', '').up()
-        .up()
-        .up()
-      <DlvryMtd>
-      <Cd>MLDB</Cd>
-        .up()
-      <DlvrTo>
-      <Nm>str1234</Nm>
-      <Adr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-        .up()
-      <InstrPrty>HIGH</InstrPrty>
-      <ChqMtrtyDt>2012-12-13</ChqMtrtyDt>
-      <FrmsCd>str1234</FrmsCd>
-      <MemoFld>str1234</MemoFld>
-      <RgnlClrZone>str1234</RgnlClrZone>
-      <PrtLctn>str1234</PrtLctn>
-        .up()
-      <UltmtDbtr>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-      <Id>
-      <OrgId>
-        <BIC>str1234</BIC>
-      <IBEI>str1234</IBEI>
-      <BEI>str1234</BEI>
-      <EANGLN>str1234</EANGLN>
-      <USCHU>str1234</USCHU>
-      <DUNS>str1234</DUNS>
-      <BkPtyId>str1234</BkPtyId>
-      <TaxIdNb>str1234</TaxIdNb>
-      <PrtryId>
-      <Id>str1234</Id>
-      <Issr>str1234</Issr>
-        .up()
-        .up()
-        .up()
-      <CtryOfRes>str1234</CtryOfRes>
-        .up()
-      <IntrmyAgt1>
-      <FinInstnId>
-        <BIC>str1234</BIC>
-        .up()
-      <BrnchId>
-      <Id>str1234</Id>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-        .up()
-        .up()
-      <IntrmyAgt1Acct>
-      <Id>
-        <IBAN>str1234</IBAN>
-        .up()
-      <Tp>
-      <Cd>CASH</Cd>
-        .up()
-      <Ccy>str1234</Ccy>
-      <Nm>str1234</Nm>
-        .up()
-      <IntrmyAgt2>
-      <FinInstnId>
-        <BIC>str1234</BIC>
-        .up()
-      <BrnchId>
-      <Id>str1234</Id>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-        .up()
-        .up()
-      <IntrmyAgt2Acct>
-      <Id>
-        <IBAN>str1234</IBAN>
-        .up()
-      <Tp>
-      <Cd>CASH</Cd>
-        .up()
-      <Ccy>str1234</Ccy>
-      <Nm>str1234</Nm>
-        .up()
-      <IntrmyAgt3>
-      <FinInstnId>
-        <BIC>str1234</BIC>
-        .up()
-      <BrnchId>
-      <Id>str1234</Id>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-        .up()
-        .up()
-      <IntrmyAgt3Acct>
-      <Id>
-        <IBAN>str1234</IBAN>
-        .up()
-      <Tp>
-      <Cd>CASH</Cd>
-        .up()
-      <Ccy>str1234</Ccy>
-      <Nm>str1234</Nm>
-        .up()
-      <CdtrAgt>
-      <FinInstnId>
-        <BIC>str1234</BIC>
-        .up()
-      <BrnchId>
-      <Id>str1234</Id>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-        .up()
-        .up()
-      <CdtrAgtAcct>
-      <Id>
-        <IBAN>str1234</IBAN>
-        .up()
-      <Tp>
-      <Cd>CASH</Cd>
-        .up()
-      <Ccy>str1234</Ccy>
-      <Nm>str1234</Nm>
-        .up()
-      <Cdtr>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-      <Id>
-      <OrgId>
-        <BIC>str1234</BIC>
-      <IBEI>str1234</IBEI>
-      <BEI>str1234</BEI>
-      <EANGLN>str1234</EANGLN>
-      <USCHU>str1234</USCHU>
-      <DUNS>str1234</DUNS>
-      <BkPtyId>str1234</BkPtyId>
-      <TaxIdNb>str1234</TaxIdNb>
-      <PrtryId>
-      <Id>str1234</Id>
-      <Issr>str1234</Issr>
-        .up()
-        .up()
-        .up()
-      <CtryOfRes>str1234</CtryOfRes>
-        .up()
-      <CdtrAcct>
-      <Id>
-        <IBAN>str1234</IBAN>
-        .up()
-      <Tp>
-      <Cd>CASH</Cd>
-        .up()
-      <Ccy>str1234</Ccy>
-      <Nm>str1234</Nm>
-        .up()
-      <UltmtCdtr>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-      <Id>
-      <OrgId>
-        <BIC>str1234</BIC>
-      <IBEI>str1234</IBEI>
-      <BEI>str1234</BEI>
-      <EANGLN>str1234</EANGLN>
-      <USCHU>str1234</USCHU>
-      <DUNS>str1234</DUNS>
-      <BkPtyId>str1234</BkPtyId>
-      <TaxIdNb>str1234</TaxIdNb>
-      <PrtryId>
-      <Id>str1234</Id>
-      <Issr>str1234</Issr>
-        .up()
-        .up()
-        .up()
-      <CtryOfRes>str1234</CtryOfRes>
-        .up()
-      <InstrForCdtrAgt>
-      <Cd>CHQB</Cd>
-      <InstrInf>str1234</InstrInf>
-        .up()
-      <InstrForDbtrAgt>str1234</InstrForDbtrAgt>
-      <Purp>
-      <Cd>str1234</Cd>
-        .up()
-      <RgltryRptg>
-      <DbtCdtRptgInd>CRED</DbtCdtRptgInd>
-      <Authrty>
-      <AuthrtyNm>str1234</AuthrtyNm>
-      <AuthrtyCtry>str1234</AuthrtyCtry>
-        .up()
-      <RgltryDtls>
-      <Cd>str</Cd>
-      <Amt Ccy="str1234">123.45</Amt>
-      <Inf>str1234</Inf>
-        .up()
-        .up()
-      <Tax>
-      <CdtrTaxId>str1234</CdtrTaxId>
-      <CdtrTaxTp>str1234</CdtrTaxTp>
-      <DbtrTaxId>str1234</DbtrTaxId>
-      <TaxRefNb>str1234</TaxRefNb>
-      <TtlTaxblBaseAmt Ccy="str1234">123.45</TtlTaxblBaseAmt>
-      <TtlTaxAmt Ccy="str1234">123.45</TtlTaxAmt>
-      <TaxDt>2012-12-13</TaxDt>
-      <TaxTpInf>
-      <CertId>str1234</CertId>
-      <TaxTp>
-      <CtgyDesc>str1234</CtgyDesc>
-      <Rate>123.45</Rate>
-      <TaxblBaseAmt Ccy="str1234">123.45</TaxblBaseAmt>
-      <Amt Ccy="str1234">123.45</Amt>
+      .up()
+      .up()
+      .ele('DlvryMtd')
+      .ele('Cd', '').up()
+      .up()
+      .ele('DlvrTo')
+      .ele('Nm', '').up()
+      .ele('Adr')
+      .ele('AdrTp', '').up()
+      .ele('AdrLine', '').up()
+      .ele('StrtNm', '').up()
+      .ele('BldgNb', '').up()
+      .ele('PstCd', '').up()
+      .ele('TwnNm', '').up()
+      .ele('CtrySubDvsn', '').up()
+      .ele('Ctry', '').up()
+      .up()
+      .up()
+      .ele('InstrPrty', '').up()
+      .ele('ChqMtrtyDt', '').up()
+      .ele('FrmsCd', '').up()
+      .ele('MemoFld', '').up()
+      .ele('RgnlClrZone', '').up()
+      .ele('PrtLctn', '').up()
+      .up()
+      .ele('UltmtDbtr')
+      .ele('Nm', '').up()
+      .ele('PstlAdr')
+      .ele('AdrTp', '').up()
+      .ele('AdrLine', '').up()
+      .ele('StrtNm', '').up()
+      .ele('BldgNb', '').up()
+      .ele('PstCd', '').up()
+      .ele('TwnNm', '').up()
+      .ele('CtrySubDvsn', '').up()
+      .ele('Ctry', '').up()
+      .up()
+
+      .ele('Id')
+      .ele('OrgId')
+      .ele('BIC', '').up()
+      .ele('IBEI', '').up()
+      .ele('BEI', '').up()
+      .ele('EANGLN', '').up()
+      .ele('USCHU', '').up()
+      .ele('DUNS', '').up()
+      .ele('BkPtyId', '').up()
+      .ele('TaxIdNb', '').up()
+      .ele('PrtryId')
+      .ele('Id', '').up()
+      .ele('Issr', '').up()
       .up()
       .up()
       .up()
-      <RltdRmtInf>
-      <RmtId>str1234</RmtId>
-      <RmtLctnMtd>FAXI</RmtLctnMtd>
-      <RmtLctnElctrncAdr>str1234</RmtLctnElctrncAdr>
-      <RmtLctnPstlAdr>
-      <Nm>str1234</Nm>
-      <Adr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
+      .ele('CtryOfRes', '').up()
       .up()
+      .ele('IntrmyAgt1')
+      .ele('FinInstnId')
+      .ele('BIC', '').up()
       .up()
-      .up()
-    <RmtInf>
-    <Ustrd>str1234</Ustrd>
-    <Strd>
-    <RfrdDocInf>
-      <RfrdDocTp>
-        <Cd>MSIN</Cd>
-    <Issr>str1234</Issr>
-      .up()
-    <RfrdDocNb>str1234</RfrdDocNb>
-      .up()
-    <RfrdDocRltdDt>2012-12-13</RfrdDocRltdDt>
-    <RfrdDocAmt>
-    <DuePyblAmt Ccy="str1234">123.45</DuePyblAmt>
-        .up()
-      <CdtrRefInf>
-      <CdtrRefTp>
-        <Cd>RADM</Cd>
-      <Issr>str1234</Issr>
-        .up()
-      <CdtrRef>str1234</CdtrRef>
-        .up()
-      <Invcr>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-      <Id>
-      <OrgId>
-        <BIC>str1234</BIC>
-      <IBEI>str1234</IBEI>
-      <BEI>str1234</BEI>
-      <EANGLN>str1234</EANGLN>
-      <USCHU>str1234</USCHU>
-      <DUNS>str1234</DUNS>
-      <BkPtyId>str1234</BkPtyId>
-      <TaxIdNb>str1234</TaxIdNb>
-      <PrtryId>
-      <Id>str1234</Id>
-      <Issr>str1234</Issr>
-        .up()
-        .up()
-        .up()
-      <CtryOfRes>str1234</CtryOfRes>
-        .up()
-      <Invcee>
-      <Nm>str1234</Nm>
-      <PstlAdr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
-        .up()
-      <Id>
-      <OrgId>
-        <BIC>str1234</BIC>
-      <IBEI>str1234</IBEI>
-      <BEI>str1234</BEI>
-      <EANGLN>str1234</EANGLN>
-      <USCHU>str1234</USCHU>
-      <DUNS>str1234</DUNS>
-      <BkPtyId>str1234</BkPtyId>
-      <TaxIdNb>str1234</TaxIdNb>
-      <PrtryId>
-      <Id>str1234</Id>
-      <Issr>str1234</Issr>
-        .up()
-        .up()
-        .up()
-      <CtryOfRes>str1234</CtryOfRes>
-        .up()
-      <AddtlRmtInf>str1234</AddtlRmtInf>
-        .up()
-        .up()
+      .ele('BrnchId')
+      .ele('Id', '').up()
+      .ele('Nm', '').up()
+      .ele('PstlAdr')
+    /*
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+    .up()
+    .up()
+  <IntrmyAgt1Acct>
+  <Id>
+    <IBAN>str1234</IBAN>
+    .up()
+  <Tp>
+  <Cd>CASH</Cd>
+    .up()
+  <Ccy>str1234</Ccy>
+  <Nm>str1234</Nm>
+    .up()
+  <IntrmyAgt2>
+  <FinInstnId>
+    <BIC>str1234</BIC>
+    .up()
+  <BrnchId>
+  <Id>str1234</Id>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+    .up()
+    .up()
+  <IntrmyAgt2Acct>
+  <Id>
+    <IBAN>str1234</IBAN>
+    .up()
+  <Tp>
+  <Cd>CASH</Cd>
+    .up()
+  <Ccy>str1234</Ccy>
+  <Nm>str1234</Nm>
+    .up()
+  <IntrmyAgt3>
+  <FinInstnId>
+    <BIC>str1234</BIC>
+    .up()
+  <BrnchId>
+  <Id>str1234</Id>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+    .up()
+    .up()
+  <IntrmyAgt3Acct>
+  <Id>
+    <IBAN>str1234</IBAN>
+    .up()
+  <Tp>
+  <Cd>CASH</Cd>
+    .up()
+  <Ccy>str1234</Ccy>
+  <Nm>str1234</Nm>
+    .up()
+  <CdtrAgt>
+  <FinInstnId>
+    <BIC>str1234</BIC>
+    .up()
+  <BrnchId>
+  <Id>str1234</Id>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+    .up()
+    .up()
+  <CdtrAgtAcct>
+  <Id>
+    <IBAN>str1234</IBAN>
+    .up()
+  <Tp>
+  <Cd>CASH</Cd>
+    .up()
+  <Ccy>str1234</Ccy>
+  <Nm>str1234</Nm>
+    .up()
+  <Cdtr>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+  <Id>
+  <OrgId>
+    <BIC>str1234</BIC>
+  <IBEI>str1234</IBEI>
+  <BEI>str1234</BEI>
+  <EANGLN>str1234</EANGLN>
+  <USCHU>str1234</USCHU>
+  <DUNS>str1234</DUNS>
+  <BkPtyId>str1234</BkPtyId>
+  <TaxIdNb>str1234</TaxIdNb>
+  <PrtryId>
+  <Id>str1234</Id>
+  <Issr>str1234</Issr>
+    .up()
+    .up()
+    .up()
+  <CtryOfRes>str1234</CtryOfRes>
+    .up()
+  <CdtrAcct>
+  <Id>
+    <IBAN>str1234</IBAN>
+    .up()
+  <Tp>
+  <Cd>CASH</Cd>
+    .up()
+  <Ccy>str1234</Ccy>
+  <Nm>str1234</Nm>
+    .up()
+  <UltmtCdtr>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+  <Id>
+  <OrgId>
+    <BIC>str1234</BIC>
+  <IBEI>str1234</IBEI>
+  <BEI>str1234</BEI>
+  <EANGLN>str1234</EANGLN>
+  <USCHU>str1234</USCHU>
+  <DUNS>str1234</DUNS>
+  <BkPtyId>str1234</BkPtyId>
+  <TaxIdNb>str1234</TaxIdNb>
+  <PrtryId>
+  <Id>str1234</Id>
+  <Issr>str1234</Issr>
+    .up()
+    .up()
+    .up()
+  <CtryOfRes>str1234</CtryOfRes>
+    .up()
+  <InstrForCdtrAgt>
+  <Cd>CHQB</Cd>
+  <InstrInf>str1234</InstrInf>
+    .up()
+  <InstrForDbtrAgt>str1234</InstrForDbtrAgt>
+  <Purp>
+  <Cd>str1234</Cd>
+    .up()
+  <RgltryRptg>
+  <DbtCdtRptgInd>CRED</DbtCdtRptgInd>
+  <Authrty>
+  <AuthrtyNm>str1234</AuthrtyNm>
+  <AuthrtyCtry>str1234</AuthrtyCtry>
+    .up()
+  <RgltryDtls>
+  <Cd>str</Cd>
+  <Amt Ccy="str1234">123.45</Amt>
+  <Inf>str1234</Inf>
+    .up()
+    .up()
+  <Tax>
+  <CdtrTaxId>str1234</CdtrTaxId>
+  <CdtrTaxTp>str1234</CdtrTaxTp>
+  <DbtrTaxId>str1234</DbtrTaxId>
+  <TaxRefNb>str1234</TaxRefNb>
+  <TtlTaxblBaseAmt Ccy="str1234">123.45</TtlTaxblBaseAmt>
+  <TtlTaxAmt Ccy="str1234">123.45</TtlTaxAmt>
+  <TaxDt>2012-12-13</TaxDt>
+  <TaxTpInf>
+  <CertId>str1234</CertId>
+  <TaxTp>
+  <CtgyDesc>str1234</CtgyDesc>
+  <Rate>123.45</Rate>
+  <TaxblBaseAmt Ccy="str1234">123.45</TaxblBaseAmt>
+  <Amt Ccy="str1234">123.45</Amt>
+  .up()
+  .up()
+  .up()
+  <RltdRmtInf>
+  <RmtId>str1234</RmtId>
+  <RmtLctnMtd>FAXI</RmtLctnMtd>
+  <RmtLctnElctrncAdr>str1234</RmtLctnElctrncAdr>
+  <RmtLctnPstlAdr>
+  <Nm>str1234</Nm>
+  <Adr>
+  <AdrTp>ADDR</AdrTp>
+  <AdrLine>str1234</AdrLine>
+  <StrtNm>str1234</StrtNm>
+  <BldgNb>str1234</BldgNb>
+  <PstCd>str1234</PstCd>
+  <TwnNm>str1234</TwnNm>
+  <CtrySubDvsn>str1234</CtrySubDvsn>
+  <Ctry>str1234</Ctry>
+  .up()
+  .up()
+  .up()
+<RmtInf>
+<Ustrd>str1234</Ustrd>
+<Strd>
+<RfrdDocInf>
+  <RfrdDocTp>
+    <Cd>MSIN</Cd>
+<Issr>str1234</Issr>
+  .up()
+<RfrdDocNb>str1234</RfrdDocNb>
+  .up()
+<RfrdDocRltdDt>2012-12-13</RfrdDocRltdDt>
+<RfrdDocAmt>
+<DuePyblAmt Ccy="str1234">123.45</DuePyblAmt>
+    .up()
+  <CdtrRefInf>
+  <CdtrRefTp>
+    <Cd>RADM</Cd>
+  <Issr>str1234</Issr>
+    .up()
+  <CdtrRef>str1234</CdtrRef>
+    .up()
+  <Invcr>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+  <Id>
+  <OrgId>
+    <BIC>str1234</BIC>
+  <IBEI>str1234</IBEI>
+  <BEI>str1234</BEI>
+  <EANGLN>str1234</EANGLN>
+  <USCHU>str1234</USCHU>
+  <DUNS>str1234</DUNS>
+  <BkPtyId>str1234</BkPtyId>
+  <TaxIdNb>str1234</TaxIdNb>
+  <PrtryId>
+  <Id>str1234</Id>
+  <Issr>str1234</Issr>
+    .up()
+    .up()
+    .up()
+  <CtryOfRes>str1234</CtryOfRes>
+    .up()
+  <Invcee>
+  <Nm>str1234</Nm>
+  <PstlAdr>
+.ele('AdrTp', '').up()
+  .ele('AdrLine', '').up()
+  .ele('StrtNm', '').up()
+  .ele('BldgNb', '').up()
+  .ele('PstCd', '').up()
+  .ele('TwnNm', '').up()
+  .ele('CtrySubDvsn', '').up()
+  .ele('Ctry', '').up()
+    .up()
+  <Id>
+  <OrgId>
+    <BIC>str1234</BIC>
+  <IBEI>str1234</IBEI>
+  <BEI>str1234</BEI>
+  <EANGLN>str1234</EANGLN>
+  <USCHU>str1234</USCHU>
+  <DUNS>str1234</DUNS>
+  <BkPtyId>str1234</BkPtyId>
+  <TaxIdNb>str1234</TaxIdNb>
+  <PrtryId>
+  <Id>str1234</Id>
+  <Issr>str1234</Issr>
+    .up()
+    .up()
+    .up()
+  <CtryOfRes>str1234</CtryOfRes>
+    .up()
+  <AddtlRmtInf>str1234</AddtlRmtInf>
+    .up()
+    .up()
+
+   */
 
 
     return xml.end({pretty: true});
