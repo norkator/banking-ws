@@ -241,39 +241,39 @@ class XL {
 
 
 
-    <PmtTpInf>
-    <InstrPrty>HIGH</InstrPrty>
-    <SvcLvl>
-    <Cd>SEPA</Cd>
+      .ele('PmtTpInf')
+      .ele('InstrPrty', 'HIGH').up()
+    .ele('SvcLvl')
+    .ele('Cd', 'SEPA').up()
     .up()
-    <LclInstrm>
-    <Cd>str1234</Cd>
+      .ele('LclInstrm')
+      .ele('Cd', '').up()
     .up()
-    <CtgyPurp>CORT</CtgyPurp>
+      .ele('CtgyPurp', 'CORT').up()
     .up()
-    <Amt>
-    <InstdAmt Ccy="str1234">123.45</InstdAmt>
+      .ele('Amt')
+      .ele('InstdAmt', 123.45, {Ccy: 'EUR'}).up()
       .up()
-      <XchgRateInf>
-      <XchgRate>123.45</XchgRate>
-      <RateTp>SPOT</RateTp>
-      <CtrctId>str1234</CtrctId>
+      .ele('XchgRateInf')
+      .ele('XchgRate',123.45).up()
+      .ele('RateTp', 'SPOT').up()
+      .ele('CtrctId','').up()
       .up()
-      <ChrgBr>DEBT</ChrgBr>
-      <ChqInstr>
-      <ChqTp>CCHQ</ChqTp>
-      <ChqNb>str1234</ChqNb>
-      <ChqFr>
-      <Nm>str1234</Nm>
-      <Adr>
-      <AdrTp>ADDR</AdrTp>
-      <AdrLine>str1234</AdrLine>
-      <StrtNm>str1234</StrtNm>
-      <BldgNb>str1234</BldgNb>
-      <PstCd>str1234</PstCd>
-      <TwnNm>str1234</TwnNm>
-      <CtrySubDvsn>str1234</CtrySubDvsn>
-      <Ctry>str1234</Ctry>
+      .ele('ChrgBr', 'DEBT').up()
+      .ele('ChqInstr')
+      .ele('ChqTp', 'CCHQ').up()
+      .ele('ChqNb', '').up()
+      .ele('ChqFr')
+      .ele('Nm', '').up()
+      .ele('Adr')
+      .ele('AdrTp', '').up()
+      .ele('AdrLine', '').up()
+      .ele('StrtNm', '').up()
+      .ele('BldgNb', '').up()
+      .ele('PstCd', '').up()
+      .ele('TwnNm', '').up()
+      .ele('CtrySubDvsn', '').up()
+      .ele('Ctry', '').up()
         .up()
         .up()
       <DlvryMtd>
