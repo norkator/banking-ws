@@ -59,6 +59,8 @@
         </BrnchId>
       </FwdgAgt>
     </GrpHdr>
+
+
     <PmtInf>
       <PmtInfId>str1234</PmtInfId>
       <PmtMtd>CHK</PmtMtd>
@@ -624,5 +626,7 @@
         </RmtInf>
       </CdtTrfTxInf>
     </PmtInf>
+
+
   </pain.001.001.02>
 </Document>

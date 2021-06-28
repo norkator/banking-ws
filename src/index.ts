@@ -6,7 +6,7 @@ const soap = require('strong-soap').soap;
 import {ApplicationRequest} from './contents/applicationRequest';
 import {XL} from './contents/XL';
 import {Bank, Environment, FileTypes, Operations} from './constants';
-import {UserParamsInterface, SoftwareIdInterface} from './interfaces';
+import {UserParamsInterface, SoftwareIdInterface, XLInterface} from './interfaces';
 import {GetWSDL} from './utils';
 
 
@@ -26,7 +26,7 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
   // );
   // console.log(applicationRequest.createXmlBody());
 
-  const xl = new XL('');
+  const xl = new XL({} as XLInterface);
   console.log(xl.createXmlBody())
 
 }
