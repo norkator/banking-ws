@@ -59,8 +59,6 @@
         </BrnchId>
       </FwdgAgt>
     </GrpHdr>
-
-
     <PmtInf>
       <PmtInfId>str1234</PmtInfId>
       <PmtMtd>CHK</PmtMtd>
@@ -186,8 +184,6 @@
         <Ccy>str1234</Ccy>
         <Nm>str1234</Nm>
       </ChrgsAcct>
-
-
       <ChrgsAcctAgt>
         <FinInstnId>
           <BIC>str1234</BIC>
@@ -207,7 +203,6 @@
           </PstlAdr>
         </BrnchId>
       </ChrgsAcctAgt>
-
       <CdtTrfTxInf>
         <PmtId>
           <InstrId>str1234</InstrId>
@@ -628,12 +623,6 @@
           </Strd>
         </RmtInf>
       </CdtTrfTxInf>
-
-
-
-
     </PmtInf>
-
-
   </pain.001.001.02>
 </Document>

@@ -311,6 +311,7 @@ class XL {
       .ele('Ctry', '').up()
       .up()
 
+
       .ele('Id')
       .ele('OrgId')
       .ele('BIC', '').up()
@@ -337,8 +338,8 @@ class XL {
       .ele('Id', '').up()
       .ele('Nm', '').up()
       .ele('PstlAdr')
-    /*
-.ele('AdrTp', '').up()
+
+      .ele('AdrTp', '').up()
   .ele('AdrLine', '').up()
   .ele('StrtNm', '').up()
   .ele('BldgNb', '').up()
@@ -349,24 +350,24 @@ class XL {
     .up()
     .up()
     .up()
-  <IntrmyAgt1Acct>
-  <Id>
-    <IBAN>str1234</IBAN>
+        .ele('IntrmyAgt1Acct')
+        .ele('Id')
+        .ele('IBAN', '').up()
     .up()
-  <Tp>
-  <Cd>CASH</Cd>
+        .ele('Tp')
+        .ele('Cd', '').up()
     .up()
-  <Ccy>str1234</Ccy>
-  <Nm>str1234</Nm>
+  .ele('Ccy', '').up()
+  .ele('Nm', '').up()
     .up()
-  <IntrmyAgt2>
-  <FinInstnId>
-    <BIC>str1234</BIC>
+  .ele('IntrmyAgt2)
+  .ele('FinInstnId)
+    .ele('BIC', '').up()
     .up()
-  <BrnchId>
-  <Id>str1234</Id>
-  <Nm>str1234</Nm>
-  <PstlAdr>
+  .ele('BrnchId)
+  .ele('Id', '').up()
+  .ele('Nm', '').up()
+      .ele('PstlAdr')
 .ele('AdrTp', '').up()
   .ele('AdrLine', '').up()
   .ele('StrtNm', '').up()
@@ -458,23 +459,23 @@ class XL {
   .ele('CtrySubDvsn', '').up()
   .ele('Ctry', '').up()
     .up()
-  <Id>
-  <OrgId>
-    <BIC>str1234</BIC>
-  <IBEI>str1234</IBEI>
-  <BEI>str1234</BEI>
-  <EANGLN>str1234</EANGLN>
-  <USCHU>str1234</USCHU>
-  <DUNS>str1234</DUNS>
-  <BkPtyId>str1234</BkPtyId>
-  <TaxIdNb>str1234</TaxIdNb>
-  <PrtryId>
-  <Id>str1234</Id>
-  <Issr>str1234</Issr>
+      .ele('Id')
+      .ele('OrgId')
+    .ele('BIC', '').up()
+  .ele('IBEI', '').up()
+  .ele('BEI', '').up()
+  .ele('EANGLN', '').up()
+  .ele('USCHU', '').up()
+  .ele('DUNS', '').up()
+  .ele('BkPtyId', '').up()
+  .ele('TaxIdNb', '').up()
+  .ele('PrtryId').up()
+  .ele('Id', '').up()
+  .ele('Issr', '').up()
     .up()
     .up()
     .up()
-  <CtryOfRes>str1234</CtryOfRes>
+      .ele('CtryOfRes', '').up()
     .up()
   <CdtrAcct>
   <Id>
@@ -498,19 +499,19 @@ class XL {
   .ele('CtrySubDvsn', '').up()
   .ele('Ctry', '').up()
     .up()
-  <Id>
-  <OrgId>
-    <BIC>str1234</BIC>
-  <IBEI>str1234</IBEI>
-  <BEI>str1234</BEI>
-  <EANGLN>str1234</EANGLN>
-  <USCHU>str1234</USCHU>
-  <DUNS>str1234</DUNS>
-  <BkPtyId>str1234</BkPtyId>
-  <TaxIdNb>str1234</TaxIdNb>
-  <PrtryId>
-  <Id>str1234</Id>
-  <Issr>str1234</Issr>
+  .ele('Id')
+  .ele('OrgId')
+    .ele('BIC', '').up()
+  .ele('IBEI', '').up()
+  .ele('BEI', '').up()
+  .ele('EANGLN', '').up()
+  .ele('USCHU', '').up()
+  .ele('DUNS', '').up()
+  .ele('BkPtyId', '').up()
+  .ele('TaxIdNb', '').up()
+  .ele('PrtryId').up()
+  .ele('Id', str1234</Id>
+  .ele('Issr', str1234</Issr>
     .up()
     .up()
     .up()
@@ -608,13 +609,13 @@ class XL {
   <Id>
   <OrgId>
     <BIC>str1234</BIC>
-  <IBEI>str1234</IBEI>
-  <BEI>str1234</BEI>
-  <EANGLN>str1234</EANGLN>
-  <USCHU>str1234</USCHU>
-  <DUNS>str1234</DUNS>
-  <BkPtyId>str1234</BkPtyId>
-  <TaxIdNb>str1234</TaxIdNb>
+      .ele('IBEI', '').up()
+      .ele('BEI', '').up()
+      .ele('EANGLN', '').up()
+      .ele('USCHU', '').up()
+      .ele('DUNS', '').up()
+      .ele('BkPtyId', '').up()
+      .ele('TaxIdNb', '').up()
   <PrtryId>
   <Id>str1234</Id>
   <Issr>str1234</Issr>
@@ -635,25 +636,25 @@ class XL {
   .ele('CtrySubDvsn', '').up()
   .ele('Ctry', '').up()
     .up()
-  <Id>
-  <OrgId>
-    <BIC>str1234</BIC>
-  <IBEI>str1234</IBEI>
-  <BEI>str1234</BEI>
-  <EANGLN>str1234</EANGLN>
-  <USCHU>str1234</USCHU>
-  <DUNS>str1234</DUNS>
-  <BkPtyId>str1234</BkPtyId>
-  <TaxIdNb>str1234</TaxIdNb>
-  <PrtryId>
-  <Id>str1234</Id>
-  <Issr>str1234</Issr>
+  .ele('Id')
+  .ele('OrgId')
+      .ele('BIC', '').up()
+      .ele('IBEI', '').up()
+      .ele('BEI', '').up()
+      .ele('EANGLN', '').up()
+      .ele('USCHU', '').up()
+      .ele('DUNS', '').up()
+      .ele('BkPtyId', '').up()
+      .ele('TaxIdNb', '').up()
+      .ele('PrtryId')
+  .ele('Id', '').up())
+  .ele('Issr', '').up())
     .up()
     .up()
     .up()
-  <CtryOfRes>str1234</CtryOfRes>
+  .ele('CtryOfRes', '').up()
     .up()
-  <AddtlRmtInf>str1234</AddtlRmtInf>
+  .ele('AddtlRmtInf', '').up()
     .up()
     .up()
 
