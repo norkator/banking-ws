@@ -186,6 +186,8 @@
         <Ccy>str1234</Ccy>
         <Nm>str1234</Nm>
       </ChrgsAcct>
+
+
       <ChrgsAcctAgt>
         <FinInstnId>
           <BIC>str1234</BIC>
@@ -205,6 +207,7 @@
           </PstlAdr>
         </BrnchId>
       </ChrgsAcctAgt>
+
       <CdtTrfTxInf>
         <PmtId>
           <InstrId>str1234</InstrId>
@@ -625,6 +628,10 @@
           </Strd>
         </RmtInf>
       </CdtTrfTxInf>
+
+
+
+
     </PmtInf>
 
 
