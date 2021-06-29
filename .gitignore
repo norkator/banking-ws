@@ -10,3 +10,4 @@ dist
 # Debugging related
 src/test.ts
 cert_debug.xml
+keys
