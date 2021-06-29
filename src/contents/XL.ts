@@ -16,7 +16,7 @@ class XL {
     this.xl = xl;
   }
 
-  appendGroupHeaderElements(xml): xmlBuilder.XMLElement {
+  appendGroupHeaderElements(xml: xmlBuilder.XMLElement): xmlBuilder.XMLElement {
     // Group header part of the message
     return xml.ele('GrpHdr') // Group header
       .ele('MsgId', this.xl.GrpHdr.MsgId).up()
@@ -45,7 +45,7 @@ class XL {
       .up()
   }
 
-  appendPaymentInfoElements(xml): xmlBuilder.XMLElement {
+  appendPaymentInfoElements(xml: xmlBuilder.XMLElement): xmlBuilder.XMLElement {
     // Payment info part of the message
     return xml
       .ele('PmtInf')
