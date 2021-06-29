@@ -19,59 +19,109 @@ export interface XLInterface {
     MsgId: string; // Message Identification
     CreDtTm: string; // Creation Date Time
     Authstn: string;
-    BtchBookg: boolean;
     NbOfTxs: string; // Number Of Transactions
-    CtrlSum: number; // Control Sum
-    Grpg: string;
-    InitgPty: { // Initiating Party
+    InitgPty: {
       Nm: string;
       PstlAdr: {
-        AdrTp: string;
-        AdrLine: string;
-        StrtNm: string;
-        BldgNb: string;
-        PstCd: string;
-        TwnNm: string;
-        CtrySubDvsn: string;
         Ctry: string;
-      };
+        AdrLine: string;
+        AdrLine2: string;
+      },
       Id: {
         OrgId: {
-          BIC: string;
-          IBEI: string;
-          BEI: string;
-          EANGLN: string;
-          USCHU: string;
-          DUNS: string;
-          BkPtyId: string;
-          TaxIdNb: string;
-          PrtryId: {
+          Othr: {
             Id: string;
-            Issr: string;
+            SchmeNm: {
+              Cd: string;
+            }
           }
         }
       }
-      CtryOfRes: string;
-    };
-    FwdgAgt: {
-      FinInstnId: {
-        BIC: string;
-      };
-      BrnchId: {
-        Id: string;
-        Nm: string;
-        PstlAdr: {
-          AdrTp: string;
-          AdrLine: string;
-          StrtNm: string;
-          BldgNb: string;
-          PstCd: string;
-          TwnNm: string;
-          CtrySubDvsn: string;
-          Ctry: string;
+    }
+  },
+  PmtInf: {
+    PmtInfId: string;
+    PmtMtd: string;
+    PmtTpInf: {
+      SvcLvl: {
+        Cd: string;
+      }
+    },
+    ReqdExctnDt: string,
+    Dbtr: {
+      Nm: string;
+      PstlAdr: {
+        Ctry: string;
+        AdrLine: string;
+        AdrLine2: string;
+      },
+      Id: {
+        OrgId: {
+          Othr: {
+            Id: string;
+            SchmeNm: {
+              Cd: string;
+            }
+          }
         }
       }
+    },
+    DbtrAcct: {
+      Id: {
+        IBAN: string;
+      }
+    },
+    DbtrAgt: {
+      FinInstnId: {
+        BIC: string;
+      }
+    },
+    ChrgBr: string;
+    CdtTrfTxInf: {
+      PmtId: {
+        InstrId: string;
+        EndToEndId: string;
+      },
+      PmtTpInf: {
+        SvcLvl: {
+          Cd: string;
+        }
+      },
+      Amt: {
+        InstdAmt: number;
+      },
+      ChrgBr: string;
+      CdtrAgt: {
+        FinInstnId: {
+          BIC: string;
+        }
+      },
+      Cdtr: {
+        Nm: string;
+        PstlAdr: {
+          Ctry: string;
+          AdrLine: string;
+          AdrLine2: string;
+        },
+        Id: {
+          OrgId: {
+            Othr: {
+              Id: string;
+              SchmeNm: {
+                Cd: string;
+              }
+            }
+          }
+        }
+      },
+      CdtrAcct: {
+        Id: {
+          IBAN: string;
+        }
+      },
+      RmtInf: {
+        Ustrd: string;
+      }
     }
-  };
-  PmtInf: {}
+  }
 }
