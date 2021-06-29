@@ -1,4 +1,4 @@
-import {Bank, Currency, Environment} from './constants';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel} from './constants';
 
 export interface UserParamsInterface {
   bank: Bank;
@@ -19,8 +19,7 @@ export interface XLInterface {
   GrpHdr: { // Group Header
     MsgId: string; // Message Identification
     CreDtTm: string; // Creation Date Time
-    Authstn: string;
-    NbOfTxs: string; // Number Of Transactions
+    NbOfTxs: number; // Number Of Transactions
     InitgPty: {
       Nm: string;
       PstlAdr: {
@@ -42,7 +41,7 @@ export interface XLInterface {
   },
   PmtInf: {
     PmtInfId: string;
-    PmtMtd: string;
+    PmtMtd: PaymentMethod;
     PmtTpInf: {
       SvcLvl: {
         Cd: string;
@@ -77,7 +76,7 @@ export interface XLInterface {
         BIC: string;
       }
     },
-    ChrgBr: string;
+    ChrgBr: ServiceLevel;
     CdtTrfTxInf: {
       PmtId: {
         InstrId: string;
@@ -91,7 +90,7 @@ export interface XLInterface {
       Amt: {
         InstdAmt: number;
       },
-      ChrgBr: string;
+      ChrgBr: ServiceLevel;
       CdtrAgt: {
         FinInstnId: {
           BIC: string;

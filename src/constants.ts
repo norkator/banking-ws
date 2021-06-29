@@ -3,6 +3,8 @@ export type Bank = 'Samlink';
 export type FileType = 'XL' | 'XT';
 export type Status = 'NEW' | 'DLD' | 'ALL' | '';
 export type Currency = 'EUR' | 'USD'
+export type PaymentMethod = 'TRF'
+export type ServiceLevel = 'SLEV'
 
 
 const Operations = {

@@ -1,9 +1,7 @@
 'use strict';
 
-import * as moment from 'moment'
 import * as xmlBuilder from 'xmlbuilder';
-import {SoftwareIdInterface, XLInterface} from '../interfaces';
-import {Environment, FileType, Operations, Status, StatusValues} from '../constants';
+import {XLInterface} from '../interfaces';
 
 
 /**
@@ -23,7 +21,6 @@ class XL {
     return xml.ele('GrpHdr') // Group header
       .ele('MsgId', this.xl.GrpHdr.MsgId).up()
       .ele('CreDtTm', this.xl.GrpHdr.CreDtTm).up()
-      .ele('Authstn', this.xl.GrpHdr.Authstn).up()
       .ele('NbOfTxs', this.xl.GrpHdr.NbOfTxs).up()
 
       .ele('InitgPty')
@@ -31,7 +28,7 @@ class XL {
       .ele('PstlAdr')
       .ele('Ctry', this.xl.GrpHdr.InitgPty.PstlAdr.Ctry).up()
       .ele('AdrLine', this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine).up()
-      .ele('AdrLine', this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine).up()
+      .ele('AdrLine', this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine2).up()
       .up()
 
       .ele('Id')
@@ -43,7 +40,9 @@ class XL {
       .up()
       .up()
       .up()
-
+      .up()
+      .up()
+      .up()
   }
 
   appendPaymentInfoElements(xml): xmlBuilder.XMLElement {

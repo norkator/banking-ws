@@ -5,7 +5,7 @@ import * as path from 'path';
 const soap = require('strong-soap').soap;
 import {ApplicationRequest} from './contents/applicationRequest';
 import {XL} from './contents/XL';
-import {Bank, Environment, FileTypes, Operations} from './constants';
+import {Bank, Currency, Environment, FileTypes, Operations} from './constants';
 import {UserParamsInterface, SoftwareIdInterface, XLInterface} from './interfaces';
 import {GetWSDL} from './utils';
 
@@ -27,65 +27,117 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
   // console.log(applicationRequest.createXmlBody());
 
   const xlValues: XLInterface = {
+    CcyOfTrf: 'EUR',
     GrpHdr: {
-      MsgId: 'test',
-      CreDtTm: 'test',
-      Authstn: 'test',
-      BtchBookg: true,
-      NbOfTxs: 'test',
-      CtrlSum: 123,
-      Grpg: 'test',
+      MsgId: 'MSGID000001',
+      CreDtTm: '2010-11-14T10:30:00',
+      NbOfTxs: 1,
       InitgPty: {
-        Nm: 'test',
+        Nm: 'Group Finance',
         PstlAdr: {
-          AdrTp: 'test',
-          AdrLine: 'test',
-          StrtNm: 'test',
-          BldgNb: 'test',
-          PstCd: 'test',
-          TwnNm: 'test',
-          CtrySubDvsn: 'test',
-          Ctry: 'test',
+          Ctry: 'FI',
+          AdrLine: 'Aleksanterinkatu 123',
+          AdrLine2: 'FI-00100 Helsinki',
         },
         Id: {
           OrgId: {
-            BIC: 'test',
-            IBEI: 'test',
-            BEI: 'test',
-            EANGLN: 'test',
-            USCHU: 'test',
-            DUNS: 'test',
-            BkPtyId: 'test',
-            TaxIdNb: 'test',
-            PrtryId: {
-              Id: 'test',
-              Issr: 'test',
+            Othr: {
+              Id: '1234567890',
+              SchmeNm: {
+                Cd: 'BANK',
+              }
             }
-          }
-        },
-        CtryOfRes: 'test',
-      },
-      FwdgAgt: {
-        FinInstnId: {
-          BIC: 'test',
-        },
-        BrnchId: {
-          Id: 'test',
-          Nm: 'test',
-          PstlAdr: {
-            AdrTp: 'test',
-            AdrLine: 'test',
-            StrtNm: 'test',
-            BldgNb: 'test',
-            PstCd: 'test',
-            TwnNm: 'test',
-            CtrySubDvsn: 'test',
-            Ctry: 'test',
           }
         }
       }
     },
-    PmtInf: {}
+    PmtInf: {
+      PmtInfId: '20101114-12345678912',
+      PmtMtd: 'TRF',
+      PmtTpInf: {
+        SvcLvl: {
+          Cd: 'SEPA',
+        }
+      },
+      ReqdExctnDt: '2010-11-14',
+      Dbtr: {
+        Nm: 'Debtor Company Plc',
+        PstlAdr: {
+          Ctry: 'FI',
+          AdrLine: 'Mannerheimintie 123',
+          AdrLine2: 'FI-00100 Helsinki',
+        },
+        Id: {
+          OrgId: {
+            Othr: {
+              Id: '0987654321',
+              SchmeNm: {
+                Cd: 'BANK',
+              }
+            }
+          }
+        }
+      },
+      DbtrAcct: {
+        Id: {
+          IBAN: 'FI8529501800020574',
+        }
+      },
+      DbtrAgt: {
+        FinInstnId: {
+          BIC: 'BANKFIHH',
+        }
+      },
+      ChrgBr: 'SLEV',
+      CdtTrfTxInf: {
+        PmtId: {
+          InstrId: 'InstrId000001',
+          EndToEndId: 'EndToEndId000001',
+        },
+        PmtTpInf: {
+          SvcLvl: {
+            Cd: 'SEPA',
+          }
+        },
+        Amt: {
+          InstdAmt: 100.00,
+        },
+        ChrgBr: 'SLEV',
+        CdtrAgt:
+          {
+            FinInstnId: {
+              BIC: 'DEUTATWW',
+            }
+          },
+        Cdtr: {
+          Nm: 'Creditor Company',
+          PstlAdr:
+            {
+              Ctry: 'AT',
+              AdrLine: 'Hohenstaufengasse 123',
+              AdrLine2: 'AT-1010 Wien',
+            },
+          Id: {
+            OrgId: {
+              Othr: {
+                Id: '0987654321',
+                SchmeNm: {
+                  Cd: 'BANK',
+                }
+              }
+            }
+          }
+        },
+        CdtrAcct: {
+          Id: {
+            IBAN: 'AT123456789012345678',
+          }
+        },
+        RmtInf: {
+          Ustrd: 'Invoices 123 and 321',
+        }
+      }
+    }
   };
 
   const xl = new XL(xlValues);
