@@ -47,7 +47,7 @@ class ApplicationRequest {
     this.fileType = fileType;
   }
 
-  createXmlBody(): string {
+  public createXmlBody(): string {
     let xml: xmlBuilder.XMLElement = xmlBuilder.create(
       'ApplicationRequest', {version: '1.0', encoding: 'utf-8'}
     )
@@ -81,28 +81,28 @@ class ApplicationRequest {
     return xml.end({pretty: true});
   }
 
-  getCustomerId(): string {
+  private getCustomerId(): string {
     return String(this.customerId);
   }
 
-  getCommand(): string {
+  private getCommand(): string {
     return String(this.command);
   }
 
-  getTimeStamp(): string {
+  private getTimeStamp(): string {
     // @ts-ignore
     return new moment().format('YYYY-MM-DDThh:mm:ssZ');
   }
 
-  getStartDate(): string {
+  private getStartDate(): string {
     return this.command === Operations.downloadFileList ? this.startDate : '';
   }
 
-  getEndDate(): string {
+  private getEndDate(): string {
     return this.command === Operations.downloadFileList ? this.endDate : '';
   }
 
-  getStatus(): Status {
+  private getStatus(): Status {
     if (this.command === Operations.downloadFileList) {
       const c = Object.values(StatusValues).find((value) => {
         return value === this.status;
@@ -113,35 +113,35 @@ class ApplicationRequest {
     }
   }
 
-  getEnvironment(): string {
+  private getEnvironment(): string {
     return String(this.environment);
   }
 
-  getUserFilename(): string {
+  private getUserFilename(): string {
     return this.command === Operations.uploadFile ? this.userFilename : '';
   }
 
-  getCompression(): boolean {
+  private getCompression(): boolean {
     return typeof this.compression === 'boolean' ? this.compression : false
   }
 
-  getCompressionMethod(): string {
+  private getCompressionMethod(): string {
     return this.getCompression() ? 'GZIP' : ''
   }
 
-  getAmountTotal(): number {
+  private getAmountTotal(): number {
     return this.amountTotal;
   }
 
-  getTransactionCount(): number {
+  private getTransactionCount(): number {
     return this.command === Operations.uploadFile ? this.transactionCount : 0;
   }
 
-  getSoftwareId(): string {
+  private getSoftwareId(): string {
     return this.softwareId.name + '-' + this.softwareId.version;
   }
 
-  getFileType(): FileType {
+  private getFileType(): FileType {
     return this.fileType;
   }
 
