@@ -32,6 +32,7 @@ export interface CertApplicationRequestInterface {
   Service: Service;
   ExecutionSerial: string;
   Content: string;
+  TransferKey?: string;
 }
 
 /**

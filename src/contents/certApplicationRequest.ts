@@ -25,12 +25,13 @@ class CertApplicationRequest {
 
       // .ele('Encryption', true).up()
       // .ele('EncryptionMethod', 'str1234').up()
-      // .ele('Compression', true).up()
+      .ele('Compression', false).up()
       // .ele('CompressionMethod', 'str1234').up()
       .ele('Service', this.crp.Service).up()
       .ele('ExecutionSerial', this.crp.ExecutionSerial).up()
-      .ele('Content', this.crp.Content).up();
-    // .ele('TransferKey', ).up()
+      .ele('Content', this.crp.Content).up()
+
+      .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
     // .ele('SerialNumber', 'str1234').up();
     return xml.end({pretty: true});
   }
