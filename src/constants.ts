@@ -5,7 +5,8 @@ export type Status = 'NEW' | 'DLD' | 'ALL' | '';
 export type Currency = 'EUR' | 'USD'
 export type PaymentMethod = 'TRF'
 export type ServiceLevel = 'SLEV'
-
+export type Command = 'GetCertificateRequest'
+export type Service = 'MATU'
 
 const Operations = {
   uploadFile: 'uploadFile',
