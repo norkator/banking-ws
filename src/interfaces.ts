@@ -1,4 +1,4 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel} from './constants';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Service} from './constants';
 
 
 /**
@@ -18,6 +18,20 @@ export interface UserParamsInterface {
 export interface SoftwareIdInterface {
   name: string;
   version: string;
+}
+
+/**
+ * Certificate request interface
+ */
+export interface CertApplicationRequestInterface {
+  CustomerId: string;
+  Timestamp: string;
+  Environment: Environment;
+  SoftwareId: SoftwareIdInterface;
+  Command: Command;
+  Service: Service;
+  ExecutionSerial: string;
+  Content: string;
 }
 
 /**
