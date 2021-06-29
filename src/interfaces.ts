@@ -1,19 +1,28 @@
 import {Bank, Currency, Environment, PaymentMethod, ServiceLevel} from './constants';
 
+
+/**
+ * User environment params like secrets
+ */
 export interface UserParamsInterface {
   bank: Bank;
   environment: Environment;
-  signingPrivate_key: string;
+  signingPrivateKey: string;
   signingCertificate: string;
   customerId: string;
 }
 
+/**
+ * User software version params
+ */
 export interface SoftwareIdInterface {
   name: string;
   version: string;
 }
 
-
+/**
+ * Definitions for XL SEPA message
+ */
 export interface XLInterface {
   CcyOfTrf: Currency; // Currency of transfer
   GrpHdr: { // Group Header
