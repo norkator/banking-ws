@@ -10,7 +10,10 @@ import {UserParamsInterface, SoftwareIdInterface, XLInterface} from './interface
 import {GetWSDL} from './utils';
 
 
-async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any) {
+async function UploadFile(userParams: UserParamsInterface, xlParams: XLInterface) {
+  const xl = new XL(xlParams);
+  const xlMessage = xl.createXmlBody();
+
   // const WSDL = soap.WSDL;
   // const options = {};
   // WSDL.open(GetWSDL(userParams.environment, userParams.bank), options,
@@ -25,7 +28,13 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
   //   {name: 'Test', version: '0.9.0'} as SoftwareIdInterface, FileTypes.XT
   // );
   // console.log(applicationRequest.createXmlBody());
+}
 
+
+
+
+
+function test() {
   const xlValues: XLInterface = {
     CcyOfTrf: 'EUR',
     GrpHdr: {
@@ -139,14 +148,16 @@ async function UploadFile(userParams: UserParamsInterface, uploadFileParams: any
       }
     }
   };
-
-  const xl = new XL(xlValues);
-  console.log(xl.createXmlBody())
-
+  // @ts-ignore
+  UploadFile(
+    {bank: 'Samlink', environment: 'TEST',
+      signingPrivateKey: '', signingCertificate: '',
+      customerId: '1234'},
+    xlValues
+  ).then(() => null);
 }
 
-// @ts-ignore
-UploadFile({environment: 'TEST', bank: 'Samlink'}).then(() => null);
+
 
 async function DownloadFileList(userParams: UserParamsInterface, downloadFileListParams: any) {
 
