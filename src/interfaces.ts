@@ -1,4 +1,4 @@
-import {Bank, Environment} from './constants';
+import {Bank, Currency, Environment} from './constants';
 
 export interface UserParamsInterface {
   bank: Bank;
@@ -15,6 +15,7 @@ export interface SoftwareIdInterface {
 
 
 export interface XLInterface {
+  CcyOfTrf: Currency; // Currency of transfer
   GrpHdr: { // Group Header
     MsgId: string; // Message Identification
     CreDtTm: string; // Creation Date Time
