@@ -3,6 +3,7 @@
 import * as xmlBuilder from 'xmlbuilder';
 import {CertApplicationRequestInterface} from '../interfaces';
 import {Environment} from '../constants';
+import {Base64EncodedSHA1Digest} from "../utils";
 
 
 class CertApplicationRequest {
@@ -33,6 +34,9 @@ class CertApplicationRequest {
       .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
     // .ele('SerialNumber', 'str1234').up();
 
+    // Calculate digest from request elements
+    const request = xml.end({pretty: true}); // before adding signature have to calculate digest
+    const digest = Base64EncodedSHA1Digest(request);
 
     // Signature elements
     xml.ele('ds:Signature', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
@@ -51,29 +55,27 @@ class CertApplicationRequest {
         Algorithm: 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
         'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
       }).up()
-       .up()
-       .ele('ds:DigestMethod', {
-         Algorithm: 'http://www.w3.org/2000/09/xmldsig#sha1',
-         'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
-       }).up()
-       .ele('ds:DigestValue', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .up()
-       .up()
-       .ele('ds:SignatureValue', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .ele('ds:KeyInfo', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-       .ele('ds:X509Data', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-       .ele('ds:X509SubjectName', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .ele('ds:X509Certificate', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .up()
-       .ele('ds:KeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-       .ele('ds:RSAKeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .ele('ds:Modulus', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .ele('ds:Exponent', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-       .up()
-       .up()
-       .up()
-      // .up();
-
+      .up()
+      .ele('ds:DigestMethod', {
+        Algorithm: 'http://www.w3.org/2000/09/xmldsig#sha1',
+        'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
+      }).up()
+      .ele('ds:DigestValue', digest, {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .up()
+      .up()
+      .ele('ds:SignatureValue', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .ele('ds:KeyInfo', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+      .ele('ds:X509Data', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+      .ele('ds:X509SubjectName', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .ele('ds:X509Certificate', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .up()
+      .ele('ds:KeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+      .ele('ds:RSAKeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .ele('ds:Modulus', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .ele('ds:Exponent', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+      .up()
+      .up()
+      .up();
 
     return xml.end({pretty: true});
   }
