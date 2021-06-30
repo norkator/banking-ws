@@ -24,6 +24,7 @@ export interface SoftwareIdInterface {
  * Certificate request interface
  */
 export interface CertApplicationRequestInterface {
+  SigningPrivateKey: string;
   CustomerId: string;
   Timestamp: string;
   Environment: Environment;
