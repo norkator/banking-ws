@@ -22,7 +22,6 @@ class CertApplicationRequest {
       .ele('Environment', this.crp.Environment).up()
       .ele('SoftwareId', this.getSoftwareId()).up()
       .ele('Command', this.crp.Command).up()
-
       // .ele('Encryption', true).up()
       // .ele('EncryptionMethod', 'str1234').up()
       .ele('Compression', false).up()
@@ -30,7 +29,6 @@ class CertApplicationRequest {
       .ele('Service', this.crp.Service).up()
       .ele('ExecutionSerial', this.crp.ExecutionSerial).up()
       .ele('Content', this.crp.Content).up()
-
       .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
     // .ele('SerialNumber', 'str1234').up();
     return xml.end({pretty: true});
