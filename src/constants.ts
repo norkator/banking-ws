@@ -2,11 +2,12 @@ export type Environment = 'TEST' | 'PRODUCTION';
 export type Bank = 'Samlink';
 export type FileType = 'XL' | 'XT';
 export type Status = 'NEW' | 'DLD' | 'ALL' | '';
-export type Currency = 'EUR' | 'USD'
-export type PaymentMethod = 'TRF'
-export type ServiceLevel = 'SLEV'
-export type Command = 'GetCertificateRequest'
-export type Service = 'MATU'
+export type Currency = 'EUR' | 'USD';
+export type PaymentMethod = 'TRF';
+export type ServiceLevel = 'SLEV';
+export type Command = 'GetCertificateRequest';
+export type Service = 'MATU';
+export type OutputEncoding = 'utf-8' | 'base64';
 
 const Operations = {
   uploadFile: 'uploadFile',

@@ -1,7 +1,8 @@
 import {createHash} from 'crypto';
-import {Bank, Environment} from './constants';
+import {Bank, Environment, OutputEncoding} from './constants';
 import * as path from 'path';
 import {readFileSync} from 'fs';
+import * as openssl from 'openssl-nodejs';
 
 
 /**
@@ -30,13 +31,13 @@ function Base64EncodeStr(str: string): string {
 
 /**
  * @param filePath, full path + filename and it's extension
+ * @param outputEncoding
  * @constructor
  */
-async function LoadFileFromPath(filePath: string): Promise<string> {
-  const file = readFileSync(filePath, 'utf-8');
+async function LoadFileFromPath(filePath: string, outputEncoding: OutputEncoding): Promise<string> {
+  const file = readFileSync(filePath, outputEncoding);
   return Buffer.from(file).toString('utf-8');
 }
-
 
 /**
  * @param csr, without modifications
@@ -67,6 +68,28 @@ function Base64EncodedSHA1Digest(content: string): string {
 }
 
 
+function OpenSSLGetSHA1Signature(outFileName: string, privateKeyPem: string, xmlContent: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // openssl dgst -sha1 -sign ./keys/signing.key -out sha1.sign cert_debug.xml
+    openssl(['dgst', '-sha1', '-sign', {
+      name: 'signing.key',
+      buffer: Buffer.from(privateKeyPem)
+    }, '-out', outFileName, {
+      name: 'toSign.xml',
+      buffer: Buffer.from(xmlContent)
+    }], function (err, buffer) {
+      LoadFileFromPath(
+        path.join(__dirname + '/../' + '/openssl/' + outFileName), 'base64'
+      ).then((content) => {
+        resolve(content);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  });
+}
+
+
 export {
   GetWSDL,
   Base64DecodeStr,
@@ -74,4 +97,5 @@ export {
   LoadFileFromPath,
   FormatCertificate,
   Base64EncodedSHA1Digest,
+  OpenSSLGetSHA1Signature,
 }

@@ -7,6 +7,9 @@ node_modules
 # Build
 dist
 
+# OpenSSL temp folder
+openssl
+
 # Debugging related
 src/test.ts
 cert_debug.xml

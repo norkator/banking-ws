@@ -13,7 +13,7 @@ import {CertApplicationRequest} from "./contents/certApplicationRequest";
 
 async function GetCertificate(crp: CertApplicationRequestInterface): Promise<string> {
   const certRequest = new CertApplicationRequest(crp);
-  console.log(certRequest.createXmlBody());
+  console.log(await certRequest.createXmlBody());
   return '';
 }
 
