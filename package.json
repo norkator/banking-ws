@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "moment": "2.29.1",
+    "openssl-nodejs": "1.0.5",
     "strong-soap": "3.2.1",
     "xmlbuilder": "15.1.1"
   }

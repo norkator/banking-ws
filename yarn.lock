@@ -1010,6 +1010,11 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
+openssl-nodejs@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/openssl-nodejs/-/openssl-nodejs-1.0.5.tgz#2249073693eabf5c5b33620eece4bf00bf1f914d"
+  integrity sha512-6+nxZBw96nK1WUk5yIjhv9NRjqtNTfklB508T64BG5TQ8fU1x1rJrc1I3iVW+31KjnYYYwInGTopYxFJa7wMqA==
+
 os-locale@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/os-locale/-/os-locale-5.0.0.tgz#6d26c1d95b6597c5d5317bf5fba37eccec3672e0"
