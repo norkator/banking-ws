@@ -1539,7 +1539,7 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
-xml-crypto@2.1.2, xml-crypto@^2.1.1:
+xml-crypto@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-2.1.2.tgz#501506d42e466f6cd908c5a03182217231b4e4b8"
   integrity sha512-DBhZXtBjENtLwJmeJhLUBwUm9YWNjCRvAx6ESP4VJyM9PDuKqZu2Fp5Y5HKqcdJT7vV7eI25Z4UBMezji6QloQ==
