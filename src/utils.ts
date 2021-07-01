@@ -89,6 +89,14 @@ function OpenSSLGetSHA1Signature(outFileName: string, privateKeyPem: string, xml
   });
 }
 
+function OpenSSLGetCertificateModulus() {
+  // Todo: openssl req -noout -modulus -in ./keys/signing.csr | openssl base64
+}
+
+function OpenSSLGetCertificateSubject() {
+  // Todo: openssl req -noout -subject -in ./keys/signing.csr
+}
+
 
 export {
   GetWSDL,
