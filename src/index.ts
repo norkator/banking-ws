@@ -11,8 +11,8 @@ import {GetWSDL} from './utils';
 import {CertApplicationRequest} from "./contents/certApplicationRequest";
 
 
-async function GetCertificate(crp: CertApplicationRequestInterface): Promise<string> {
-  const certRequest = new CertApplicationRequest(crp);
+async function GetCertificate(firstTimeRequest: boolean, crp: CertApplicationRequestInterface): Promise<string> {
+  const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
   console.log(await certRequest.createXmlBody());
   return '';
 }
