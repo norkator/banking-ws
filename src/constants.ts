@@ -1,5 +1,6 @@
 export type Environment = 'TEST' | 'PRODUCTION';
 export type Bank = 'Samlink';
+export type WsdlType = 'cert_' | '';
 export type FileType = 'XL' | 'XT';
 export type Status = 'NEW' | 'DLD' | 'ALL' | '';
 export type Currency = 'EUR' | 'USD';
