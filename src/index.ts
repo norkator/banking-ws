@@ -1,34 +1,39 @@
 'use strict';
 
-import * as path from 'path';
-
-const soap = require('strong-soap').soap;
-import {ApplicationRequest} from './contents/applicationRequest';
 import {XL} from './contents/XL';
-import {Bank, Currency, Environment, FileTypes, Operations} from './constants';
-import {UserParamsInterface, SoftwareIdInterface, XLInterface, CertApplicationRequestInterface} from './interfaces';
-import {GetWSDL} from './utils';
-import {CertApplicationRequest} from "./contents/certApplicationRequest";
+import {UserParamsInterface, XLInterface, CertApplicationRequestInterface} from './interfaces';
+import {Base64EncodeStr} from './utils';
+import {CertApplicationRequest} from './contents/certApplicationRequest';
+import {CertRequestEnvelope} from './contents/CertRequestEnvelope';
+import {CertApplicationResponse} from './contents/certApplicationResponse';
+import axios from 'axios';
 
 
-async function GetCertificate(firstTimeRequest: boolean, crp: CertApplicationRequestInterface): Promise<string> {
-  const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
-  console.log(await certRequest.createXmlBody());
-  return '';
+async function GetCertificate(
+  userParams: UserParamsInterface, firstTimeRequest: boolean, crp: CertApplicationRequestInterface, requestId: string,
+): Promise<CertApplicationResponse> {
+  try {
+    const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
+    const body = await certRequest.createXmlBody();
+    // console.log('CertApplicationRequest', body);
+    const applicationRequest = Base64EncodeStr(body);
+    const certRequestEnvelope = new CertRequestEnvelope(crp.CustomerId, requestId, applicationRequest);
+
+    const response = await axios.post(crp.requestUrl, certRequestEnvelope, {
+      headers: {'Content-Type': 'text/xml'}
+    });
+
+    return new CertApplicationResponse(response.data);
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
 }
+
 
 async function UploadFile(userParams: UserParamsInterface, xlParams: XLInterface) {
   const xl = new XL(xlParams);
   const xlMessage = xl.createXmlBody();
-
-  // const WSDL = soap.WSDL;
-  // const options = {};
-  // WSDL.open(GetWSDL(userParams.environment, userParams.bank), options,
-  //   function (err: any, wsdl: any) {
-  //     const downloadFileOp = wsdl.definitions.bindings.CorporateFileServiceHttpBinding.operations.downloadFile;
-  //     console.log(downloadFileOp.$name)
-  //   });
-
   // const applicationRequest = new ApplicationRequest(
   //   '123456', Operations.downloadFile, '', '', 'NEW',
   //   ['test1', 'test2', 'test3'], 'TestFileName', false, 0, 0,

@@ -24,6 +24,7 @@ export interface SoftwareIdInterface {
  * Certificate request interface
  */
 export interface CertApplicationRequestInterface {
+  requestUrl: string;
   CurrentWorkingDirectory?: string;
   SigningPrivateKey?: string;
   CustomerId: string;
