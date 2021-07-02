@@ -11,6 +11,8 @@ Table of contents
     * [Documents](#documents)
 * [Installing](#installing)
 * [Getting Started](#getting-started)
+* [Examples](#examples)
+    * [Samlink initial get certificate](#samlink-initial-get-certificate)
     
 
 
@@ -65,4 +67,40 @@ encryption.csr
 encryption.key
 signing.csr
 signing.key
+```
+
+
+
+Examples
+============
+
+
+Samlink initial get certificate
+-----
+```typescript
+import * as moment from 'moment'
+import {CertApplicationRequestInterface, SoftwareIdInterface} from './src/interfaces';
+import {FormatCertificate, LoadFileFromPath} from './src/utils';
+import {GetCertificate} from "./src/index";
+import * as path from 'path';
+
+
+const csrFilePath = path.join(__dirname + '/../' + '/keys/signing.csr');
+const csr = await LoadFileFromPath(csrFilePath, 'utf-8');
+const formattedCsr = FormatCertificate(csr);
+
+
+const crp: CertApplicationRequestInterface = {
+  CustomerId: '12345678',
+  Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  Environment: 'PRODUCTION',
+  SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
+  Command: 'GetCertificate',
+  Service: 'ISSUER',
+  Content: formattedCsr,
+  TransferKey: '1234567812345678'
+};
+
+const certificate = await GetCertificate(true, crp);
+console.log(certificate);
 ```
