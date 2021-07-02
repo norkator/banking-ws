@@ -1,5 +1,5 @@
 import {createHash} from 'crypto';
-import {Bank, Environment, OutputEncoding} from './constants';
+import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
 import * as path from 'path';
 import {readFileSync} from 'fs';
 import * as openssl from 'openssl-nodejs';
@@ -8,8 +8,10 @@ import * as openssl from 'openssl-nodejs';
 /**
  * @return {string} wsdl file path and name
  */
-function GetWSDL(environment: Environment, bank: Bank): string {
-  return path.join(__dirname + '/wsdl/wsdl_' + bank.toLowerCase() + '_' + environment.toLowerCase() + '.xml');
+function GetWSDL(environment: Environment, bank: Bank, type: WsdlType): string {
+  const path_ = path.join(__dirname + '/wsdl/wsdl_' + bank.toLowerCase() + '_' + type + environment.toLowerCase() + '.xml');
+  console.log(path_);
+  return path_;
 }
 
 /**
