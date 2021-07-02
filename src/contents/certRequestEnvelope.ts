@@ -25,7 +25,8 @@ class CertRequestEnvelope {
       .ele('opc:RequestHeader')
       .ele('opc:SenderId', this.senderId).up()
       .ele('opc:RequestId', this.requestId).up()
-      .ele('opc:Timestamp', moment().format('YYYY-MM-DDThh:mm:ssZ'),).up()
+      // @ts-ignore
+      .ele('opc:Timestamp', new moment().format('YYYY-MM-DDThh:mm:ssZ'),).up()
       .up()
       .ele('opc:ApplicationRequest', this.applicationRequest)
       .up()

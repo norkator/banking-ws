@@ -2,6 +2,7 @@ import {createHash} from 'crypto';
 import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
 import * as path from 'path';
 import {readFileSync} from 'fs';
+// @ts-ignore
 import * as openssl from 'openssl-nodejs';
 
 
@@ -79,7 +80,7 @@ function OpenSSLGetSHA1Signature(outFileName: string, privateKeyPem: string, xml
     }, '-out', outFileName, {
       name: 'toSign.xml',
       buffer: Buffer.from(xmlContent)
-    }], function (err, buffer) {
+    }], function () {
       LoadFileFromPath(
         path.join(__dirname + '/../' + '/openssl/' + outFileName), 'base64'
       ).then((content) => {

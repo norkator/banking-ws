@@ -16,7 +16,7 @@ class CertApplicationResponse {
     return false;
   }
 
-  public getCertificate(): string {
+  public getCertificate(): string | undefined {
     return undefined;
   }
 

@@ -12,22 +12,20 @@ import axios from 'axios';
 async function GetCertificate(
   userParams: UserParamsInterface, firstTimeRequest: boolean, crp: CertApplicationRequestInterface, requestId: string,
 ): Promise<CertApplicationResponse> {
-  try {
-    const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
-    const body = await certRequest.createXmlBody();
-    // console.log('CertApplicationRequest', body);
-    const applicationRequest = Base64EncodeStr(body);
-    const certRequestEnvelope = new CertRequestEnvelope(crp.CustomerId, requestId, applicationRequest);
+  const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
+  const body = await certRequest.createXmlBody();
 
-    const response = await axios.post(crp.requestUrl, certRequestEnvelope, {
-      headers: {'Content-Type': 'text/xml'}
-    });
-
-    return new CertApplicationResponse(response.data);
-  } catch (e) {
-    console.error(e);
-    return undefined;
+  if (body === undefined) {
+    throw new Error('CertApplicationRequest returned emtpy body from createXmlBody');
   }
+  const applicationRequest = Base64EncodeStr(body);
+  const certRequestEnvelope = new CertRequestEnvelope(crp.CustomerId, requestId, applicationRequest);
+
+  const response = await axios.post(crp.requestUrl, certRequestEnvelope, {
+    headers: {'Content-Type': 'text/xml'}
+  });
+
+  return new CertApplicationResponse(response.data);
 }
 
 

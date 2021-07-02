@@ -16,7 +16,7 @@ class CertApplicationRequest {
     this.crp = crp;
   }
 
-  public async createXmlBody(): Promise<string> {
+  public async createXmlBody(): Promise<string | undefined> {
     try {
       let xml: xmlBuilder.XMLElement = xmlBuilder.create(
         'CertApplicationRequest', {version: '1.0', encoding: 'utf-8'}
@@ -34,7 +34,7 @@ class CertApplicationRequest {
         .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
 
 
-      if (!this.firstTimeRequest) {
+      if (!this.firstTimeRequest && this.crp.SigningPrivateKey !== undefined) {
         // Calculate digest from request elements
         const requestXml = xml.end({pretty: true}); // before adding signature have to calculate digest
         const digest = Base64EncodedSHA1Digest(requestXml);
