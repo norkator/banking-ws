@@ -8,9 +8,11 @@ import {Base64EncodedSHA1Digest, OpenSSLGetSHA1Signature} from '../utils';
 
 class CertApplicationRequest {
 
+  private readonly firstTimeRequest: boolean;
   private crp: CertApplicationRequestInterface;
 
-  constructor(crp: CertApplicationRequestInterface) {
+  constructor(firstTimeRequest: boolean, crp: CertApplicationRequestInterface) {
+    this.firstTimeRequest = firstTimeRequest;
     this.crp = crp;
   }
 
@@ -25,63 +27,60 @@ class CertApplicationRequest {
         .ele('Environment', this.crp.Environment).up()
         .ele('SoftwareId', this.getSoftwareId()).up()
         .ele('Command', this.crp.Command).up()
-        // .ele('Encryption', true).up()
-        // .ele('EncryptionMethod', 'str1234').up()
         .ele('Compression', false).up()
-        // .ele('CompressionMethod', 'str1234').up()
         .ele('Service', this.crp.Service).up()
         .ele('ExecutionSerial', this.crp.ExecutionSerial).up()
         .ele('Content', this.crp.Content).up()
         .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
-      // .ele('SerialNumber', 'str1234').up();
-
-      // Calculate digest from request elements
-      const requestXml = xml.end({pretty: true}); // before adding signature have to calculate digest
-      const digest = Base64EncodedSHA1Digest(requestXml);
 
 
-      const outFileName = 'sha1.sign';
-      const signatureValue = await OpenSSLGetSHA1Signature(outFileName, this.crp.SigningPrivateKey, requestXml);
+      if (!this.firstTimeRequest) {
+        // Calculate digest from request elements
+        const requestXml = xml.end({pretty: true}); // before adding signature have to calculate digest
+        const digest = Base64EncodedSHA1Digest(requestXml);
 
+        const outFileName = 'sha1.sign';
+        const signatureValue = await OpenSSLGetSHA1Signature(outFileName, this.crp.SigningPrivateKey, requestXml);
 
-      // Signature elements
-      xml.ele('ds:Signature', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-        .ele('ds:SignedInfo', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#"'})
-        .ele('ds:CanonicalizationMethod', {
-          Algorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-          'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
-        }).up()
-        .ele('ds:SignatureMethod', {
-          Algorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
-          'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
-        }).up()
-        .ele('ds:Reference', {URI: '', 'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-        .ele('ds:Transforms', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-        .ele('ds:Transform', {
-          Algorithm: 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-          'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
-        }).up()
-        .up()
-        .ele('ds:DigestMethod', {
-          Algorithm: 'http://www.w3.org/2000/09/xmldsig#sha1',
-          'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
-        }).up()
-        .ele('ds:DigestValue', digest, {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .up()
-        .up()
-        .ele('ds:SignatureValue', signatureValue, {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .ele('ds:KeyInfo', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-        .ele('ds:X509Data', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-        .ele('ds:X509SubjectName', 'ok_value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .ele('ds:X509Certificate', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .up()
-        .ele('ds:KeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
-        .ele('ds:RSAKeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .ele('ds:Modulus', 'ok_value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .ele('ds:Exponent', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
-        .up()
-        .up()
-        .up();
+        // Signature elements
+        xml.ele('ds:Signature', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+          .ele('ds:SignedInfo', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#"'})
+          .ele('ds:CanonicalizationMethod', {
+            Algorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+            'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
+          }).up()
+          .ele('ds:SignatureMethod', {
+            Algorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+            'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
+          }).up()
+          .ele('ds:Reference', {URI: '', 'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+          .ele('ds:Transforms', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+          .ele('ds:Transform', {
+            Algorithm: 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+            'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
+          }).up()
+          .up()
+          .ele('ds:DigestMethod', {
+            Algorithm: 'http://www.w3.org/2000/09/xmldsig#sha1',
+            'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'
+          }).up()
+          .ele('ds:DigestValue', digest, {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .up()
+          .up()
+          .ele('ds:SignatureValue', signatureValue, {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .ele('ds:KeyInfo', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+          .ele('ds:X509Data', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+          .ele('ds:X509SubjectName', 'ok_value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .ele('ds:X509Certificate', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .up()
+          .ele('ds:KeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'})
+          .ele('ds:RSAKeyValue', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .ele('ds:Modulus', 'ok_value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .ele('ds:Exponent', 'value_here', {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#'}).up()
+          .up()
+          .up()
+          .up();
+      }
 
       return xml.end({pretty: true});
     } catch (e) {
