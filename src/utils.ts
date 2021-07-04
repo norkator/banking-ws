@@ -69,6 +69,14 @@ function FormatCertificate(csr: string): string {
 }
 
 /**
+ * @param content, example base64 encoded message with white spaces
+ * @constructor
+ */
+function RemoveWhiteSpacesAndNewLines(content: string): string {
+  return content.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
+}
+
+/**
  * @param content to digest
  * @return base64 encoded sha1 digest
  * @constructor
@@ -101,6 +109,20 @@ function OpenSSLGetSHA1Signature(outFileName: string, privateKeyPem: string, xml
   });
 }
 
+function OpenSSLVerifySHA1Signature(pemKey: string, fileContent: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    openssl(['dgst', '-sha1', '-verify', {
+      name: 'public.pem',
+      buffer: Buffer.from(pemKey)
+    }, '-signature', {
+      name: 'sha1.sign',
+      buffer: Buffer.from(fileContent)
+    }], function (result) {
+      console.log(result.toString());
+    });
+  });
+}
+
 function OpenSSLGetCertificateModulus() {
   // Todo: openssl req -noout -modulus -in ./keys/signing.csr | openssl base64
 }
@@ -117,6 +139,8 @@ export {
   Base64EncodeStr,
   LoadFileFromPath,
   FormatCertificate,
+  RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
   OpenSSLGetSHA1Signature,
+  OpenSSLVerifySHA1Signature,
 }
