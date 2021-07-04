@@ -38,6 +38,14 @@ export interface CertApplicationRequestInterface {
   TransferKey?: string; // used in the first time request
 }
 
+
+export interface CertificateInterface {
+  Name: string;
+  Certificate: string; // base64 encoded
+  CertificateFormat: string;
+}
+
+
 /**
  * Definitions for XL SEPA message
  */
