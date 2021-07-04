@@ -37,6 +37,7 @@
     "axios": "0.21.1",
     "moment": "2.29.1",
     "openssl-nodejs": "1.0.5",
+    "xml2js": "0.4.23",
     "xmlbuilder": "15.1.1"
   }
 }
