@@ -7,6 +7,15 @@ import * as openssl from 'openssl-nodejs';
 
 
 /**
+ * @param fullPath, path and filenames with extension
+ * @constructor
+ */
+function LoadFileAsString(fullPath: string): string {
+  const file = readFileSync(fullPath, 'utf-8');
+  return Buffer.from(file).toString('utf-8');
+}
+
+/**
  * @return {string} wsdl file path and name
  */
 function GetWSDL(environment: Environment, bank: Bank, type: WsdlType): string {
@@ -102,6 +111,7 @@ function OpenSSLGetCertificateSubject() {
 
 
 export {
+  LoadFileAsString,
   GetWSDL,
   Base64DecodeStr,
   Base64EncodeStr,
