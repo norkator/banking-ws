@@ -1,17 +1,18 @@
 'use strict';
 
 import {XL} from './contents/XL';
-import {UserParamsInterface, XLInterface, CertApplicationRequestInterface} from './interfaces';
-import {Base64EncodeStr} from './utils';
+import {UserParamsInterface, XLInterface, CertApplicationRequestInterface, CertificateInterface} from './interfaces';
+import {Base64EncodeStr, LoadFileAsString} from './utils';
 import {CertApplicationRequest} from './contents/certApplicationRequest';
 import {CertRequestEnvelope} from './contents/CertRequestEnvelope';
 import {CertApplicationResponse} from './contents/certApplicationResponse';
 import axios from 'axios';
+import * as path from "path";
 
 
 async function GetCertificate(
   userParams: UserParamsInterface, firstTimeRequest: boolean, crp: CertApplicationRequestInterface, requestId: string,
-): Promise<CertApplicationResponse> {
+): Promise<CertificateInterface> {
   const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
   const body = await certRequest.createXmlBody();
 
@@ -24,8 +25,17 @@ async function GetCertificate(
   const response = await axios.post(crp.requestUrl, certRequestEnvelope, {
     headers: {'Content-Type': 'text/xml'}
   });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'certtestresponse.xml'))
+  // };
+  const car = new CertApplicationResponse(firstTimeRequest, response.data, userParams.customerId);
+  await car.parseBody();
 
-  return new CertApplicationResponse(response.data);
+  if (car.isValid()) {
+    return car.getCertificate()
+  } else {
+    throw new Error('Response is not valid!')
+  }
 }
 
 
