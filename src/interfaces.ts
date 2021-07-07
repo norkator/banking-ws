@@ -10,6 +10,8 @@ export interface UserParamsInterface {
   signingPrivateKey: string | undefined;
   signingCertificate: string | undefined;
   customerId: string;
+  rootCA: string;
+  intermediateCA?: string
 }
 
 /**

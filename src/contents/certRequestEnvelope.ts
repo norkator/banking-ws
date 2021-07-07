@@ -16,11 +16,14 @@ class CertRequestEnvelope {
   }
 
   public createXmlBody(): string {
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create('soapenv:Envelope', {});
+    let xml: xmlBuilder.XMLElement = xmlBuilder.create('soapenv:Envelope');
 
     xml
-      .ele('seapenv:Header').up()
-      .ele('seapenv:Body', {})
+      .ele('seapenv:Header', {}).up()
+      .ele('seapenv:Body', {
+        'wsu:Id': 'id-3',
+        'xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd'
+      })
       .ele('opc:getCertificatein')
       .ele('opc:RequestHeader')
       .ele('opc:SenderId', this.senderId).up()

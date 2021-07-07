@@ -31,15 +31,15 @@ class CertApplicationResponse {
 
     // parse, handle response itself
     const xml = await this.parseXml(applicationResponseXML);
-    const ns2CertApplicationResponse = xml['ns2:CertApplicationResponse'];
+    const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
-    const customerId = ns2CertApplicationResponse['ns2:CustomerId'][0];
+    const customerId = ns2CertApplicationResponse['CustomerId'][0];
     if (customerId !== this.customerId) {
       throw new Error('Customer id does not match with cert application response customer id');
     }
 
-    const ResponseCode = ns2CertApplicationResponse['ResponseCode'];
-    const ResponseText = ns2CertApplicationResponse['ResponseText'];
+    const ResponseCode = ns2CertApplicationResponse['ResponseCode'][0];
+    const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     CertApplicationResponse.handleResponseCode(ResponseCode, ResponseText);
 
 
