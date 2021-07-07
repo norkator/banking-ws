@@ -22,14 +22,15 @@ class CertApplicationRequest {
         'CertApplicationRequest', {version: '1.0', encoding: 'utf-8'}
       );
       // Basic data elements
-      xml.ele('CustomerId', this.crp.CustomerId).up()
+      xml
+        .ele('CustomerId', this.crp.CustomerId).up()
         .ele('Timestamp', this.crp.Timestamp).up() // 2012-12-13T12:12:12
         .ele('Environment', this.crp.Environment).up()
         .ele('SoftwareId', this.getSoftwareId()).up()
         .ele('Command', this.crp.Command).up()
         .ele('Compression', false).up()
         .ele('Service', this.crp.Service).up()
-        .ele('ExecutionSerial', this.crp.ExecutionSerial).up()
+        // .ele('ExecutionSerial', this.crp.ExecutionSerial).up()
         .ele('Content', this.crp.Content).up()
         .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
 

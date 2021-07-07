@@ -65,7 +65,9 @@ function FormatCertificate(csr: string): string {
   return csr
     .replace('-----BEGIN CERTIFICATE REQUEST-----', '')
     .replace('-----END CERTIFICATE REQUEST-----', '')
-    .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
+    // .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
+    .replace(/\s+/, '') // remove white spaces
+    // .replace('\n', '')
 }
 
 /**

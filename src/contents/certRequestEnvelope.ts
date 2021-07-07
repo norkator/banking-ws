@@ -19,19 +19,16 @@ class CertRequestEnvelope {
     let xml: xmlBuilder.XMLElement = xmlBuilder.create('soapenv:Envelope');
 
     xml
-      .ele('seapenv:Header', {}).up()
-      .ele('seapenv:Body', {
-        'wsu:Id': 'id-3',
-        'xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd'
-      })
-      .ele('opc:getCertificatein')
-      .ele('opc:RequestHeader')
-      .ele('opc:SenderId', this.senderId).up()
-      .ele('opc:RequestId', this.requestId).up()
+      .ele('seapenv:Header').up()
+      .ele('seapenv:Body')
+      .ele('cer:getCertificatein')
+      .ele('cer:RequestHeader')
+      .ele('cer:SenderId', this.senderId).up()
+      .ele('cer:RequestId', this.requestId).up()
       // @ts-ignore
-      .ele('opc:Timestamp', new moment().format('YYYY-MM-DDThh:mm:ssZ'),).up()
+      .ele('cer:Timestamp', new moment().format('YYYY-MM-DDThh:mm:ssZ'),).up()
       .up()
-      .ele('opc:ApplicationRequest', this.applicationRequest)
+      .ele('cer:ApplicationRequest', this.applicationRequest)
       .up()
       .up()
       .up();

@@ -17,8 +17,10 @@ async function GetCertificate(
   const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
   const body = await certRequest.createXmlBody();
 
-  // console.log(body)
-  // return;
+  console.log(body);
+  const applicationRequests = Base64EncodeStr(body);
+  console.log(applicationRequests)
+  return;
 
   if (body === undefined) {
     throw new Error('CertApplicationRequest returned emtpy body from createXmlBody');
@@ -30,15 +32,18 @@ async function GetCertificate(
     ca: userParams.rootCA
   });
 
-  // const response = await axios.post(crp.requestUrl, certRequestEnvelope.createXmlBody(), {
-  //   headers: {'Content-Type': 'text/xml'},
-  //   httpsAgent: agent,
-  // });
-  const response = {
-    data: LoadFileAsString(path.join(__dirname + '/../' + 'certtestresponse.xml'))
-  };
+  const response = await axios.post(crp.requestUrl, certRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: ':get_certificate',
+    },
+    httpsAgent: agent,
+  });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'certtestresponse.xml'))
+  // };
 
-  // console.log(response.data);
+  console.log(response.data);
 
   const car = new CertApplicationResponse(firstTimeRequest, response.data, userParams.customerId);
   await car.parseBody();
