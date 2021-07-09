@@ -10,7 +10,7 @@ class CertApplicationResponse {
   private readonly response: string;
   private readonly customerId: string;
 
-  private certificate: CertificateInterface;
+  private certificate: CertificateInterface = {Name: undefined, Certificate: undefined, CertificateFormat: undefined};
   private isValidMessage: boolean = false;
 
   constructor(firstTimeRequest: boolean, response: string, customerId: string) {
@@ -21,7 +21,7 @@ class CertApplicationResponse {
 
   public async parseBody(): Promise<void> {
     // parse, handle application response envelope
-    const envelopeXML = await this.parseXml(this.response);
+    const envelopeXML: any = await this.parseXml(this.response);
     const envelope = envelopeXML['soapenv:Envelope'];
     const body = envelope['soapenv:Body'];
     const getCertificateOut = body[0]['cer:getCertificateout'];
@@ -30,7 +30,7 @@ class CertApplicationResponse {
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
     // parse, handle response itself
-    const xml = await this.parseXml(applicationResponseXML);
+    const xml: any = await this.parseXml(applicationResponseXML);
     const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
     const customerId = ns2CertApplicationResponse['CustomerId'][0];

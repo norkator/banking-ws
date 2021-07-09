@@ -42,9 +42,9 @@ export interface CertApplicationRequestInterface {
 
 
 export interface CertificateInterface {
-  Name: string;
-  Certificate: string; // base64 encoded
-  CertificateFormat: string;
+  Name: string | undefined;
+  Certificate: string | undefined; // base64 encoded
+  CertificateFormat: string | undefined;
 }
 
 

@@ -119,7 +119,7 @@ function OpenSSLVerifySHA1Signature(pemKey: string, fileContent: string): Promis
     }, '-signature', {
       name: 'sha1.sign',
       buffer: Buffer.from(fileContent)
-    }], function (result) {
+    }], function (result: Buffer) {
       console.log(result.toString());
     });
   });
