@@ -31,6 +31,7 @@ class CertApplicationResponse {
 
     // parse, handle response itself
     const xml: any = await this.parseXml(applicationResponseXML);
+    console.log(JSON.stringify(xml));
     const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
     const customerId = ns2CertApplicationResponse['CustomerId'][0];

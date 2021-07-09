@@ -2,12 +2,13 @@
 
 import {XL} from './contents/XL';
 import {UserParamsInterface, XLInterface, CertApplicationRequestInterface, CertificateInterface} from './interfaces';
-import {Base64EncodeStr} from './utils';
+import {Base64EncodeStr, LoadFileAsString} from './utils';
 import {CertApplicationRequest} from './contents/certApplicationRequest';
 import {CertRequestEnvelope} from './contents/certRequestEnvelope';
 import {CertApplicationResponse} from './contents/certApplicationResponse';
 import * as https from 'https';
 import axios from 'axios';
+import * as path from 'path';
 
 
 async function GetCertificate(
