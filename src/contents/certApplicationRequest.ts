@@ -4,6 +4,7 @@ import * as xmlBuilder from 'xmlbuilder';
 import {CertApplicationRequestInterface} from '../interfaces';
 import {Environment} from '../constants';
 import {Base64EncodedSHA1Digest, OpenSSLGetSHA1Signature} from '../utils';
+import * as moment from "moment";
 
 
 class CertApplicationRequest {
@@ -18,23 +19,25 @@ class CertApplicationRequest {
 
   public async createXmlBody(): Promise<string | undefined> {
     try {
-      let xml: xmlBuilder.XMLElement = xmlBuilder.create(
-        'CertApplicationRequest', {version: '1.0', encoding: 'utf-8'}
-      );
-      // Basic data elements
-      xml
-        .ele('CustomerId', this.crp.CustomerId).up()
-        .ele('Timestamp', this.crp.Timestamp).up() // 2012-12-13T12:12:12
-        .ele('Environment', this.crp.Environment).up()
-        .ele('SoftwareId', this.getSoftwareId()).up()
-        .ele('Command', this.crp.Command).up()
-        .ele('Compression', false).up()
-        .ele('Service', this.crp.Service).up()
-        // .ele('ExecutionSerial', this.crp.ExecutionSerial).up()
-        .ele('Content', this.crp.Content).up()
-        .ele('TransferKey', this.crp.TransferKey === undefined ? '' : this.crp.TransferKey).up();
 
+      const certRequestObj = {
+        'CertApplicationRequest': {
+          '@xmlns': 'http://op.fi/mlp/xmldata/',
 
+          'CustomerId': this.crp.CustomerId,
+          'Timestamp': this.crp.Timestamp, // 2012-12-13T12:12:12
+          'Environment': this.crp.Environment,
+          'SoftwareId': this.getSoftwareId(),
+          'Command': this.crp.Command,
+          'Compression': false,
+          'Service': this.crp.Service,
+          'ExecutionSerial': this.crp.ExecutionSerial,
+          'Content': this.crp.Content,
+          'TransferKey': this.crp.TransferKey === undefined ? '' : this.crp.TransferKey,
+        }
+      };
+
+      /*
       if (!this.firstTimeRequest && this.crp.SigningPrivateKey !== undefined) {
         // Calculate digest from request elements
         const requestXml = xml.end({pretty: true}); // before adding signature have to calculate digest
@@ -82,7 +85,9 @@ class CertApplicationRequest {
           .up()
           .up();
       }
+      */
 
+      let xml: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
       return xml.end({pretty: true});
     } catch (e) {
       return undefined;
