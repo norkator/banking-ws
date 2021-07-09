@@ -17,25 +17,22 @@ async function GetCertificate(
   const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
   const body = await certRequest.createXmlBody();
 
-  console.log(body);
-  const applicationRequests = Base64EncodeStr(body);
-  console.log(applicationRequests)
-  return;
-
   if (body === undefined) {
-    throw new Error('CertApplicationRequest returned emtpy body from createXmlBody');
+    throw new Error('CertApplicationRequest returned empty body from createXmlBody');
   }
   const applicationRequest = Base64EncodeStr(body);
   const certRequestEnvelope = new CertRequestEnvelope(crp.CustomerId, requestId, applicationRequest);
+
 
   const agent = new https.Agent({
     ca: userParams.rootCA
   });
 
+  // return;
   const response = await axios.post(crp.requestUrl, certRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
-      SOAPAction: ':get_certificate',
+      SOAPAction: '',
     },
     httpsAgent: agent,
   });
