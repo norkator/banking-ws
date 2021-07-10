@@ -3,8 +3,8 @@
 import * as xmlBuilder from 'xmlbuilder';
 import {CertApplicationRequestInterface} from '../interfaces';
 import {Environment} from '../constants';
-import {Base64EncodedSHA1Digest, OpenSSLGetSHA1Signature} from '../utils';
-import * as moment from "moment";
+import {Base64EncodedSHA1Digest, Base64EncodeStr, OpenSSLGetSHA1Signature} from '../utils';
+import * as moment from 'moment';
 
 
 class CertApplicationRequest {
@@ -32,7 +32,7 @@ class CertApplicationRequest {
           'Compression': false,
           'Service': this.crp.Service,
           'ExecutionSerial': this.crp.ExecutionSerial,
-          'Content': this.crp.Content,
+          'Content': Base64EncodeStr(this.crp.Content), // Base64 encoded -----BEGIN CERTIFICATE REQUEST----- ...
           'TransferKey': this.crp.TransferKey === undefined ? '' : this.crp.TransferKey,
         }
       };

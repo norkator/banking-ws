@@ -1,7 +1,8 @@
 # Banking-ws
 
-Library to construct, validate and make corporate banking web service request with SOAP
+Library to construct, validate and make corporate banking web service request with SOAP.
 
+Works with Samlink.
 
 
 Table of contents
@@ -12,7 +13,7 @@ Table of contents
 * [Installing](#installing)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
-    * [Samlink initial get certificate](#samlink-initial-get-certificate)
+    * [Initial get certificate](#initial-get-certificate)
     
 
 
@@ -56,15 +57,12 @@ Then you need to get your bank to sign your signing/encryption certificate(s). F
 You can generate your certificate signing requests with `openssl`
 
 ```bash
-openssl req -out encryption.csr -new -newkey rsa:2048 -nodes -keyout encryption.key
 openssl req -out signing.csr -new -newkey rsa:2048 -nodes -keyout signing.key
 ```
 
-After all this, you should have folllowing files:
+After this, you should have following files:
 
 ```
-encryption.csr
-encryption.key
 signing.csr
 signing.key
 ```
@@ -75,7 +73,7 @@ Examples
 ============
 
 
-Samlink initial get certificate
+Initial get certificate
 -----
 ```typescript
 import * as moment from 'moment'
