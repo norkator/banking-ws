@@ -1,11 +1,11 @@
 'use strict';
 
-import {XL} from './contents/XL';
+import {XL} from './sepa_payment/XL';
 import {UserParamsInterface, XLInterface, CertApplicationRequestInterface, CertificateInterface} from './interfaces';
 import {Base64EncodeStr, LoadFileAsString} from './utils';
-import {CertApplicationRequest} from './contents/certApplicationRequest';
-import {CertRequestEnvelope} from './contents/certRequestEnvelope';
-import {CertApplicationResponse} from './contents/certApplicationResponse';
+import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
+import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
+import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
 import * as https from 'https';
 import axios from 'axios';
 import * as path from 'path';
@@ -53,7 +53,11 @@ async function GetCertificate(
 }
 
 
-async function UploadFile(userParams: UserParamsInterface, xlParams: XLInterface) {
+async function RenewCertificate(): Promise<any> {
+}
+
+
+async function SEPAPayment(userParams: UserParamsInterface, xlParams: XLInterface) {
   const xl = new XL(xlParams);
   const xlMessage = xl.createXmlBody();
   // const applicationRequest = new ApplicationRequest(
@@ -64,20 +68,13 @@ async function UploadFile(userParams: UserParamsInterface, xlParams: XLInterface
   // console.log(applicationRequest.createXmlBody());
 }
 
-async function DownloadFileList(userParams: UserParamsInterface, downloadFileListParams: any) {
-}
-
-async function DownloadFile(userParams: UserParamsInterface, downloadFileParams: any) {
-}
-
-async function DeleteFile(userParams: UserParamsInterface, deleteFileParams: any) {
+async function BankStatement(userParams: UserParamsInterface, downloadFileListParams: any) {
 }
 
 
 export {
   GetCertificate,
-  UploadFile,
-  DownloadFileList,
-  DownloadFile,
-  DeleteFile,
+  RenewCertificate,
+  SEPAPayment,
+  BankStatement,
 }
