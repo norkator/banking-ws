@@ -23,6 +23,8 @@ class CertApplicationRequest {
       const certRequestObj = {
         'CertApplicationRequest': {
           '@xmlns': 'http://op.fi/mlp/xmldata/',
+          '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+          '@xsi:schemaLocation': 'http://op.fi/mlp/xmldata/ file:////csamnt1/K830186$/Datapower/schemas/CertApplicationRequest_20090422.xsd',
 
           'CustomerId': this.crp.CustomerId,
           'Timestamp': this.crp.Timestamp, // 2012-12-13T12:12:12
