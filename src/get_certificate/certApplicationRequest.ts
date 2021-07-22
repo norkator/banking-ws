@@ -29,9 +29,9 @@ class CertApplicationRequest {
           'Environment': this.crp.Environment,
           'SoftwareId': this.getSoftwareId(),
           'Command': this.crp.Command,
-          'Compression': false,
+          // 'Compression': false,
           'Service': this.crp.Service,
-          'ExecutionSerial': this.crp.ExecutionSerial,
+          // 'ExecutionSerial': this.crp.ExecutionSerial,
           'Content': Base64EncodeStr(this.crp.Content), // Base64 encoded -----BEGIN CERTIFICATE REQUEST----- ...
           'TransferKey': this.crp.TransferKey === undefined ? '' : this.crp.TransferKey,
         }
