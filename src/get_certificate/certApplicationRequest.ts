@@ -3,7 +3,7 @@
 import * as xmlBuilder from 'xmlbuilder';
 import {CertApplicationRequestInterface} from '../interfaces';
 import {Environment} from '../constants';
-import {Base64EncodedSHA1Digest, Base64EncodeStr, OpenSSLGetSHA1Signature} from '../utils';
+import {Base64EncodeStr} from '../utils';
 import * as moment from 'moment';
 
 

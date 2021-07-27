@@ -2,8 +2,6 @@ import {createHash} from 'crypto';
 import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
 import * as path from 'path';
 import {readFileSync} from 'fs';
-// @ts-ignore
-import * as openssl from 'openssl-nodejs';
 
 
 /**
@@ -66,8 +64,8 @@ function FormatCertificate(csr: string): string {
     // .replace('-----BEGIN CERTIFICATE REQUEST-----', '')
     // .replace('-----END CERTIFICATE REQUEST-----', '')
     .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
-    // .replace(/\s+/, '') // remove white spaces
-    // .replace('\n', '')
+  // .replace(/\s+/, '') // remove white spaces
+  // .replace('\n', '')
 }
 
 /**
@@ -90,50 +88,6 @@ function Base64EncodedSHA1Digest(content: string): string {
 }
 
 
-function OpenSSLGetSHA1Signature(outFileName: string, privateKeyPem: string, xmlContent: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // openssl dgst -sha1 -sign ./keys/signing.key -out sha1.sign cert_debug.xml
-    openssl(['dgst', '-sha1', '-sign', {
-      name: 'signing.key',
-      buffer: Buffer.from(privateKeyPem)
-    }, '-out', outFileName, {
-      name: 'toSign.xml',
-      buffer: Buffer.from(xmlContent)
-    }], function () {
-      LoadFileFromPath(
-        path.join(__dirname + '/../' + '/openssl/' + outFileName), 'base64'
-      ).then((content) => {
-        resolve(content);
-      }).catch((error) => {
-        reject(error);
-      });
-    });
-  });
-}
-
-function OpenSSLVerifySHA1Signature(pemKey: string, fileContent: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    openssl(['dgst', '-sha1', '-verify', {
-      name: 'public.pem',
-      buffer: Buffer.from(pemKey)
-    }, '-signature', {
-      name: 'sha1.sign',
-      buffer: Buffer.from(fileContent)
-    }], function (result: Buffer) {
-      console.log(result.toString());
-    });
-  });
-}
-
-function OpenSSLGetCertificateModulus() {
-  // Todo: openssl req -noout -modulus -in ./keys/signing.csr | openssl base64
-}
-
-function OpenSSLGetCertificateSubject() {
-  // Todo: openssl req -noout -subject -in ./keys/signing.csr
-}
-
-
 export {
   LoadFileAsString,
   GetWSDL,
@@ -143,6 +97,4 @@ export {
   FormatCertificate,
   RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
-  OpenSSLGetSHA1Signature,
-  OpenSSLVerifySHA1Signature,
 }
