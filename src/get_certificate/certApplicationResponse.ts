@@ -1,20 +1,18 @@
 'use strict';
 
 import {parseString} from 'xml2js';
-import {RemoveWhiteSpacesAndNewLines, Base64DecodeStr, OpenSSLVerifySHA1Signature} from '../utils';
+import {RemoveWhiteSpacesAndNewLines, Base64DecodeStr} from '../utils';
 import {CertificateInterface} from '../interfaces';
 
 class CertApplicationResponse {
 
-  private readonly firstTimeRequest: boolean;
   private readonly response: string;
   private readonly customerId: string;
 
   private certificate: CertificateInterface = {Name: undefined, Certificate: undefined, CertificateFormat: undefined};
   private isValidMessage: boolean = false;
 
-  constructor(firstTimeRequest: boolean, response: string, customerId: string) {
-    this.firstTimeRequest = firstTimeRequest;
+  constructor(response: string, customerId: string) {
     this.response = response;
     this.customerId = customerId;
   }
@@ -31,7 +29,6 @@ class CertApplicationResponse {
 
     // parse, handle response itself
     const xml: any = await this.parseXml(applicationResponseXML);
-    console.log(JSON.stringify(xml));
     const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
     const customerId = ns2CertApplicationResponse['CustomerId'][0];
@@ -56,13 +53,7 @@ class CertApplicationResponse {
     // const KeyInfo = Signature['KeyInfo'];
 
 
-    if (!this.firstTimeRequest) {
-      // todo, implement!!!
-      await OpenSSLVerifySHA1Signature('---key-here---', SignatureValue);
-      this.isValidMessage = false;
-    } else {
-      this.isValidMessage = true;
-    }
+    this.isValidMessage = true;
   }
 
   public isValid(): boolean {

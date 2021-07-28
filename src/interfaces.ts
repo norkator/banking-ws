@@ -23,21 +23,21 @@ export interface SoftwareIdInterface {
 }
 
 /**
- * Certificate request interface
+ * Get certificate interface
  */
-export interface CertApplicationRequestInterface {
+export interface GetCertificateInterface {
+  userParams: UserParamsInterface;
   requestUrl: string;
   CurrentWorkingDirectory?: string;
   SigningPrivateKey?: string;
-  CustomerId: string;
   Timestamp: string; // not in use with samlink but mandatory to be in schema
-  Environment: Environment;
   SoftwareId: SoftwareIdInterface; // eases problem solving so good to specify
   Command: Command;
   Service: Service;
   ExecutionSerial?: string; // not in use with samlink
   Content: string;
   TransferKey?: string; // used in the first time request
+  RequestId: string;
 }
 
 

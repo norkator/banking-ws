@@ -1,7 +1,12 @@
 'use strict';
 
 import {XL} from './sepa_payment/XL';
-import {UserParamsInterface, XLInterface, CertApplicationRequestInterface, CertificateInterface} from './interfaces';
+import {
+  UserParamsInterface,
+  XLInterface,
+  CertificateInterface,
+  GetCertificateInterface
+} from './interfaces';
 import {Base64EncodeStr, LoadFileAsString} from './utils';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
@@ -11,38 +16,36 @@ import axios from 'axios';
 import * as path from 'path';
 
 
-async function GetCertificate(
-  userParams: UserParamsInterface, firstTimeRequest: boolean, crp: CertApplicationRequestInterface, requestId: string,
-): Promise<CertificateInterface> {
-  const certRequest = new CertApplicationRequest(firstTimeRequest, crp);
+async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateInterface> {
+  const certRequest = new CertApplicationRequest(gc);
   const body = await certRequest.createXmlBody();
 
   if (body === undefined) {
     throw new Error('CertApplicationRequest returned empty body from createXmlBody');
   }
   const applicationRequest = Base64EncodeStr(body);
-  const certRequestEnvelope = new CertRequestEnvelope(crp.CustomerId, requestId, applicationRequest);
+  const certRequestEnvelope = new CertRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
 
 
   const agent = new https.Agent({
-    ca: userParams.rootCA
+    ca: gc.userParams.rootCA
   });
 
   // return;
-  const response = await axios.post(crp.requestUrl, certRequestEnvelope.createXmlBody(), {
-    headers: {
-      'Content-Type': 'text/xml',
-      SOAPAction: '',
-    },
-    httpsAgent: agent,
-  });
-  // const response = {
-  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'certtestresponse.xml'))
-  // };
+  // const response = await axios.post(crp.requestUrl, certRequestEnvelope.createXmlBody(), {
+  //   headers: {
+  //     'Content-Type': 'text/xml',
+  //     SOAPAction: '',
+  //   },
+  //   httpsAgent: agent,
+  // });
+  const response = {
+    data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
+  };
 
-  console.log(response.data);
+  // console.log(response.data);
 
-  const car = new CertApplicationResponse(firstTimeRequest, response.data, userParams.customerId);
+  const car = new CertApplicationResponse(response.data, gc.userParams.customerId);
   await car.parseBody();
 
   if (car.isValid()) {
