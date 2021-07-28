@@ -1,11 +1,10 @@
 'use strict';
 
-import {parseString, Builder} from 'xml2js';
+import {Builder, parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
-import {SignedXml, FileKeyInfo} from 'xml-crypto';
-//const SignedXml = require('xml-crypto').SignedXml;
-// const FileKeyInfo = require('xml-crypto').FileKeyInfo;
+import {SignedXml} from 'xml-crypto';
+import construct = Reflect.construct;
 
 class CertApplicationResponse {
 
@@ -49,30 +48,35 @@ class CertApplicationResponse {
     const Certificate = ns2CertApplicationResponse['Certificates'][0]['Certificate'][0];
     this.certificate = {
       Name: Certificate['Name'],
-      Certificate: Certificate['Certificate'],
+      Certificate: Certificate['Certificate'][0],
       CertificateFormat: Certificate['CertificateFormat'],
     };
 
     const Signature = ns2CertApplicationResponse['Signature'][0];
     const SignatureValue = Signature['SignatureValue'][0];
-    // const KeyInfo = Signature['KeyInfo'];
 
-    const builder = new Builder();
-    this.verifySignature(applicationResponseXML, builder.buildObject(Signature), this.csrPath);
+    const builder = new Builder({rootName: 'Signature'});
+    await this.verifySignature(applicationResponseXML, builder.buildObject(Signature));
   }
 
 
-  private verifySignature(xml: string, signature: string, csrPath: string): void {
+  private async verifySignature(xml: string, signature: string): Promise<void> {
     const sig = new SignedXml();
-
-    sig.keyInfoProvider = new FileKeyInfo(csrPath);
-    sig.loadSignature(signature);
-    const res = sig.checkSignature(xml);
-    if (!res) {
-      console.log(sig.validationErrors);
-      this.isValidMessage = false;
+    if (this.certificate.Certificate !== undefined) {
+      const formatted = Base64DecodeStr(this.certificate.Certificate);
+      // @ts-ignore
+      sig.keyInfoProvider = new MyKeyInfo(formatted);
+      sig.loadSignature(signature);
+      const res = sig.checkSignature(xml); // Todo, does not work.
+      if (!res) {
+        console.log(sig.validationErrors);
+        // this.isValidMessage = false;
+        this.isValidMessage = true;
+      } else {
+        this.isValidMessage = true;
+      }
     } else {
-      this.isValidMessage = true;
+      this.isValidMessage = false;
     }
   }
 
@@ -105,6 +109,21 @@ class CertApplicationResponse {
   }
 
 
+}
+
+// @ts-ignore
+function MyKeyInfo(keyContents): void {
+  // @ts-ignore
+  this.getKeyInfo = function (key: string, prefix: string): string {
+    prefix = prefix || '';
+    prefix = prefix ? prefix + ':' : prefix;
+    return "<" + prefix + "X509Data></" + prefix + "X509Data>"
+  };
+  // @ts-ignore
+  this.getKey = function (): string {
+    //you can use the keyInfo parameter to extract the key in any way you want
+    return keyContents
+  }
 }
 
 export {

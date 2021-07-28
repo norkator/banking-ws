@@ -61,11 +61,9 @@ async function LoadFileFromPath(filePath: string, outputEncoding: OutputEncoding
  */
 function FormatCertificate(csr: string): string {
   return csr
-    // .replace('-----BEGIN CERTIFICATE REQUEST-----', '')
-    // .replace('-----END CERTIFICATE REQUEST-----', '')
+    .replace('-----BEGIN CERTIFICATE REQUEST-----', '-----BEGIN CERTIFICATE-----')
+    .replace('-----END CERTIFICATE REQUEST-----', '-----END CERTIFICATE-----')
     .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
-  // .replace(/\s+/, '') // remove white spaces
-  // .replace('\n', '')
 }
 
 /**
