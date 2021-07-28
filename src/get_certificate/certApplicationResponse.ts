@@ -1,20 +1,25 @@
 'use strict';
 
-import {parseString} from 'xml2js';
-import {RemoveWhiteSpacesAndNewLines, Base64DecodeStr} from '../utils';
-import {CertificateInterface} from '../interfaces';
+import {parseString, Builder} from 'xml2js';
+import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
+import {CertificateInterface, GetCertificateInterface} from '../interfaces';
+import {SignedXml, FileKeyInfo} from 'xml-crypto';
+//const SignedXml = require('xml-crypto').SignedXml;
+// const FileKeyInfo = require('xml-crypto').FileKeyInfo;
 
 class CertApplicationResponse {
 
   private readonly response: string;
   private readonly customerId: string;
+  private readonly csrPath: string;
 
   private certificate: CertificateInterface = {Name: undefined, Certificate: undefined, CertificateFormat: undefined};
   private isValidMessage: boolean = false;
 
-  constructor(response: string, customerId: string) {
+  constructor(gc: GetCertificateInterface, response: string) {
     this.response = response;
-    this.customerId = customerId;
+    this.customerId = gc.userParams.customerId;
+    this.csrPath = gc.CsrPath;
   }
 
   public async parseBody(): Promise<void> {
@@ -52,8 +57,23 @@ class CertApplicationResponse {
     const SignatureValue = Signature['SignatureValue'][0];
     // const KeyInfo = Signature['KeyInfo'];
 
+    const builder = new Builder();
+    this.verifySignature(applicationResponseXML, builder.buildObject(Signature), this.csrPath);
+  }
 
-    this.isValidMessage = true;
+
+  private verifySignature(xml: string, signature: string, csrPath: string): void {
+    const sig = new SignedXml();
+
+    sig.keyInfoProvider = new FileKeyInfo(csrPath);
+    sig.loadSignature(signature);
+    const res = sig.checkSignature(xml);
+    if (!res) {
+      console.log(sig.validationErrors);
+      this.isValidMessage = false;
+    } else {
+      this.isValidMessage = true;
+    }
   }
 
   public isValid(): boolean {
@@ -83,6 +103,7 @@ class CertApplicationResponse {
       throw new Error(responseText);
     }
   }
+
 
 }
 

@@ -2,7 +2,7 @@
 
 import * as xmlBuilder from 'xmlbuilder';
 import {GetCertificateInterface} from '../interfaces';
-import {Base64EncodeStr} from '../utils';
+import {Base64EncodeStr, LoadFileFromPath} from '../utils';
 
 
 class CertApplicationRequest {
@@ -15,6 +15,7 @@ class CertApplicationRequest {
 
   public async createXmlBody(): Promise<string | undefined> {
     try {
+      const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
       const certRequestObj = {
         'CertApplicationRequest': {
           '@xmlns': 'http://op.fi/mlp/xmldata/',
@@ -26,7 +27,7 @@ class CertApplicationRequest {
           'SoftwareId': this.getSoftwareId(),
           'Command': this.gc.Command,
           'Service': this.gc.Service,
-          'Content': Base64EncodeStr(this.gc.Content), // Base64 encoded -----BEGIN CERTIFICATE REQUEST----- ...
+          'Content': Base64EncodeStr(csr), // Base64 encoded -----BEGIN CERTIFICATE REQUEST----- ...
           'TransferKey': this.gc.TransferKey === undefined ? '' : this.gc.TransferKey,
         }
       };

@@ -28,7 +28,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
 
 
   const agent = new https.Agent({
-    ca: gc.userParams.rootCA
+    ca: await LoadFileAsString(gc.userParams.rootCAPath)
   });
 
   // return;
@@ -45,7 +45,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
 
   // console.log(response.data);
 
-  const car = new CertApplicationResponse(response.data, gc.userParams.customerId);
+  const car = new CertApplicationResponse(gc, response.data);
   await car.parseBody();
 
   if (car.isValid()) {

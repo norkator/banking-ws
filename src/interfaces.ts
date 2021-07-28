@@ -10,7 +10,7 @@ export interface UserParamsInterface {
   signingPrivateKey: string | undefined;
   signingCertificate: string | undefined;
   customerId: string;
-  rootCA: string;
+  rootCAPath: string;
   intermediateCA?: string
 }
 
@@ -35,7 +35,7 @@ export interface GetCertificateInterface {
   Command: Command;
   Service: Service;
   ExecutionSerial?: string; // not in use with samlink
-  Content: string;
+  CsrPath: string;
   TransferKey?: string; // used in the first time request
   RequestId: string;
 }
