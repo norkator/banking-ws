@@ -16,7 +16,7 @@ class CertApplicationRequest {
 
   public async createXmlBody(): Promise<string | undefined> {
     const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
-    let certRequestObj = {
+    let certRequestObj: any = {
       'CertApplicationRequest': {
         '@xmlns': 'http://op.fi/mlp/xmldata/',
         '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',

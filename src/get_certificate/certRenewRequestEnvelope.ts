@@ -1,15 +1,13 @@
 'use strict';
 
 import * as xmlBuilder from 'xmlbuilder'
-import * as moment from 'moment'
+import * as moment from 'moment';
 import {Base64DecodeStr} from '../utils';
 import {GetCertificateInterface} from '../interfaces';
 
 class CertRenewRequestEnvelope {
 
   private gc: GetCertificateInterface;
-  private readonly senderId: string;
-  private readonly requestId: string;
   private readonly applicationRequest: string;
 
   constructor(gc: GetCertificateInterface, applicationRequest: string) {
@@ -18,6 +16,9 @@ class CertRenewRequestEnvelope {
   }
 
   public createXmlBody(): string {
+    if (this.gc.Base64EncodedClientPrivateKey === undefined) {
+      throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
+    }
     const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
 
     // noinspection JSDuplicatedDeclaration,JSDuplicatedDeclaration

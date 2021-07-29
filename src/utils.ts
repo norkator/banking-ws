@@ -2,9 +2,10 @@ import {createHash} from 'crypto';
 import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
 import * as path from 'path';
 import {readFileSync} from 'fs';
-import * as moment from 'moment'
 // @ts-ignore
 import * as openssl from 'openssl-nodejs';
+// @ts-ignore
+import moment from 'moment';
 
 
 /**
@@ -97,7 +98,7 @@ function x509ExpirationDate(pem: string): Promise<any> {
     openssl(['x509', '-enddate', '-noout', '-in', {
       name: 'temp_cert.pem',
       buffer: Buffer.from(pem)
-    }], function (err, buffer) {
+    }], function (err: string, buffer: any) {
       // console.log(err.toString(), buffer.toString());
       const res = buffer.toString().replace('\n', '').split('=');
       const date = moment(res[1], 'MMM D hh:mm:ss yyyy').format('YYYY-MM-DD hh:mm:ss');

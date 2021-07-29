@@ -5,7 +5,8 @@
 * http://xsd2xml.com/https://github.com/oozcitak/xmlbuilder-js/wiki
 */
 
-import * as moment from 'moment'
+// @ts-ignore
+import moment from 'moment';
 import * as xmlBuilder from 'xmlbuilder';
 import {SoftwareIdInterface} from '../interfaces';
 import {Environment, FileType, Operations, Status, StatusValues} from '../constants';

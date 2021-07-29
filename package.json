@@ -27,6 +27,7 @@
     "umd"
   ],
   "devDependencies": {
+    "@types/moment": "^2.13.0",
     "@types/node": "16.4.6",
     "@types/xml-crypto": "1.4.2",
     "@types/xml2js": "0.4.9",

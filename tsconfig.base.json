@@ -3,7 +3,7 @@
     "target": "es5",
     "declaration": true,
     "strict": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "skipLibCheck": true,
     "moduleResolution": "node"
   }

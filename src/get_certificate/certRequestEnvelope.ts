@@ -1,7 +1,7 @@
 'use strict';
 
 import * as xmlBuilder from 'xmlbuilder'
-import * as moment from 'moment'
+import * as moment from 'moment';
 
 class CertRequestEnvelope {
 
