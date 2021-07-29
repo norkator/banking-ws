@@ -27,7 +27,6 @@ export interface GetCertificateInterface {
   userParams: UserParamsInterface;
   requestUrl: string;
   CurrentWorkingDirectory?: string;
-  SigningPrivateKey?: string;
   Timestamp: string; // not in use with samlink but mandatory to be in schema
   SoftwareId: SoftwareIdInterface; // eases problem solving so good to specify
   Command: Command;
@@ -35,6 +34,7 @@ export interface GetCertificateInterface {
   CsrPath: string;
   TransferKey?: string; // used in the first time request
   RequestId: string;
+  Base64EncodedClientPrivateKey?: string; // used with renew certificate to sign xml with existing certificate
 }
 
 
