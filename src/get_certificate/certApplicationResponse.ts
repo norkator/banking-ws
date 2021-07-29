@@ -3,7 +3,6 @@
 import {Builder, parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines, x509ExpirationDate} from '../utils';
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
-import {SignedXml} from 'xml-crypto';
 
 class CertApplicationResponse {
 
@@ -67,20 +66,9 @@ class CertApplicationResponse {
 
 
   private async verifySignature(xml: string, signature: string): Promise<void> {
-    const sig = new SignedXml();
     if (this.certificate.Certificate !== undefined) {
       const formatted = Base64DecodeStr(this.certificate.Certificate);
-      // @ts-ignore
-      sig.keyInfoProvider = new MyKeyInfo(formatted);
-      sig.loadSignature(signature);
-      const res = sig.checkSignature(xml); // Todo, does not work.
-      if (!res) {
-        console.log(sig.validationErrors);
-        // this.isValidMessage = false;
-        this.isValidMessage = true;
-      } else {
-        this.isValidMessage = true;
-      }
+      this.isValidMessage = true; // Todo, implement signature verification
     } else {
       this.isValidMessage = false;
     }
