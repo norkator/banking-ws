@@ -30,10 +30,6 @@ class CertRenewRequestEnvelope {
 
     const signingCsr = CleanUpCertificate(await LoadFileFromPath(this.gc.CsrPath, 'utf-8'));
 
-
-    console.log(signingCsr)
-    process.exit(0);
-
     const timeStampNode = {
       'wsu:Timestamp': {
         '@wsu:Id': this.timeStampUuid,
@@ -140,8 +136,8 @@ class CertRenewRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: true});
 
-    console.log(xml);
-    process.exit(0);
+    // console.log(xml);
+    // process.exit(0);
 
     return xml;
   }

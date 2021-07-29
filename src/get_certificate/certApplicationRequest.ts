@@ -41,24 +41,26 @@ class CertApplicationRequest {
     }
 
     if (this.gc.Command === 'RenewCertificate') {
-      if (this.gc.Base64EncodedClientPrivateKey === undefined) {
-        throw new Error('Base64EncodedClientPrivateKey cannot be undefined with RenewCertificate command')
-      }
-      const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
 
-      let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
-      const xml = xml_.end({pretty: true});
+      let xml: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
+      return xml.end({pretty: true});
 
-      const sig = new SignedXml();
-      sig.addReference("//*[local-name(.)='CertApplicationRequest']");
-      sig.signingKey = signingKey;
-      // sig.keyInfoProvider = new MyKeyInfo(signingKey);
-      sig.computeSignature(xml);
-
-      // console.log(sig.getSignedXml());
-      // process.exit(0);
-
-      return sig.getSignedXml();
+     //  if (this.gc.Base64EncodedClientPrivateKey === undefined) {
+     //    throw new Error('Base64EncodedClientPrivateKey cannot be undefined with RenewCertificate command')
+     //  }
+     //  const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
+//
+     //  let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
+     //  const xml = xml_.end({pretty: true});
+//
+     //  const sig = new SignedXml();
+     //  sig.addReference("//*[local-name(.)='CertApplicationRequest']");
+     //  sig.signingKey = signingKey;
+     //  sig.computeSignature(xml);
+//
+     //  // console.log(sig.getSignedXml());
+     //  // process.exit(0);
+     //  return sig.getSignedXml();
     }
 
     return undefined;

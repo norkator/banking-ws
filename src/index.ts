@@ -60,7 +60,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   const agent = new https.Agent({
     ca: await LoadFileAsString(gc.userParams.rootCAPath)
   });
-  const response = await axios.post(gc.requestUrl, certRenewRequestEnvelope.createXmlBody(), {
+  const response = await axios.post(gc.requestUrl, await certRenewRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
       SOAPAction: '',
