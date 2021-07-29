@@ -52,24 +52,24 @@ class CertApplicationRequest {
       // process.exit(0);
 
       const signedInfoNode = {
-        'dsig:SignedInfo': {
-          'dsig:CanonicalizationMethod': {
+        'SignedInfo': {
+          'CanonicalizationMethod': {
             '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments'
           },
-          'dsig:SignatureMethod': {
+          'SignatureMethod': {
             '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
           },
-          'dsig:Reference': {
+          'Reference': {
             '@URI': '',
-            'dsig:Transforms': {
-              'dsig:Transform': {
+            'Transforms': {
+              'Transform': {
                 '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
               }
             },
-            'dsig:DigestMethod': {
+            'DigestMethod': {
               '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
             },
-            'dsig:DigestValue': this.getDigestValue(requestXml),
+            'DigestValue': this.getDigestValue(requestXml),
           }
         },
       };
@@ -81,21 +81,21 @@ class CertApplicationRequest {
 
 
       let signature = {
-        'dsig:Signature': {
-          '@xmlns:dsig': 'http://www.w3.org/2000/09/xmldsig#',
+        'Signature': {
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
 
-          // 'dsig:SignedInfo' is appended here
-          'dsig:SignatureValue': this.getSignatureValue(signingKey, signedInfoXml),
-          'dsig:KeyInfo': {
-            'dsig:X509Data': {
-              'dsig:X509Certificate': cleanedSigningCsr,
+          // 'SignedInfo' is appended here
+          'SignatureValue': this.getSignatureValue(signingKey, signedInfoXml),
+          'KeyInfo': {
+            'X509Data': {
+              'X509Certificate': cleanedSigningCsr,
             }
           }
         }
       };
 
-      signature["dsig:Signature"]["dsig:SignedInfo"] = signedInfoNode["dsig:SignedInfo"];
-      certRequestObj.CertApplicationRequest["dsig:Signature"] = signature["dsig:Signature"];
+      signature["Signature"]["SignedInfo"] = signedInfoNode["SignedInfo"];
+      certRequestObj.CertApplicationRequest["Signature"] = signature["Signature"];
 
 
       let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
