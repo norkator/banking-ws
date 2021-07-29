@@ -56,7 +56,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     throw new Error('CertApplicationRequest returned empty body from createXmlBody');
   }
   const applicationRequest = Base64EncodeStr(body);
-  const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
+  const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc, applicationRequest);
   const agent = new https.Agent({
     ca: await LoadFileAsString(gc.userParams.rootCAPath)
   });
