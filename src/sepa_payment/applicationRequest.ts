@@ -90,8 +90,7 @@ class ApplicationRequest {
   }
 
   private getTimeStamp(): string {
-    // @ts-ignore
-    return new moment().format('YYYY-MM-DDThh:mm:ssZ');
+    return moment().format('YYYY-MM-DDThh:mm:ssZ');
   }
 
   private getStartDate(): string {
