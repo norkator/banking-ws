@@ -27,8 +27,9 @@
     "umd"
   ],
   "devDependencies": {
-    "@types/moment": "^2.13.0",
+    "@types/moment": "2.13.0",
     "@types/node": "16.4.6",
+    "@types/uuid": "8.3.1",
     "@types/xml2js": "0.4.9",
     "prettier": "2.3.2",
     "ts-loader": "9.2.4",
