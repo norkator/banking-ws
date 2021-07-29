@@ -45,6 +45,7 @@ export interface CertificateInterface {
   Name: string | undefined;
   Certificate: string | undefined; // base64 encoded
   CertificateFormat: string | undefined;
+  ExpirationDateTime: string | undefined;
 }
 
 

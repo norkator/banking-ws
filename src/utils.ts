@@ -2,6 +2,9 @@ import {createHash} from 'crypto';
 import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
 import * as path from 'path';
 import {readFileSync} from 'fs';
+import * as moment from 'moment'
+// @ts-ignore
+import * as openssl from 'openssl-nodejs';
 
 
 /**
@@ -85,6 +88,24 @@ function Base64EncodedSHA1Digest(content: string): string {
   return Base64EncodeStr(shaSum.digest('hex'));
 }
 
+/**
+ * Get expiration date for certificate
+ * @param pem
+ */
+function x509ExpirationDate(pem: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    openssl(['x509', '-enddate', '-noout', '-in', {
+      name: 'temp_cert.pem',
+      buffer: Buffer.from(pem)
+    }], function (err, buffer) {
+      // console.log(err.toString(), buffer.toString());
+      const res = buffer.toString().replace('\n', '').split('=');
+      const date = moment(res[1], 'MMM D hh:mm:ss yyyy').format('YYYY-MM-DD hh:mm:ss');
+      resolve(date);
+    });
+  });
+}
+
 
 export {
   LoadFileAsString,
@@ -95,4 +116,5 @@ export {
   FormatCertificate,
   RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
+  x509ExpirationDate,
 }

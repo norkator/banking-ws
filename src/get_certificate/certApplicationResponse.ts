@@ -1,10 +1,9 @@
 'use strict';
 
 import {Builder, parseString} from 'xml2js';
-import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
+import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines, x509ExpirationDate} from '../utils';
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
 import {SignedXml} from 'xml-crypto';
-import construct = Reflect.construct;
 
 class CertApplicationResponse {
 
@@ -12,7 +11,12 @@ class CertApplicationResponse {
   private readonly customerId: string;
   private readonly csrPath: string;
 
-  private certificate: CertificateInterface = {Name: undefined, Certificate: undefined, CertificateFormat: undefined};
+  private certificate: CertificateInterface = {
+    Name: undefined,
+    Certificate: undefined,
+    CertificateFormat: undefined,
+    ExpirationDateTime: undefined
+  };
   private isValidMessage: boolean = false;
 
   constructor(gc: GetCertificateInterface, response: string) {
@@ -46,10 +50,12 @@ class CertApplicationResponse {
 
 
     const Certificate = ns2CertApplicationResponse['Certificates'][0]['Certificate'][0];
+    const cert = Certificate['Certificate'][0];
     this.certificate = {
-      Name: Certificate['Name'],
-      Certificate: Certificate['Certificate'][0],
-      CertificateFormat: Certificate['CertificateFormat'],
+      Name: Certificate['Name'][0],
+      Certificate: cert,
+      CertificateFormat: Certificate['CertificateFormat'][0],
+      ExpirationDateTime: await CertApplicationResponse.getCertificateExpirationDate(cert)
     };
 
     const Signature = ns2CertApplicationResponse['Signature'][0];
@@ -108,6 +114,10 @@ class CertApplicationResponse {
     }
   }
 
+
+  private static async getCertificateExpirationDate(cert: string): Promise<string> {
+    return await x509ExpirationDate(Base64DecodeStr(cert));
+  }
 
 }
 
