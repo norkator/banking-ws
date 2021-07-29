@@ -2,7 +2,7 @@
 
 import * as xmlBuilder from 'xmlbuilder';
 import {GetCertificateInterface} from '../interfaces';
-import {Base64DecodeStr, Base64EncodeStr, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate, LoadFileFromPath} from '../utils';
 import {createHash, createSign} from "crypto";
 
 
@@ -17,6 +17,7 @@ class CertApplicationRequest {
   public async createXmlBody(): Promise<string | undefined> {
     const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
     const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
+    const cleanedSigningCsr = CleanUpCertificate(csr);
 
     let certRequestObj: any = {
       'CertApplicationRequest': {
@@ -87,7 +88,7 @@ class CertApplicationRequest {
           'dsig:SignatureValue': this.getSignatureValue(signingKey, signedInfoXml),
           'dsig:KeyInfo': {
             'dsig:X509Data': {
-              'dsig:X509Certificate': '',
+              'dsig:X509Certificate': cleanedSigningCsr,
             }
           }
         }
@@ -99,7 +100,8 @@ class CertApplicationRequest {
 
       let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
       const xml = xml_.end({pretty: true});
-      // console.log(xml);
+
+      console.log(xml);
       // process.exit(0);
 
       return xml;
