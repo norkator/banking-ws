@@ -1,3 +1,4 @@
+import {v4 as uuidv4} from 'uuid';
 import {createHash} from 'crypto';
 import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
 import * as path from 'path';
@@ -108,6 +109,16 @@ function x509ExpirationDate(pem: string): Promise<any> {
 }
 
 
+/**
+ * Get random uuid with or without prefix
+ * @param prefix could be like TS-uuid
+ * @constructor
+ */
+function GetUuid(prefix: string | undefined) {
+  return prefix ? prefix + '-' + uuidv4() : uuidv4();
+}
+
+
 export {
   LoadFileAsString,
   GetWSDL,
@@ -118,4 +129,5 @@ export {
   RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
   x509ExpirationDate,
+  GetUuid,
 }
