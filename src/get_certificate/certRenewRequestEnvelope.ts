@@ -2,10 +2,9 @@
 
 import * as xmlBuilder from 'xmlbuilder'
 import * as moment from 'moment';
-import {Base64DecodeStr, GetUuid} from '../utils';
+import {Base64DecodeStr, CleanUpCertificate, GetUuid, LoadFileFromPath} from '../utils';
 import {GetCertificateInterface} from '../interfaces';
 import {createHash, createSign} from 'crypto';
-import {node} from "webpack";
 
 class CertRenewRequestEnvelope {
 
@@ -13,19 +12,27 @@ class CertRenewRequestEnvelope {
   private readonly applicationRequest: string;
   private readonly timeStampUuid: string;
   private readonly bodyUuid: string;
+  private readonly binarySecurityTokenUuid: string;
 
   constructor(gc: GetCertificateInterface, applicationRequest: string) {
     this.gc = gc;
     this.applicationRequest = applicationRequest;
     this.timeStampUuid = GetUuid('TS');
     this.bodyUuid = GetUuid('id');
+    this.binarySecurityTokenUuid = GetUuid('X509');
   }
 
-  public createXmlBody(): string {
+  public async createXmlBody(): Promise<string> {
     if (this.gc.Base64EncodedClientPrivateKey === undefined) {
       throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
     }
     const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
+
+    const signingCsr = CleanUpCertificate(await LoadFileFromPath(this.gc.CsrPath, 'utf-8'));
+
+
+    console.log(signingCsr)
+    process.exit(0);
 
     const timeStampNode = {
       'wsu:Timestamp': {
@@ -101,8 +108,8 @@ class CertRenewRequestEnvelope {
             'wsse:BinarySecurityToken': {
               '@EncodingType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
               '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3',
-              '@wsu:Id': this.getWsuId(),
-              '#text': this.getBinarySecurityToken(),
+              '@wsu:Id': this.binarySecurityTokenUuid,
+              '#text': signingCsr,
             },
             // 'wsu:Timestamp' node is appended here
             'ds:Signature': {
@@ -112,6 +119,7 @@ class CertRenewRequestEnvelope {
               'ds:KeyInfo': {
                 'wsse:SecurityTokenReference': {
                   'wsse:Reference': {
+                    '@URI': '#' + this.binarySecurityTokenUuid,
                     '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3'
                   }
                 }
@@ -138,14 +146,6 @@ class CertRenewRequestEnvelope {
     return xml;
   }
 
-  private getWsuId(): string {
-    return '';
-  }
-
-  private getBinarySecurityToken(): string {
-    return '';
-  }
-
   private static getCreated(): string {
     return moment().format('YYYY-MM-DDThh:mm:ssZ');
   }
@@ -154,20 +154,20 @@ class CertRenewRequestEnvelope {
     return moment().add(5, 'minutes').format('YYYY-MM-DDThh:mm:ssZ');
   }
 
+  // noinspection JSMethodCanBeStatic
   private getDigestValue(node: string): string {
-    var shaSum = createHash('sha1');
+    const shaSum = createHash('sha1');
     shaSum.update(node);
     return shaSum.digest('base64');
   }
 
+  // noinspection JSMethodCanBeStatic
   private getSignatureValue(signingKey: string, node: string): string {
     const sign = createSign('rsa-sha1');
     sign.update(node);
     sign.end();
     const signature = sign.sign(signingKey);
-    const sig = signature.toString('base64');
-    console.log(sig);
-    return sig;
+    return signature.toString('base64');
   }
 
 

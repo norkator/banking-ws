@@ -72,6 +72,18 @@ function FormatCertificate(csr: string): string {
 }
 
 /**
+ * Removes first and last lines
+ * @param csr
+ * @constructor
+ */
+function CleanUpCertificate(csr: string): string {
+  return csr
+    .replace('-----BEGIN CERTIFICATE REQUEST-----', '')
+    .replace('-----END CERTIFICATE REQUEST-----', '')
+    .replace(/\s+/, '')
+}
+
+/**
  * @param content, example base64 encoded message with white spaces
  * @constructor
  */
@@ -126,6 +138,7 @@ export {
   Base64EncodeStr,
   LoadFileFromPath,
   FormatCertificate,
+  CleanUpCertificate,
   RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
   x509ExpirationDate,
