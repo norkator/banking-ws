@@ -27,6 +27,7 @@
     "umd"
   ],
   "devDependencies": {
+    "@types/node": "16.4.6",
     "@types/xml-crypto": "1.4.2",
     "@types/xml2js": "0.4.9",
     "prettier": "2.3.2",

@@ -13,7 +13,7 @@ Table of contents
 * [Installing](#installing)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
-    * [Initial get certificate](#initial-get-certificate)
+    * [Get certificate](#get-certificate)
     
 
 
@@ -73,32 +73,39 @@ Examples
 ============
 
 
-Initial get certificate
+Get certificate
 -----
 ```typescript
 import * as moment from 'moment'
-import {CertApplicationRequestInterface, SoftwareIdInterface} from './src/interfaces';
-import {FormatCertificate, LoadFileFromPath} from './src/utils';
-import {GetCertificate} from "./src/index";
+import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
+import {GetCertificate} from './src/index';
 import * as path from 'path';
 
 
-const csrFilePath = path.join(__dirname + '/../' + '/keys/signing.csr');
-const csr = await LoadFileFromPath(csrFilePath, 'utf-8');
-const formattedCsr = FormatCertificate(csr);
+const userParams: UserParamsInterface = {
+  bank: 'Samlink',
+  environment: 'PRODUCTION',
+  customerId: '12345678',
+  rootCAPath: path.join(__dirname + '/../' + 'keys/samlink_test_root_ca.csr')
+};
 
-
-const crp: CertApplicationRequestInterface = {
-  CustomerId: '12345678',
-  Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
-  Environment: 'PRODUCTION',
+const gc: GetCertificateInterface = {
+  userParams: userParams,
+  requestUrl: 'https://185.251.49.57/wsdl/CertificateService.xml',
+  // @ts-ignore
+  Timestamp: new moment().format('YYYY-MM-DDThh:mm:ssZ'),
   SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
   Command: 'GetCertificate',
   Service: 'ISSUER',
-  Content: formattedCsr,
-  TransferKey: '1234567812345678'
+  CsrPath: path.join(__dirname + '/../' + '/keys/signing.csr'),
+  TransferKey: '123123123123123123123',
+  RequestId: '123456'
 };
 
-const certificate = await GetCertificate(true, crp);
+const certificate = await GetCertificate(gc);
 console.log(certificate);
 ```
+
+
+Renew certificate
+-----

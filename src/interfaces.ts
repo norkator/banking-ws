@@ -7,8 +7,6 @@ import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Servi
 export interface UserParamsInterface {
   bank: Bank;
   environment: Environment;
-  signingPrivateKey: string | undefined;
-  signingCertificate: string | undefined;
   customerId: string;
   rootCAPath: string;
   intermediateCA?: string
