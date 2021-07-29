@@ -2,7 +2,8 @@
 
 import * as xmlBuilder from 'xmlbuilder';
 import {GetCertificateInterface} from '../interfaces';
-import {Base64EncodeStr, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, LoadFileFromPath} from '../utils';
+import {createHash, createSign} from "crypto";
 
 
 class CertApplicationRequest {
@@ -14,7 +15,9 @@ class CertApplicationRequest {
   }
 
   public async createXmlBody(): Promise<string | undefined> {
+    const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
     const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
+
     let certRequestObj: any = {
       'CertApplicationRequest': {
         '@xmlns': 'http://op.fi/mlp/xmldata/',
@@ -41,10 +44,65 @@ class CertApplicationRequest {
 
     if (this.gc.Command === 'RenewCertificate') {
 
-      
+      let tempRequest_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
+      const requestXml = tempRequest_.end({pretty: true});
 
-      let xml: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
-      return xml.end({pretty: true});
+      // console.log(requestXml)
+      // process.exit(0);
+
+      const signedInfoNode = {
+        'dsig:SignedInfo': {
+          'dsig:CanonicalizationMethod': {
+            '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments'
+          },
+          'dsig:SignatureMethod': {
+            '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
+          },
+          'dsig:Reference': {
+            '@URI': '',
+            'dsig:Transforms': {
+              'dsig:Transform': {
+                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
+              }
+            },
+            'dsig:DigestMethod': {
+              '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
+            },
+            'dsig:DigestValue': this.getDigestValue(requestXml),
+          }
+        },
+      };
+
+      const signedInfo_: xmlBuilder.XMLElement = xmlBuilder.create(signedInfoNode, {headless: true});
+      const signedInfoXml = signedInfo_.end({pretty: true});
+      // console.log(signedInfoXml);
+      // process.exit(0);
+
+
+      let signature = {
+        'dsig:Signature': {
+          '@xmlns:dsig': 'http://www.w3.org/2000/09/xmldsig#',
+
+          // 'dsig:SignedInfo' is appended here
+          'dsig:SignatureValue': this.getSignatureValue(signingKey, signedInfoXml),
+          'dsig:KeyInfo': {
+            'dsig:X509Data': {
+              'dsig:X509Certificate': '',
+            }
+          }
+        }
+      };
+
+      signature["dsig:Signature"]["dsig:SignedInfo"] = signedInfoNode["dsig:SignedInfo"];
+      certRequestObj.CertApplicationRequest["dsig:Signature"] = signature["dsig:Signature"];
+
+
+      let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
+      const xml = xml_.end({pretty: true});
+      // console.log(xml);
+      // process.exit(0);
+
+      return xml;
     }
 
     return undefined;
@@ -53,6 +111,24 @@ class CertApplicationRequest {
   private getSoftwareId(): string {
     return this.gc.SoftwareId.name + '-' + this.gc.SoftwareId.version;
   }
+
+
+  // noinspection JSMethodCanBeStatic
+  private getDigestValue(node: string): string {
+    const shaSum = createHash('sha1');
+    shaSum.update(node);
+    return shaSum.digest('base64');
+  }
+
+  // noinspection JSMethodCanBeStatic
+  private getSignatureValue(signingKey: string, node: string): string {
+    const sign = createSign('rsa-sha1');
+    sign.update(node);
+    sign.end();
+    const signature = sign.sign(signingKey);
+    return signature.toString('base64');
+  }
+
 
 }
 
