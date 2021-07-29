@@ -16,7 +16,7 @@ class CertApplicationRequest {
   public async createXmlBody(): Promise<string | undefined> {
     try {
       const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
-      const certRequestObj = {
+      let certRequestObj = {
         'CertApplicationRequest': {
           '@xmlns': 'http://op.fi/mlp/xmldata/',
           '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -25,12 +25,15 @@ class CertApplicationRequest {
           'Timestamp': this.gc.Timestamp, // 2012-12-13T12:12:12
           'Environment': this.gc.userParams.environment,
           'SoftwareId': this.getSoftwareId(),
-          'Command': 'GetCertificate',
+          'Command': this.gc.Command,
           'Service': 'ISSUER',
           'Content': Base64EncodeStr(csr), // Base64 encoded -----BEGIN CERTIFICATE REQUEST----- ...
-          'TransferKey': this.gc.TransferKey === undefined ? '' : this.gc.TransferKey,
         }
       };
+      if (this.gc.Command === 'GetCertificate') {
+        certRequestObj.CertApplicationRequest['TransferKey'] = this.gc.TransferKey === undefined ? '' : this.gc.TransferKey;
+      }
+
       let xml: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
       return xml.end({pretty: true});
     } catch (e) {
