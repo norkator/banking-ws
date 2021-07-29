@@ -128,8 +128,11 @@ class CertRenewRequestEnvelope {
       }
     };
 
+    // @ts-ignore
     envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["wsu:Timestamp"] = timeStampNode["wsu:Timestamp"];
+    // @ts-ignore
     envelopeObject["soapenv:Envelope"]["soapenv:Body"] = bodyNode["soapenv:Body"];
+    // @ts-ignore
     envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["ds:Signature"]["ds:SignedInfo"] = signedInfoNode["ds:SignedInfo"];
 
 
