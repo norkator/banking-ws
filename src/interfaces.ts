@@ -31,7 +31,6 @@ export interface GetCertificateInterface {
   Timestamp: string; // not in use with samlink but mandatory to be in schema
   SoftwareId: SoftwareIdInterface; // eases problem solving so good to specify
   Command: Command;
-  Service: Service;
   ExecutionSerial?: string; // not in use with samlink
   CsrPath: string;
   TransferKey?: string; // used in the first time request

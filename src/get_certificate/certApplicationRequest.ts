@@ -25,8 +25,8 @@ class CertApplicationRequest {
           'Timestamp': this.gc.Timestamp, // 2012-12-13T12:12:12
           'Environment': this.gc.userParams.environment,
           'SoftwareId': this.getSoftwareId(),
-          'Command': this.gc.Command,
-          'Service': this.gc.Service,
+          'Command': 'GetCertificate',
+          'Service': 'ISSUER',
           'Content': Base64EncodeStr(csr), // Base64 encoded -----BEGIN CERTIFICATE REQUEST----- ...
           'TransferKey': this.gc.TransferKey === undefined ? '' : this.gc.TransferKey,
         }

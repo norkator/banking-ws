@@ -19,46 +19,33 @@ import * as path from 'path';
 async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateInterface> {
   const certRequest = new CertApplicationRequest(gc);
   const body = await certRequest.createXmlBody();
-
   if (body === undefined) {
     throw new Error('CertApplicationRequest returned empty body from createXmlBody');
   }
   const applicationRequest = Base64EncodeStr(body);
   const certRequestEnvelope = new CertRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
-
-
   const agent = new https.Agent({
     ca: await LoadFileAsString(gc.userParams.rootCAPath)
   });
-
-  // return;
-  // const response = await axios.post(crp.requestUrl, certRequestEnvelope.createXmlBody(), {
-  //   headers: {
-  //     'Content-Type': 'text/xml',
-  //     SOAPAction: '',
-  //   },
-  //   httpsAgent: agent,
-  // });
-  const response = {
-    data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
-  };
-
+  const response = await axios.post(gc.requestUrl, certRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
+  // };
   // console.log(response.data);
-
   const car = new CertApplicationResponse(gc, response.data);
   await car.parseBody();
-
   if (car.isValid()) {
     return car.getCertificate()
   } else {
     throw new Error('Response is not valid!')
   }
 }
-
-
-async function RenewCertificate(): Promise<any> {
-}
-
 
 async function SEPAPayment(userParams: UserParamsInterface, xlParams: XLInterface) {
   const xl = new XL(xlParams);
@@ -77,7 +64,6 @@ async function BankStatement(userParams: UserParamsInterface, downloadFileListPa
 
 export {
   GetCertificate,
-  RenewCertificate,
   SEPAPayment,
   BankStatement,
 }
