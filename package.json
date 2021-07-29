@@ -29,7 +29,6 @@
   "devDependencies": {
     "@types/moment": "^2.13.0",
     "@types/node": "16.4.6",
-    "@types/xml-crypto": "1.4.2",
     "@types/xml2js": "0.4.9",
     "prettier": "2.3.2",
     "ts-loader": "9.2.4",
@@ -42,7 +41,6 @@
     "moment": "2.29.1",
     "openssl-nodejs": "1.0.5",
     "uuid": "8.3.2",
-    "xml-crypto": "1.5.4",
     "xml2js": "0.4.23",
     "xmlbuilder": "15.1.1"
   }

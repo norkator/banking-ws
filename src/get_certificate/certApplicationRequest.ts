@@ -2,8 +2,7 @@
 
 import * as xmlBuilder from 'xmlbuilder';
 import {GetCertificateInterface} from '../interfaces';
-import {Base64DecodeStr, Base64EncodeStr, LoadFileFromPath} from '../utils';
-import {SignedXml} from 'xml-crypto';
+import {Base64EncodeStr, LoadFileFromPath} from '../utils';
 
 
 class CertApplicationRequest {
@@ -42,25 +41,10 @@ class CertApplicationRequest {
 
     if (this.gc.Command === 'RenewCertificate') {
 
+      
+
       let xml: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
       return xml.end({pretty: true});
-
-     //  if (this.gc.Base64EncodedClientPrivateKey === undefined) {
-     //    throw new Error('Base64EncodedClientPrivateKey cannot be undefined with RenewCertificate command')
-     //  }
-     //  const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
-//
-     //  let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
-     //  const xml = xml_.end({pretty: true});
-//
-     //  const sig = new SignedXml();
-     //  sig.addReference("//*[local-name(.)='CertApplicationRequest']");
-     //  sig.signingKey = signingKey;
-     //  sig.computeSignature(xml);
-//
-     //  // console.log(sig.getSignedXml());
-     //  // process.exit(0);
-     //  return sig.getSignedXml();
     }
 
     return undefined;
