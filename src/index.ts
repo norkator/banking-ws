@@ -12,11 +12,12 @@ import * as https from 'https';
 import axios from 'axios';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
+import {XTRequestEnvelope} from "./bank_statement/XTRequestEnvelope";
 
 
 /**
- *
- * @param gc
+ * Initial certificate get function to get certificate with one time use transfer key
+ * @param gc interface describes mandatory parameters
  * @constructor
  */
 async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateInterface> {
@@ -52,8 +53,8 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
 
 
 /**
- *
- * @param gc
+ * Renew certificate using old certificate before it expires
+ * @param gc interface describes mandatory parameters
  * @constructor
  */
 async function RenewCertificate(gc: GetCertificateInterface): Promise<CertificateInterface> {
@@ -83,25 +84,19 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   }
 }
 
+
 /**
- *
+ * Initiate outgoing SEPA payment with using pain.001.001.02 standard
  * @constructor
  */
 async function SEPAPayment() {
-  // const xl = new XL(xlParams);
-  // const xlMessage = xl.createXmlBody();
-  // const applicationRequest = new ApplicationRequest(
-  //   '123456', Operations.downloadFile, '', '', 'NEW',
-  //   ['test1', 'test2', 'test3'], 'TestFileName', false, 0, 0,
-  //   {name: 'Test', version: '0.9.0'} as SoftwareIdInterface, FileTypes.XT
-  // );
-  // console.log(applicationRequest.createXmlBody());
+  // Todo...
 }
 
 
 /**
- *
- * @param xt
+ * Bank statement returns account info with camt.053.001.02 standard
+ * @param xt interface describes mandatory parameters
  * @constructor
  */
 async function BankStatement(xt: XTInterface): Promise<string> {
@@ -112,20 +107,21 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   }
   console.log(body);
   process.exit(0);
-  // const applicationRequest = Base64EncodeStr(body);
-  // const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
-  // const agent = new https.Agent({
-  //   ca: await LoadFileAsString(xt.userParams.rootCAPath)
-  // });
-  // const response = await axios.post(xr.requestUrl, await xtRequestEnvelope.createXmlBody(), {
-  //   headers: {
-  //     'Content-Type': 'text/xml',
-  //     SOAPAction: '',
-  //   },
-  //   httpsAgent: agent,
-  // });
-  // return response.data;
-  return '';
+
+  const applicationRequest = Base64EncodeStr(body);
+  const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
+  const agent = new https.Agent({
+    ca: await LoadFileAsString(xt.userParams.rootCAPath)
+  });
+  const response = await axios.post(xt.requestUrl, await xtRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  // Todo, create response parser here, maybe try to transform it to json?
+  return response.data;
 }
 
 
