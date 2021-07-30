@@ -1,8 +1,9 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Service} from './constants';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command} from './constants';
 
 
 /**
  * User environment params like secrets
+ * used with each and every functionality
  */
 export interface UserParamsInterface {
   bank: Bank;
@@ -14,6 +15,7 @@ export interface UserParamsInterface {
 
 /**
  * User software version params
+ * meant to help with bug solving
  */
 export interface SoftwareIdInterface {
   name: string;
@@ -37,7 +39,10 @@ export interface GetCertificateInterface {
   Base64EncodedClientPrivateKey?: string; // used with renew certificate to sign xml with existing certificate
 }
 
-
+/**
+ * Response certificate from get certificate methods
+ * response stored in object which contains below fields
+ */
 export interface CertificateInterface {
   Name: string | undefined;
   Certificate: string | undefined; // base64 encoded
@@ -63,6 +68,7 @@ export interface XTInterface {
 
 /**
  * Definitions for XL SEPA message
+ * pain.001.001.02
  */
 export interface XLInterface {
   CcyOfTrf: Currency; // Currency of transfer
