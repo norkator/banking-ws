@@ -47,6 +47,21 @@ export interface CertificateInterface {
 
 
 /**
+ * Get bank statement interface
+ * camt.053.001.02
+ */
+export interface XTInterface {
+  userParams: UserParamsInterface;
+  requestUrl: string;
+  Timestamp: string;
+  SoftwareId: SoftwareIdInterface;
+  ExecutionSerial: string;
+  CsrPath: string;
+  Base64EncodedClientPrivateKey?: string;
+}
+
+
+/**
  * Definitions for XL SEPA message
  */
 export interface XLInterface {

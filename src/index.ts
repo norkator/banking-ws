@@ -1,11 +1,8 @@
 'use strict';
 
-import {XL} from './sepa_payment/XL';
 import {
-  UserParamsInterface,
-  XLInterface,
   CertificateInterface,
-  GetCertificateInterface
+  GetCertificateInterface, XTInterface
 } from './interfaces';
 import {Base64EncodeStr, LoadFileAsString} from './utils';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
@@ -13,10 +10,15 @@ import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
 import * as https from 'https';
 import axios from 'axios';
-import * as path from 'path';
-import {CertRenewRequestEnvelope} from "./get_certificate/certRenewRequestEnvelope";
+import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
+import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 
 
+/**
+ *
+ * @param gc
+ * @constructor
+ */
 async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateInterface> {
   const certRequest = new CertApplicationRequest(gc);
   const body = await certRequest.createXmlBody();
@@ -49,6 +51,11 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
 }
 
 
+/**
+ *
+ * @param gc
+ * @constructor
+ */
 async function RenewCertificate(gc: GetCertificateInterface): Promise<CertificateInterface> {
   const certRequest = new CertApplicationRequest(gc);
   const body = await certRequest.createXmlBody();
@@ -76,9 +83,13 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   }
 }
 
-async function SEPAPayment(userParams: UserParamsInterface, xlParams: XLInterface) {
-  const xl = new XL(xlParams);
-  const xlMessage = xl.createXmlBody();
+/**
+ *
+ * @constructor
+ */
+async function SEPAPayment() {
+  // const xl = new XL(xlParams);
+  // const xlMessage = xl.createXmlBody();
   // const applicationRequest = new ApplicationRequest(
   //   '123456', Operations.downloadFile, '', '', 'NEW',
   //   ['test1', 'test2', 'test3'], 'TestFileName', false, 0, 0,
@@ -87,7 +98,34 @@ async function SEPAPayment(userParams: UserParamsInterface, xlParams: XLInterfac
   // console.log(applicationRequest.createXmlBody());
 }
 
-async function BankStatement(userParams: UserParamsInterface, downloadFileListParams: any) {
+
+/**
+ *
+ * @param xt
+ * @constructor
+ */
+async function BankStatement(xt: XTInterface): Promise<string> {
+  const xtRequest = new XTApplicationRequest(xt);
+  const body = await xtRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('XTApplicationRequest returned empty body from createXmlBody');
+  }
+  console.log(body);
+  process.exit(0);
+  // const applicationRequest = Base64EncodeStr(body);
+  // const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
+  // const agent = new https.Agent({
+  //   ca: await LoadFileAsString(xt.userParams.rootCAPath)
+  // });
+  // const response = await axios.post(xr.requestUrl, await xtRequestEnvelope.createXmlBody(), {
+  //   headers: {
+  //     'Content-Type': 'text/xml',
+  //     SOAPAction: '',
+  //   },
+  //   httpsAgent: agent,
+  // });
+  // return response.data;
+  return '';
 }
 
 
