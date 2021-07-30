@@ -16,131 +16,140 @@ class XL {
     this.xl = xl;
   }
 
-  appendGroupHeaderElements(xml: xmlBuilder.XMLElement): xmlBuilder.XMLElement {
-    // Group header part of the message
-    return xml.ele('GrpHdr') // Group header
-      .ele('MsgId', this.xl.GrpHdr.MsgId).up()
-      .ele('CreDtTm', this.xl.GrpHdr.CreDtTm).up()
-      .ele('NbOfTxs', this.xl.GrpHdr.NbOfTxs).up()
 
-      .ele('InitgPty')
-      .ele('Nm', this.xl.GrpHdr.InitgPty.Nm).up()
-      .ele('PstlAdr')
-      .ele('Ctry', this.xl.GrpHdr.InitgPty.PstlAdr.Ctry).up()
-      .ele('AdrLine', this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine).up()
-      .ele('AdrLine', this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine2).up()
-      .up()
+  public async createXmlBody(): Promise<string | undefined> {
+    let xlObj: any = {
+      'Document': {
+        '@xmlns': 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03',
+        '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        '@xsi:schemaLocation': 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 pain.001.001.03.xsd',
+        'CstmrCdtTrfInitn': {
 
-      .ele('Id')
-      .ele('OrgId')
-      .ele('Othr')
-      .ele('Id', this.xl.GrpHdr.InitgPty.Id.OrgId.Othr.Id).up()
-      .ele('SchmeNm')
-      .ele('Cd', this.xl.GrpHdr.InitgPty.Id.OrgId.Othr.SchmeNm.Cd).up()
-      .up()
-      .up()
-      .up()
-      .up()
-      .up()
-      .up()
-  }
+          'GrpHdr': {
+            'MsgId': this.xl.GrpHdr.MsgId,
+            'CreDtTm': this.xl.GrpHdr.CreDtTm,
+            'NbOfTxs': this.xl.GrpHdr.NbOfTxs,
+            'InitgPty': {
+              'Nm': this.xl.GrpHdr.InitgPty.Nm,
+              'PstlAdr': {
+                'Ctry': this.xl.GrpHdr.InitgPty.PstlAdr.Ctry,
+                'AdrLine': [
+                  this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine,
+                  this.xl.GrpHdr.InitgPty.PstlAdr.AdrLine2,
+                ],
+              },
+              'Id': {
+                'OrgId': {
+                  'Othr': {
+                    'Id': this.xl.GrpHdr.InitgPty.Id.OrgId.Othr.Id,
+                    'SchmeNm': {
+                      'Cd': this.xl.GrpHdr.InitgPty.Id.OrgId.Othr.SchmeNm.Cd,
+                    }
+                  },
+                },
+              }
+            }
+          },
 
-  appendPaymentInfoElements(xml: xmlBuilder.XMLElement): xmlBuilder.XMLElement {
-    // Payment info part of the message
-    return xml
-      .ele('PmtInf')
+          'PmtInf': {
+            'PmtInfId': this.xl.PmtInf.PmtInfId,
+            'PmtMtd': this.xl.PmtInf.PmtMtd,
+            'PmtTpInf': {
+              'SvcLvl': {
+                'Cd': this.xl.PmtInf.PmtTpInf.SvcLvl.Cd,
+              },
+            },
+            'ReqdExctnDt': this.xl.PmtInf.ReqdExctnDt,
 
-      .ele('PmtInfId', this.xl.PmtInf.PmtInfId).up()
-      .ele('PmtMtd', this.xl.PmtInf.PmtMtd).up()
-      .ele('PmtTpInf')
-      .ele('SvcLvl')
-      .ele('Cd', this.xl.PmtInf.PmtTpInf.SvcLvl.Cd).up()
-      .up()
-      .up()
-      .ele('ReqdExctnDt', this.xl.PmtInf.ReqdExctnDt).up()
-      .ele('Dbtr')
-      .ele('Nm', this.xl.PmtInf.Dbtr.Nm).up()
-      .ele('PstlAdr')
-      .ele('Ctry', this.xl.PmtInf.Dbtr.PstlAdr.Ctry).up()
-      .ele('AdrLine', this.xl.PmtInf.Dbtr.PstlAdr.AdrLine).up()
-      .ele('AdrLine', this.xl.PmtInf.Dbtr.PstlAdr.AdrLine2).up()
-      .up()
-      .ele('Id')
-      .ele('OrgId')
-      .ele('Othr')
-      .ele('Id', this.xl.PmtInf.Dbtr.Id.OrgId.Othr.Id).up()
-      .ele('SchmeNm')
-      .ele('Cd', this.xl.PmtInf.Dbtr.Id.OrgId.Othr.SchmeNm.Cd).up()
-      .up()
-      .up()
-      .up()
-      .up()
-      .up()
-      .ele('DbtrAcct')
-      .ele('Id')
-      .ele('IBAN', this.xl.PmtInf.DbtrAcct.Id.IBAN).up()
-      .up()
-      .up()
-      .ele('DbtrAgt')
-      .ele('FinInstnId')
-      .ele('BIC', this.xl.PmtInf.DbtrAgt.FinInstnId.BIC).up()
-      .up()
-      .up()
-      .ele('ChrgBr', this.xl.PmtInf.ChrgBr).up()
-      .ele('CdtTrfTxInf')
-      .ele('PmtId')
-      .ele('InstrId', this.xl.PmtInf.CdtTrfTxInf.PmtId.InstrId).up()
-      .ele('EndToEndId', this.xl.PmtInf.CdtTrfTxInf.PmtId.EndToEndId).up()
-      .up()
-      .ele('PmtTpInf')
-      .ele('SvcLvl')
-      .ele('Cd', this.xl.PmtInf.PmtTpInf.SvcLvl.Cd).up()
-      .up()
-      .up()
-      .ele('Amt')
-      .ele('InstdAmt', this.xl.PmtInf.CdtTrfTxInf.Amt.InstdAmt, {Ccy: this.xl.CcyOfTrf}).up()
-      .up()
-      .ele('ChrgBr', this.xl.PmtInf.CdtTrfTxInf.ChrgBr).up()
-      .ele('CdtrAgt')
-      .ele('FinInstnId')
-      .ele('BIC', this.xl.PmtInf.CdtTrfTxInf.CdtrAgt.FinInstnId.BIC).up()
-      .up()
-      .up()
-      .ele('Cdtr')
-      .ele('Nm', this.xl.PmtInf.CdtTrfTxInf.Cdtr.Nm).up()
-      .ele('PstlAdr')
-      .ele('Ctry', this.xl.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.Ctry).up()
-      .ele('AdrLine', this.xl.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine).up()
-      .ele('AdrLine', this.xl.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine2).up()
-      .up()
-      .ele('Id')
-      .ele('OrgId')
-      .ele('Othr')
-      .ele('Id', this.xl.PmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.Id).up()
-      .ele('SchmeNm')
-      .ele('Cd', this.xl.PmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.SchmeNm.Cd).up()
-      .up()
-      .up()
-      .up()
-      .up()
-      .up()
-      .ele('CdtrAcct')
-      .ele('Id')
-      .ele('IBAN', this.xl.PmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN).up()
-      .up()
-      .up()
-      .ele('RmtInf')
-      .ele('Ustrd', this.xl.PmtInf.CdtTrfTxInf.RmtInf.Ustrd).up()
-      .up()
-      .up()
-      .up()
-  }
+            'Dbtr': {
+              'Nm': this.xl.PmtInf.Dbtr.Nm,
+              'PstlAdr': {
+                'Ctry': this.xl.PmtInf.Dbtr.PstlAdr.Ctry,
+                'AdrLine': [
+                  this.xl.PmtInf.Dbtr.PstlAdr.AdrLine,
+                  this.xl.PmtInf.Dbtr.PstlAdr.AdrLine2,
+                ],
+              },
+              'Id': {
+                'OrgId': {
+                  'Othr': {
+                    'Id': this.xl.PmtInf.Dbtr.Id.OrgId.Othr.Id,
+                    'SchmeNm': {
+                      'Cd': this.xl.PmtInf.Dbtr.Id.OrgId.Othr.SchmeNm.Cd,
+                    }
+                  }
+                }
+              }
+            },
+            'DbtrAcct': {
+              'Id': {
+                'IBAN': this.xl.PmtInf.DbtrAcct.Id.IBAN,
+              },
+            },
+            'DbtrAgt': {
+              'FinInstnId': {
+                'BIC': this.xl.PmtInf.DbtrAgt.FinInstnId.BIC,
+              },
+            },
+            'ChrgBr': this.xl.PmtInf.ChrgBr,
+            'CdtTrfTxInf': {
+              'PmtId': {
+                'InstrId': this.xl.PmtInf.CdtTrfTxInf.PmtId.InstrId,
+                'EndToEndId': this.xl.PmtInf.CdtTrfTxInf.PmtId.EndToEndId,
+              },
+              'PmtTpInf': {
+                'SvcLvl': {
+                  'Cd': this.xl.PmtInf.PmtTpInf.SvcLvl.Cd,
+                }
+              },
+              'Amt': {
+                'InstdAmt': {
+                  '@Ccy': this.xl.CcyOfTrf,
+                  '#text': this.xl.PmtInf.CdtTrfTxInf.Amt.InstdAmt,
+                },
+              },
+              'ChrgBr': this.xl.PmtInf.CdtTrfTxInf.ChrgBr,
+              'CdtrAgt': {
+                'FinInstnId': {
+                  'BIC': this.xl.PmtInf.CdtTrfTxInf.CdtrAgt.FinInstnId.BIC,
+                }
+              },
+              'Cdtr': {
+                'Nm': this.xl.PmtInf.CdtTrfTxInf.Cdtr.Nm,
+                'PstlAdr': {
+                  'Ctry': this.xl.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.Ctry,
+                  'AdrLine': [
+                    this.xl.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine,
+                    this.xl.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine2,
+                  ],
+                },
+                'Id': {
+                  'OrgId': {
+                    'Othr': {
+                      'Id': this.xl.PmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.Id,
+                      'SchmeNm': {
+                        'Cd': this.xl.PmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.SchmeNm.Cd,
+                      }
+                    }
+                  }
+                }
+              },
+              'CdtrAcct': {
+                'Id': {
+                  'IBAN': this.xl.PmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN,
+                }
+              },
+              'RmtInf': {
+                'Ustrd': this.xl.PmtInf.CdtTrfTxInf.RmtInf.Ustrd,
+              }
+            }
+          },
 
-  createXmlBody(): string {
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create('Document', {version: '1.0', encoding: 'utf-8'})
-      .ele('CstmrCdtTrfInitn');
-    xml = this.appendGroupHeaderElements(xml);
-    xml = this.appendPaymentInfoElements(xml);
+        }
+      }
+    };
+
+    let xml: xmlBuilder.XMLElement = xmlBuilder.create(xlObj, {version: '1.0', encoding: 'utf-8'});
     return xml.end({pretty: true});
   }
 
