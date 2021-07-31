@@ -105,9 +105,6 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   if (body === undefined) {
     throw new Error('XTApplicationRequest returned empty body from createXmlBody');
   }
-  console.log(body);
-  process.exit(0);
-
   const applicationRequest = Base64EncodeStr(body);
   const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
   const agent = new https.Agent({

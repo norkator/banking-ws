@@ -3,6 +3,7 @@
 import * as xmlBuilder from 'xmlbuilder';
 import {XTInterface} from '../interfaces';
 import {Base64DecodeStr, CleanUpCertificate, LoadFileFromPath} from '../utils';
+import {createHash, createSign} from "crypto";
 
 
 /**
@@ -43,16 +44,101 @@ class XTApplicationRequest {
         // 'Signature': '', append node here
       }
     };
+    let tempRequest_: xmlBuilder.XMLElement = xmlBuilder.create(obj);
+    const requestXml = tempRequest_.end({pretty: true});
 
-    const signatureNode = {};
+    const signedInfoNode = {
+      'SignedInfo': {
+        '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+        'CanonicalizationMethod': {
+          '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments',
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+        },
+        'SignatureMethod': {
+          '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+        },
+        'Reference': {
+          '@URI': '',
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+          'Transforms': {
+            'Transform': {
+              '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+              '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+            }
+          },
+          'DigestMethod': {
+            '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1',
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+          },
+          'DigestValue': {
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+            '#text': this.getDigestValue(requestXml)
+          },
+        }
+      },
+    };
+    const signedInfo_: xmlBuilder.XMLElement = xmlBuilder.create(signedInfoNode, {headless: true});
+    const signedInfoXml = signedInfo_.end({pretty: false});
 
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create(obj, {version: '1.0', encoding: 'UTF-8'});
-    return xml.end({pretty: true});
+
+    let signatureNode = {
+      'Signature': {
+        '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+
+        // 'SignedInfo' is appended here
+        'SignatureValue': {
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+          '#text': this.getSignatureValue(signingKey, signedInfoXml)
+        },
+        'KeyInfo': {
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+          'X509Data': {
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+            'X509Certificate': {
+              '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+              '#text': cleanedSigningCsr
+            },
+          }
+        }
+      }
+    };
+
+    // @ts-ignore
+    signatureNode["Signature"]["SignedInfo"] = signedInfoNode["SignedInfo"];
+    // @ts-ignore
+    obj.ApplicationRequest["Signature"] = signatureNode["Signature"];
+
+
+    let xml_: xmlBuilder.XMLElement = xmlBuilder.create(obj, {version: '1.0', encoding: 'UTF-8'});
+    const xml = xml_.end({pretty: true});
+
+    console.log(xml);
+    // process.exit(0);
+
+    return xml;
   }
 
   private getSoftwareId(): string {
     return this.xt.SoftwareId.name + '-' + this.xt.SoftwareId.version;
   }
+
+  // noinspection JSMethodCanBeStatic
+  private getDigestValue(node: string): string {
+    const shaSum = createHash('sha1');
+    shaSum.update(node);
+    return shaSum.digest('base64');
+  }
+
+  // noinspection JSMethodCanBeStatic
+  private getSignatureValue(signingKey: string, node: string): string {
+    const sign = createSign('rsa-sha1');
+    sign.update(node);
+    sign.end();
+    const signature = sign.sign(signingKey);
+    return signature.toString('base64');
+  }
+
 
 }
 
