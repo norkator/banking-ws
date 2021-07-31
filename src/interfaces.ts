@@ -1,4 +1,4 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command} from './constants';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language} from './constants';
 
 
 /**
@@ -64,6 +64,7 @@ export interface XTInterface {
   ExecutionSerial: string;
   CsrPath: string;
   Base64EncodedClientPrivateKey?: string;
+  language: Language;
 }
 
 

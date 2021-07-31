@@ -39,9 +39,9 @@ class XTRequestEnvelope {
               'bxd:SenderId': this.xt.userParams.customerId,
               'bxd:RequestId': this.xt.RequestId,
               'bxd:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
-              'bxd:Language': '', // Todo, investigate
-              'bxd:UserAgent': '', // Todo, investigate
-              'bxd:ReceiverId': '', // Todo, investigate
+              'bxd:Language': this.xt.language,
+              'bxd:UserAgent': this.getSoftwareId(),
+              // 'bxd:ReceiverId': '', // only used with other banks like Nordea
             },
             'ApplicationRequest': {
               '@xmlns:bxd': 'http://model.bxd.fi',
@@ -56,6 +56,10 @@ class XTRequestEnvelope {
 
     let xml: xmlBuilder.XMLElement = xmlBuilder.create(obj, {version: '1.0', encoding: 'UTF-8'});
     return xml.end({pretty: true});
+  }
+
+  private getSoftwareId(): string {
+    return this.xt.SoftwareId.name + '-' + this.xt.SoftwareId.version;
   }
 
   private static getCreated(): string {

@@ -9,6 +9,7 @@ export type ServiceLevel = 'SLEV';
 export type Command = 'GetCertificate' | 'RenewCertificate';
 export type Service = 'ISSUER' | 'MATU';
 export type OutputEncoding = 'utf-8' | 'base64';
+export type Language = 'FI' | 'EN' | 'SV';
 
 const Operations = {
   uploadFile: 'uploadFile',
