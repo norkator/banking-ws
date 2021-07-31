@@ -15,10 +15,6 @@ class CertApplicationRequest {
   }
 
   public async createXmlBody(): Promise<string | undefined> {
-    if (this.gc.Base64EncodedClientPrivateKey === undefined) {
-      throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
-    }
-    const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
     const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
     const cleanedSigningCsr = CleanUpCertificate(csr);
 
@@ -47,6 +43,10 @@ class CertApplicationRequest {
     }
 
     if (this.gc.Command === 'RenewCertificate') {
+      if (this.gc.Base64EncodedClientPrivateKey === undefined) {
+        throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
+      }
+      const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
 
       let tempRequest_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
       const requestXml = tempRequest_.end({pretty: true});
@@ -56,29 +56,38 @@ class CertApplicationRequest {
 
       const signedInfoNode = {
         'SignedInfo': {
+          '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
           'CanonicalizationMethod': {
-            '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments'
+            '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments',
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
           },
           'SignatureMethod': {
-            '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
+            '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
           },
           'Reference': {
             '@URI': '',
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
             'Transforms': {
               'Transform': {
-                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
+                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+                '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
               }
             },
             'DigestMethod': {
-              '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
+              '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1',
+              '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
             },
-            'DigestValue': this.getDigestValue(requestXml),
+            'DigestValue': {
+              '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+              '#text': this.getDigestValue(requestXml)
+            },
           }
         },
       };
 
       const signedInfo_: xmlBuilder.XMLElement = xmlBuilder.create(signedInfoNode, {headless: true});
-      const signedInfoXml = signedInfo_.end({pretty: true});
+      const signedInfoXml = signedInfo_.end({pretty: false});
       // console.log(signedInfoXml);
       // process.exit(0);
 
@@ -88,10 +97,18 @@ class CertApplicationRequest {
           '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
 
           // 'SignedInfo' is appended here
-          'SignatureValue': this.getSignatureValue(signingKey, signedInfoXml),
+          'SignatureValue': {
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+            '#text': this.getSignatureValue(signingKey, signedInfoXml)
+          },
           'KeyInfo': {
+            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
             'X509Data': {
-              'X509Certificate': cleanedSigningCsr,
+              '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+              'X509Certificate': {
+                '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+                '#text': cleanedSigningCsr
+              },
             }
           }
         }
