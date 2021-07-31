@@ -58,6 +58,7 @@ export interface CertificateInterface {
 export interface XTInterface {
   userParams: UserParamsInterface;
   requestUrl: string;
+  RequestId: string;
   Timestamp: string;
   SoftwareId: SoftwareIdInterface;
   ExecutionSerial: string;

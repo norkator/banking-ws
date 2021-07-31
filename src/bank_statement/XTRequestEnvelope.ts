@@ -23,7 +23,39 @@ class XTRequestEnvelope {
   }
 
   public async createXmlBody(): Promise<string> {
-    return '';
+    let obj: any = {
+      'env:Envelope': {
+        '@xmlns:env': 'http://schemas.xmlsoap.org/soap/envelope/',
+        '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+        '@xmlns:cor': 'http://bxd.fi/CorporateFileService',
+        '@xmlns:bxd': 'http://model.bxd.fi',
+        'env:Body': {
+          '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+          '@wsu:Id': '',
+          'cor:downloadFileListin': {
+            '@xmlns:cor': 'http://bxd.fi/CorporateFileService',
+            'bxd:RequestHeader': {
+              '@xmlns:bxd': 'http://model.bxd.fi',
+              'bxd:SenderId': this.xt.userParams.customerId,
+              'bxd:RequestId': this.xt.RequestId,
+              'bxd:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
+              'bxd:Language': '', // Todo, investigate
+              'bxd:UserAgent': '', // Todo, investigate
+              'bxd:ReceiverId': '', // Todo, investigate
+            },
+            'ApplicationRequest': {
+              '@xmlns:bxd': 'http://model.bxd.fi',
+              '#text': this.applicationRequest,
+            },
+          }
+        }
+      }
+    };
+
+    const signatureNode = {};
+
+    let xml: xmlBuilder.XMLElement = xmlBuilder.create(obj, {version: '1.0', encoding: 'UTF-8'});
+    return xml.end({pretty: true});
   }
 
   private static getCreated(): string {
