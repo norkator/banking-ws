@@ -87,7 +87,7 @@ class CertApplicationRequest {
       };
 
       const signedInfo_: xmlBuilder.XMLElement = xmlBuilder.create(signedInfoNode, {headless: true});
-      const signedInfoXml = signedInfo_.end({pretty: false});
+      const signedInfoXml = signedInfo_.end({pretty: true});
       // console.log(signedInfoXml);
       // process.exit(0);
 
