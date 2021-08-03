@@ -34,6 +34,7 @@ export interface GetCertificateInterface {
   Command: Command;
   ExecutionSerial?: string; // not in use with samlink
   CsrPath: string;
+  BankCsrPath?: string;
   TransferKey?: string; // used in the first time request
   RequestId: string;
   Base64EncodedClientPrivateKey?: string; // used with renew certificate to sign xml with existing certificate

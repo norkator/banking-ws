@@ -80,7 +80,9 @@ function CleanUpCertificate(csr: string): string {
   return csr
     .replace('-----BEGIN CERTIFICATE REQUEST-----', '')
     .replace('-----END CERTIFICATE REQUEST-----', '')
-    .replace(/\s+/, '')
+    .replace('-----BEGIN CERTIFICATE-----', '')
+    .replace('-----END CERTIFICATE-----', '')
+    .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm,'')
 }
 
 /**
