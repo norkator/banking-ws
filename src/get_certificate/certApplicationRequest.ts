@@ -17,8 +17,6 @@ class CertApplicationRequest {
   public async createXmlBody(): Promise<string | undefined> {
     const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
 
-    const bankCertificate = CleanUpCertificate(await LoadFileFromPath(this.gc.BankCsrPath, 'utf-8'));
-
     let certRequestObj: any = {
       'CertApplicationRequest': {
         '@xmlns': 'http://op.fi/mlp/xmldata/',
@@ -92,6 +90,10 @@ class CertApplicationRequest {
       // console.log(signedInfoXml);
       // process.exit(0);
 
+      const bankCertificate = CleanUpCertificate(await LoadFileFromPath(this.gc.BankCsrPath, 'utf-8'));
+      if (bankCertificate === undefined) {
+        throw new Error('BankCsrPath is undefined or given path is wrong')
+      }
 
       let signature = {
         'Signature': {
