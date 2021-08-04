@@ -57,12 +57,10 @@ class CertApplicationRequest {
         'SignedInfo': {
           '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
           'CanonicalizationMethod': {
-            '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments',
-            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+            '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
           },
           'SignatureMethod': {
             '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
-            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
           },
           'Reference': {
             '@URI': '',
