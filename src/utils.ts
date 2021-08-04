@@ -7,6 +7,9 @@ import {readFileSync} from 'fs';
 import * as openssl from 'openssl-nodejs';
 // @ts-ignore
 import moment from 'moment';
+import * as xmlC14N from 'xml-c14n';
+import {Buffer} from 'buffer';
+import {DOMParser} from 'xmldom';
 
 
 /**
@@ -82,7 +85,7 @@ function CleanUpCertificate(csr: string): string {
     .replace('-----END CERTIFICATE REQUEST-----', '')
     .replace('-----BEGIN CERTIFICATE-----', '')
     .replace('-----END CERTIFICATE-----', '')
-    .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm,'')
+    .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '')
 }
 
 /**
@@ -124,6 +127,25 @@ function x509ExpirationDate(pem: string): Promise<any> {
 
 
 /**
+ * XML Canonicalize xml node
+ * @param xmlStr, xml data as string
+ * @param kind, example: http://www.w3.org/TR/2001/REC-xml-c14n-20010315
+ * @constructor
+ */
+function Canonicalize(xmlStr: string, kind: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
+    const xmlC14n = xmlC14N();
+    const canonicalize = xmlC14n.createCanonicaliser(kind);
+    // console.log("Canonicalize with algorithm: " + canonicalize.name());
+    canonicalize.canonicalise(doc, (err: string, data: string) => {
+      err ? reject(err) : resolve(data);
+    });
+  });
+}
+
+
+/**
  * Get random uuid with or without prefix
  * @param prefix could be like TS-uuid
  * @constructor
@@ -144,5 +166,6 @@ export {
   RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
   x509ExpirationDate,
+  Canonicalize,
   GetUuid,
 }

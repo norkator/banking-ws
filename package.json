@@ -27,10 +27,10 @@
     "umd"
   ],
   "devDependencies": {
-    "@types/xml-c14n": "0.0.1",
     "@types/moment": "2.13.0",
     "@types/node": "16.4.10",
     "@types/uuid": "8.3.1",
+    "@types/xml-c14n": "0.0.1",
     "@types/xml2js": "0.4.9",
     "prettier": "2.3.2",
     "ts-loader": "9.2.4",
@@ -45,6 +45,7 @@
     "uuid": "8.3.2",
     "xml-c14n": "0.0.6",
     "xml2js": "0.4.23",
-    "xmlbuilder": "15.1.1"
+    "xmlbuilder": "15.1.1",
+    "xmldom": "^0.6.0"
   }
 }

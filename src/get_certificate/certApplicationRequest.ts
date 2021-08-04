@@ -2,12 +2,13 @@
 
 import * as xmlBuilder from 'xmlbuilder';
 import {GetCertificateInterface} from '../interfaces';
-import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, Canonicalize, CleanUpCertificate, LoadFileFromPath} from '../utils';
 import {createHash, createSign} from 'crypto';
 
 
 class CertApplicationRequest {
 
+  private readonly CANONICALIZE_METHOD = 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments';
   private gc: GetCertificateInterface;
 
   constructor(gc: GetCertificateInterface) {
@@ -47,17 +48,16 @@ class CertApplicationRequest {
       }
       const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
 
-      let tempRequest_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
-      const requestXml = tempRequest_.end({pretty: true});
-
-      // console.log(requestXml)
+      const requestXml: string = xmlBuilder.create(certRequestObj).end({pretty: true});
+      const canonicalRequestXml = await Canonicalize(requestXml, this.CANONICALIZE_METHOD);
+      // console.log(c);
       // process.exit(0);
 
       const signedInfoNode = {
         'SignedInfo': {
           '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
           'CanonicalizationMethod': {
-            '@Algorithm': 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+            '@Algorithm': this.CANONICALIZE_METHOD,
           },
           'SignatureMethod': {
             '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
@@ -77,14 +77,14 @@ class CertApplicationRequest {
             },
             'DigestValue': {
               '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-              '#text': this.getDigestValue(requestXml)
+              '#text': this.getDigestValue(canonicalRequestXml)
             },
           }
         },
       };
 
-      const signedInfo_: xmlBuilder.XMLElement = xmlBuilder.create(signedInfoNode, {headless: true});
-      const signedInfoXml = signedInfo_.end({pretty: true});
+      const signedInfoXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: true});
+      const canonicalSignedInfoXml = await Canonicalize(signedInfoXml, this.CANONICALIZE_METHOD);
       // console.log(signedInfoXml);
       // process.exit(0);
 
@@ -100,7 +100,7 @@ class CertApplicationRequest {
           // 'SignedInfo' is appended here
           'SignatureValue': {
             '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-            '#text': this.getSignatureValue(signingKey, signedInfoXml)
+            '#text': this.getSignatureValue(signingKey, canonicalSignedInfoXml)
           },
           'KeyInfo': {
             '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
@@ -124,8 +124,8 @@ class CertApplicationRequest {
       let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
       const xml = xml_.end({pretty: true});
 
-      // console.log(xml);
-      // process.exit(0);
+      console.log(xml);
+      process.exit(0);
 
       return xml;
     }
