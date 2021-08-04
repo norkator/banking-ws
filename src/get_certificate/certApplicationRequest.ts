@@ -96,36 +96,41 @@ class CertApplicationRequest {
       let signature = {
         'Signature': {
           '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-
-          // 'SignedInfo' is appended here
-          'SignatureValue': {
-            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-            '#text': this.getSignatureValue(signingKey, canonicalSignedInfoXml)
-          },
-          'KeyInfo': {
-            '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-            'X509Data': {
-              '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-              'X509Certificate': {
+          '#text': [
+            // 'SignedInfo' is appended here
+            {
+              'SignatureValue': {
                 '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
-                '#text': bankCertificate
-              },
-            }
-          }
+                '#text': this.getSignatureValue(signingKey, canonicalSignedInfoXml)
+              }
+            },
+            {
+              'KeyInfo': {
+                '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+                'X509Data': {
+                  '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+                  'X509Certificate': {
+                    '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
+                    '#text': bankCertificate
+                  },
+                }
+              }
+            },
+          ]
         }
       };
 
       // @ts-ignore
-      signature["Signature"]["SignedInfo"] = signedInfoNode["SignedInfo"];
+      signature["Signature"]["#text"].unshift({'SignedInfo': signedInfoNode["SignedInfo"]});
       // @ts-ignore
       certRequestObj.CertApplicationRequest["Signature"] = signature["Signature"];
 
 
-      let xml_: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
-      const xml = xml_.end({pretty: true});
+      let xml: string = xmlBuilder.create(certRequestObj).end({pretty: true});
+
 
       console.log(xml);
-      process.exit(0);
+      // process.exit(0);
 
       return xml;
     }
