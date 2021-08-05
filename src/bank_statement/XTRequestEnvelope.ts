@@ -41,7 +41,7 @@ class XTRequestEnvelope {
               'bxd:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
               'bxd:Language': this.xt.language,
               'bxd:UserAgent': this.getSoftwareId(),
-              // 'bxd:ReceiverId': '', // only used with other banks like Nordea
+              'bxd:ReceiverId': 'SAMLINK',
             },
             'ApplicationRequest': {
               '@xmlns:bxd': 'http://model.bxd.fi',
