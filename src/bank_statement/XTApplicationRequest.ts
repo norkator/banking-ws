@@ -32,8 +32,8 @@ class XTApplicationRequest {
     let obj: any = {
       'ApplicationRequest': {
         '@xmlns': 'http://bxd.fi/xmldata/',
-        '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-        '@xsi:schemaLocation': 'http://www.w3.org/2001/XMLSchema-instance',
+        // '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        // '@xsi:schemaLocation': 'http://www.w3.org/2001/XMLSchema-instance',
         'CustomerId': this.xt.userParams.customerId,
         'Command': 'DownloadFileList',
         'Timestamp': this.xt.Timestamp,
@@ -60,9 +60,9 @@ class XTApplicationRequest {
     // noinspection UnnecessaryLocalVariableJS
     let xml: string = xmlBuilder.create(obj).end({pretty: false});
 
-    console.log(xml);
+    // console.log(xml);
     // fs.writeFileSync("signed.xml", xml)
-    process.exit(0);
+    // process.exit(0);
 
     return xml;
   }
