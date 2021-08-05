@@ -119,7 +119,7 @@ console.log(certificate);
 ```
 
 #### Expected response
-```json
+```json5
 {
   Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
   Certificate: 'base64-encoded-certificate',
@@ -164,7 +164,7 @@ console.log(certificate);
 ```
 
 #### Expected response
-```json
+```json5
 {
   Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
   Certificate: 'base64-encoded-certificate',
