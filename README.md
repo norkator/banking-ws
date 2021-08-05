@@ -86,6 +86,8 @@ Below are examples for each step.
 
 Get certificate
 -----
+
+#### Making request
 ```typescript
 import * as moment from 'moment'
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -103,7 +105,6 @@ const userParams: UserParamsInterface = {
 const gc: GetCertificateInterface = {
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/wsdl/CertificateService.xml',
-  // @ts-ignore
   Timestamp: new moment().format('YYYY-MM-DDThh:mm:ssZ'),
   SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
   Command: 'GetCertificate',
@@ -117,11 +118,23 @@ const certificate = await GetCertificate(gc);
 console.log(certificate);
 ```
 
+#### Expected response
+```json
+{
+  Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
+  Certificate: 'base64-encoded-certificate',
+  CertificateFormat: 'X509',
+  ExpirationDateTime: '<certificate-expiration-date>'
+}
+```
+Certificate should be renewed with Renew Certificate method before it's expired. 
+
 
 
 Renew certificate
 -----
 
+#### Making request
 ```typescript
 import * as moment from 'moment';
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -149,6 +162,17 @@ const gc: GetCertificateInterface = {
 const certificate = await RenewCertificate(gc);
 console.log(certificate);
 ```
+
+#### Expected response
+```json
+{
+  Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
+  Certificate: 'base64-encoded-certificate',
+  CertificateFormat: 'X509',
+  ExpirationDateTime: '<certificate-expiration-date>'
+}
+```
+Certificate should be renewed with Renew Certificate method before it's expired. 
 
 
 
