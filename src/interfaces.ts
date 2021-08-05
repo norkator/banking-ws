@@ -75,6 +75,7 @@ export interface XTInterface {
   SoftwareId: SoftwareIdInterface;
   ExecutionSerial: string;
   CsrPath: string;
+  BankCsrPath: string;
   Base64EncodedClientPrivateKey?: string;
   language: Language;
 }
