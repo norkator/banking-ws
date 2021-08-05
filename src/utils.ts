@@ -6,7 +6,7 @@ import {readFileSync} from 'fs';
 // @ts-ignore
 import * as openssl from 'openssl-nodejs';
 // @ts-ignore
-import moment from 'moment';
+import * as moment from 'moment';
 import * as xmlC14N from 'xml-c14n';
 import {Buffer} from 'buffer';
 import {DOMParser} from 'xmldom';
@@ -113,15 +113,19 @@ function Base64EncodedSHA1Digest(content: string): string {
  */
 function x509ExpirationDate(pem: string): Promise<any> {
   return new Promise((resolve, reject) => {
-    openssl(['x509', '-enddate', '-noout', '-in', {
-      name: 'temp_cert.pem',
-      buffer: Buffer.from(pem)
-    }], function (err: string, buffer: any) {
-      // console.log(err.toString(), buffer.toString());
-      const res = buffer.toString().replace('\n', '').split('=');
-      const date = moment(res[1], 'MMM D hh:mm:ss yyyy').format('YYYY-MM-DD hh:mm:ss');
-      resolve(date);
-    });
+    try {
+      openssl(['x509', '-enddate', '-noout', '-in', {
+        name: 'temp_cert.pem',
+        buffer: Buffer.from(pem)
+      }], function (err: string, buffer: any) {
+        // console.log(err.toString(), buffer.toString());
+        const res = buffer.toString().replace('\n', '').split('=');
+        const date = moment(res[1], 'MMM D HH:mm:ss yyyy').format('YYYY-MM-DD HH:mm:ss'); // Todo, this date formatting is big question mark
+        resolve(date);
+      });
+    } catch (e) {
+      return undefined;
+    }
   });
 }
 

@@ -54,7 +54,7 @@ class CertApplicationResponse {
       Name: Certificate['Name'][0],
       Certificate: cert,
       CertificateFormat: Certificate['CertificateFormat'][0],
-      ExpirationDateTime: '', // await CertApplicationResponse.getCertificateExpirationDate(cert)
+      ExpirationDateTime: await CertApplicationResponse.getCertificateExpirationDate(cert)
     };
 
     const Signature = ns2CertApplicationResponse['Signature'][0];
@@ -104,7 +104,8 @@ class CertApplicationResponse {
 
 
   private static async getCertificateExpirationDate(cert: string): Promise<string> {
-    return await x509ExpirationDate(Base64DecodeStr(cert));
+    const decoded = Base64DecodeStr(cert);
+    return await x509ExpirationDate(decoded);
   }
 
 }

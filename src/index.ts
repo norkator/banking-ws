@@ -8,11 +8,12 @@ import {Base64EncodeStr, LoadFileAsString} from './utils';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
-import * as https from 'https';
-import axios from 'axios';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
-import {XTRequestEnvelope} from "./bank_statement/XTRequestEnvelope";
+import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
+import * as https from 'https';
+import * as path from 'path';
+import axios from 'axios';
 
 
 /**
@@ -75,7 +76,9 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     },
     httpsAgent: agent,
   });
-  console.log(response.data);
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
+  // };
   const car = new CertApplicationResponse(gc, response.data);
   await car.parseBody();
   if (car.isValid()) {
