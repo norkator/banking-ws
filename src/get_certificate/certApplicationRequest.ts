@@ -59,14 +59,15 @@ class CertApplicationRequest {
         X509Certificate: bankCertificate
       });
 
+      // @ts-ignore
       certRequestObj.CertApplicationRequest["Signature"] = signature["Signature"];
+      // noinspection UnnecessaryLocalVariableJS
       let xml: string = xmlBuilder.create(certRequestObj).end({pretty: false});
 
 
-      console.log(xml);
+      // console.log(xml);
       // fs.writeFileSync("signed.xml", xml)
-      process.exit(0);
-
+      // process.exit(0);
       return xml;
     }
 
