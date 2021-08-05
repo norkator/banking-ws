@@ -54,8 +54,12 @@ class XTRequestEnvelope {
 
     const signatureNode = {};
 
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create(obj, {version: '1.0', encoding: 'UTF-8'});
-    return xml.end({pretty: true});
+    let xml: string = xmlBuilder.create(obj, {version: '1.0', encoding: 'UTF-8'}).end({pretty: true});
+
+    // console.log(xml);
+    // process.exit(0);
+
+    return xml;
   }
 
   private getSoftwareId(): string {
