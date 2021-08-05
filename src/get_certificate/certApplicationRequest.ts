@@ -4,6 +4,7 @@ import * as xmlBuilder from 'xmlbuilder';
 import {GetCertificateInterface} from '../interfaces';
 import {Base64DecodeStr, Base64EncodeStr, Canonicalize, CleanUpCertificate, LoadFileFromPath} from '../utils';
 import {createHash, createSign} from 'crypto';
+import * as fs from "fs";
 
 
 class CertApplicationRequest {
@@ -21,8 +22,8 @@ class CertApplicationRequest {
     let certRequestObj: any = {
       'CertApplicationRequest': {
         '@xmlns': 'http://op.fi/mlp/xmldata/',
-        '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-        '@xsi:schemaLocation': 'http://op.fi/mlp/xmldata/ file:////csamnt1/K830186$/Datapower/schemas/CertApplicationRequest_20090422.xsd',
+        // '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        // '@xsi:schemaLocation': 'http://op.fi/mlp/xmldata/ file:////csamnt1/K830186$/Datapower/schemas/CertApplicationRequest_20090422.xsd',
         'CustomerId': this.gc.userParams.customerId,
         'Timestamp': this.gc.Timestamp, // 2012-12-13T12:12:12
         'Environment': this.gc.userParams.environment,
@@ -48,7 +49,7 @@ class CertApplicationRequest {
       }
       const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
 
-      const requestXml: string = xmlBuilder.create(certRequestObj).end({pretty: true});
+      const requestXml: string = xmlBuilder.create(certRequestObj).end({pretty: false});
       const canonicalRequestXml = await Canonicalize(requestXml, this.CANONICALIZE_METHOD);
       // console.log(c);
       // process.exit(0);
@@ -83,7 +84,7 @@ class CertApplicationRequest {
         },
       };
 
-      const signedInfoXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: true});
+      const signedInfoXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
       const canonicalSignedInfoXml = await Canonicalize(signedInfoXml, this.CANONICALIZE_METHOD);
       // console.log(signedInfoXml);
       // process.exit(0);
@@ -126,10 +127,11 @@ class CertApplicationRequest {
       certRequestObj.CertApplicationRequest["Signature"] = signature["Signature"];
 
 
-      let xml: string = xmlBuilder.create(certRequestObj).end({pretty: true});
+      let xml: string = xmlBuilder.create(certRequestObj).end({pretty: false});
 
 
-      console.log(xml);
+      // console.log(xml);
+      // fs.writeFileSync("signed.xml", xml)
       // process.exit(0);
 
       return xml;

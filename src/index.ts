@@ -75,6 +75,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     },
     httpsAgent: agent,
   });
+  console.log(response.data);
   const car = new CertApplicationResponse(gc, response.data);
   await car.parseBody();
   if (car.isValid()) {

@@ -54,7 +54,7 @@ class CertApplicationResponse {
       Name: Certificate['Name'][0],
       Certificate: cert,
       CertificateFormat: Certificate['CertificateFormat'][0],
-      ExpirationDateTime: await CertApplicationResponse.getCertificateExpirationDate(cert)
+      ExpirationDateTime: '', // await CertApplicationResponse.getCertificateExpirationDate(cert)
     };
 
     const Signature = ns2CertApplicationResponse['Signature'][0];
