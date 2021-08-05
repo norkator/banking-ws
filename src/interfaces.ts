@@ -22,6 +22,17 @@ export interface SoftwareIdInterface {
   version: string;
 }
 
+
+/**
+ * Required parameters needed with application request signature
+ */
+export interface ApplicationRequestSignatureInterface {
+  requestXml: string;
+  signingPrivateKey: string;
+  X509Certificate?: string;
+}
+
+
 /**
  * Get certificate interface
  */
