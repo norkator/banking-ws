@@ -19,7 +19,7 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:umd": "webpack",
-    "test": "mocha --reporter spec --require ts-node/register src/**/*.test.ts"
+    "test": "mocha --reporter spec --require ts-node/register src/**/*.test.ts --forbid-only --bail"
   },
   "files": [
     "lib",
@@ -39,7 +39,7 @@
     "mocha": "9.0.3",
     "prettier": "2.3.2",
     "ts-loader": "9.2.5",
-    "ts-node": "10.1.0",
+    "ts-node": "8.10.2",
     "typescript": "4.3.5",
     "webpack": "5.48.0",
     "webpack-cli": "4.7.2"
