@@ -42,16 +42,16 @@ class XTRequestEnvelope {
       'soapenv:Body': {
         '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         '@wsu:Id': this.bodyUuid,
-        'opc:downloadFileListin': {
-          'opc:RequestHeader': {
-            'opc:SenderId': this.xt.userParams.customerId,
-            'opc:RequestId': this.xt.RequestId,
-            'opc:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
-            'bxd:Language': this.xt.language,
-            'bxd:UserAgent': this.getSoftwareId(),
-            'bxd:ReceiverId': 'SAMLINK',
+        'cor:downloadFileListin': {
+          'mod:RequestHeader': {
+            'mod:SenderId': this.xt.userParams.customerId,
+            'mod:RequestId': this.xt.RequestId,
+            'mod:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
+            'mod:Language': this.xt.language,
+            'mod:UserAgent': this.getSoftwareId(),
+            'mod:ReceiverId': 'SAMLINK',
           },
-          'opc:ApplicationRequest': this.applicationRequest,
+          'mod:ApplicationRequest': this.applicationRequest,
         },
       },
     };

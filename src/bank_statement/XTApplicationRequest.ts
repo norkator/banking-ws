@@ -32,8 +32,8 @@ class XTApplicationRequest {
     let obj: any = {
       'ApplicationRequest': {
         '@xmlns': 'http://bxd.fi/xmldata/',
-        // '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-        // '@xsi:schemaLocation': 'http://www.w3.org/2001/XMLSchema-instance',
+        '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        '@xsi:schemaLocation': 'http://bxd.fi/xmldata/',
         'CustomerId': this.xt.userParams.customerId,
         'Command': 'DownloadFileList',
         'Timestamp': this.xt.Timestamp,
