@@ -2,7 +2,7 @@
 
 import * as xmlBuilder from 'xmlbuilder'
 import * as moment from 'moment';
-import {Base64DecodeStr, CleanUpCertificate, GetUuid, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, Canonicalize, CleanUpCertificate, GetUuid, LoadFileFromPath} from '../utils';
 import {XTInterface} from '../interfaces';
 import {createHash, createSign} from 'crypto';
 
@@ -22,7 +22,7 @@ class XTRequestEnvelope {
     this.xt = xt;
     this.applicationRequest = applicationRequest;
     this.timeStampUuid = GetUuid('Timestamp');
-    this.bodyUuid = GetUuid('Body');
+    this.bodyUuid = GetUuid('B');
     this.binarySecurityTokenUuid = GetUuid('CertId');
   }
 
@@ -45,8 +45,8 @@ class XTRequestEnvelope {
 
     const bodyNode = {
       'soapenv:Body': {
-        '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         '@wsu:Id': this.bodyUuid,
+        '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         'cor:downloadFileListin': {
           'mod:RequestHeader': {
             'mod:SenderId': this.xt.userParams.customerId,
@@ -62,7 +62,34 @@ class XTRequestEnvelope {
         },
       },
     };
-    let bodyNodeXml: string = xmlBuilder.create(bodyNode).end({pretty: false});
+    let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
+
+    let canonicalizeBodyNodeXml = await Canonicalize(
+      bodyNodeXml
+        .replace(/soapenv:Body/g, 'Body')
+        .replace('xmlns:wsu', 'xmlns')
+        .replace('wsu:Id', 'Id')
+        .replace(/cor:downloadFileListin/g, 'downloadFileListin')
+        .replace(/mod:/g, '')
+      , this.CANONICALIZE_METHOD
+    );
+
+
+    canonicalizeBodyNodeXml = canonicalizeBodyNodeXml
+      .replace(/Body/g, 'soapenv:Body')
+      .replace('xmlns', 'xmlns:wsu')
+      .replace('Id', 'wsu:Id')
+      .replace(/downloadFileListin/g, 'cor:downloadFileListin')
+      .replace(/RequestHeader/g, 'mod:RequestHeader')
+      .replace(/SenderId/g, 'mod:SenderId')
+      .replace(/RequestId/g, 'mod:RequestId')
+      .replace(/Timestamp/g, 'mod:Timestamp')
+      .replace(/Language/g, 'mod:Language')
+      .replace(/UserAgent/g, 'mod:UserAgent')
+      .replace(/ReceiverId/g, 'mod:ReceiverId')
+      .replace(/ApplicationRequest/g, 'mod:ApplicationRequest')
+    ;
+
 
     const signedInfoNode = {
       'ds:SignedInfo': {
@@ -74,18 +101,6 @@ class XTRequestEnvelope {
         },
 
         'ds:Reference': [
-          // {
-          //   '@URI': '#' + this.timeStampUuid,
-          //   'ds:Transforms': {
-          //     'ds:Transform': {
-          //       '@Algorithm': this.CANONICALIZE_METHOD
-          //     },
-          //     'ds:DigestMethod': {
-          //       '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
-          //     },
-          //     'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
-          //   },
-          // },
           {
             '@URI': '#' + this.bodyUuid,
             'ds:Transforms': {
@@ -96,7 +111,7 @@ class XTRequestEnvelope {
             'ds:DigestMethod': {
               '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
             },
-            'ds:DigestValue': this.getDigestValue(bodyNodeXml),
+            'ds:DigestValue': this.getDigestValue(canonicalizeBodyNodeXml),
           }
         ],
       },
@@ -155,14 +170,13 @@ class XTRequestEnvelope {
     // @ts-ignore
     envelopeObject["soapenv:Envelope"]["soapenv:Body"] = bodyNode["soapenv:Body"];
     // @ts-ignore
-    // envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["ds:Signature"]["ds:SignedInfo"] = signedInfoNode["ds:SignedInfo"];
     envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["#text"][2]["ds:Signature"]["#text"].unshift({'ds:SignedInfo': signedInfoNode["ds:SignedInfo"]});
 
 
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: false});
 
-    console.log(xml);
+    // console.log(xml);
     // process.exit(0);
 
     return xml;

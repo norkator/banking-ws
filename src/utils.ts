@@ -136,7 +136,7 @@ function x509ExpirationDate(pem: string): Promise<any> {
  * @param kind, example: http://www.w3.org/TR/2001/REC-xml-c14n-20010315
  * @constructor
  */
-function Canonicalize(xmlStr: string, kind: string): Promise<any> {
+function Canonicalize(xmlStr: string, kind: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
     const xmlC14n = xmlC14N();
