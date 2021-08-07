@@ -74,29 +74,29 @@ class XTRequestEnvelope {
         },
 
         'ds:Reference': [
-          {
-            '@URI': '#' + this.timeStampUuid,
-            'ds:Transforms': {
-              'ds:Transform': {
-                '@Algorithm': this.CANONICALIZE_METHOD
-              },
-              'ds:DigestMethod': {
-                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
-              },
-              'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
-            },
-          },
+          // {
+          //   '@URI': '#' + this.timeStampUuid,
+          //   'ds:Transforms': {
+          //     'ds:Transform': {
+          //       '@Algorithm': this.CANONICALIZE_METHOD
+          //     },
+          //     'ds:DigestMethod': {
+          //       '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
+          //     },
+          //     'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
+          //   },
+          // },
           {
             '@URI': '#' + this.bodyUuid,
             'ds:Transforms': {
               'ds:Transform': {
                 '@Algorithm': this.CANONICALIZE_METHOD
               },
-              'ds:DigestMethod': {
-                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
-              },
-              'ds:DigestValue': this.getDigestValue(bodyNodeXml),
-            }
+            },
+            'ds:DigestMethod': {
+              '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
+            },
+            'ds:DigestValue': this.getDigestValue(bodyNodeXml),
           }
         ],
       },
@@ -163,7 +163,7 @@ class XTRequestEnvelope {
     const xml = xml_.end({pretty: false});
 
     console.log(xml);
-    process.exit(0);
+    // process.exit(0);
 
     return xml;
   }
