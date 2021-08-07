@@ -45,8 +45,8 @@ class XTRequestEnvelope {
 
     const bodyNode = {
       'soapenv:Body': {
-        '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         '@wsu:Id': this.bodyUuid,
+        '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         'cor:downloadFileListin': {
           'mod:RequestHeader': {
             'mod:SenderId': this.xt.userParams.customerId,
@@ -101,18 +101,6 @@ class XTRequestEnvelope {
         },
 
         'ds:Reference': [
-          // {
-          //   '@URI': '#' + this.timeStampUuid,
-          //   'ds:Transforms': {
-          //     'ds:Transform': {
-          //       '@Algorithm': this.CANONICALIZE_METHOD
-          //     },
-          //     'ds:DigestMethod': {
-          //       '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
-          //     },
-          //     'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
-          //   },
-          // },
           {
             '@URI': '#' + this.bodyUuid,
             'ds:Transforms': {
@@ -188,7 +176,7 @@ class XTRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: false});
 
-    console.log(xml);
+    // console.log(xml);
     // process.exit(0);
 
     return xml;

@@ -1,4 +1,4 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language} from './constants';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language} from './types';
 
 
 /**
