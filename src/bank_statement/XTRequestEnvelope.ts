@@ -21,9 +21,9 @@ class XTRequestEnvelope {
   constructor(xt: XTInterface, applicationRequest: string) {
     this.xt = xt;
     this.applicationRequest = applicationRequest;
-    this.timeStampUuid = GetUuid('TS');
-    this.bodyUuid = GetUuid('id');
-    this.binarySecurityTokenUuid = GetUuid('X509');
+    this.timeStampUuid = GetUuid('Timestamp');
+    this.bodyUuid = GetUuid('Body');
+    this.binarySecurityTokenUuid = GetUuid('CertId');
   }
 
   public async createXmlBody(): Promise<string> {
@@ -48,9 +48,7 @@ class XTRequestEnvelope {
         '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         '@wsu:Id': this.bodyUuid,
         'cor:downloadFileListin': {
-          '@xmlns:mod': 'http://model.bxd.fi',
           'mod:RequestHeader': {
-            '@xmlns:mod': 'http://model.bxd.fi',
             'mod:SenderId': this.xt.userParams.customerId,
             'mod:RequestId': this.xt.RequestId,
             'mod:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
@@ -59,7 +57,6 @@ class XTRequestEnvelope {
             'mod:ReceiverId': 'SAMLINK',
           },
           'mod:ApplicationRequest': {
-            '@xmlns:mod': 'http://model.bxd.fi',
             '#text': this.applicationRequest
           },
         },
