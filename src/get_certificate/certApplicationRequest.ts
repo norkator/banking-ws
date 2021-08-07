@@ -35,8 +35,11 @@ class CertApplicationRequest {
       }
       certRequestObj.CertApplicationRequest['TransferKey'] = this.gc.TransferKey;
 
-      let xml: xmlBuilder.XMLElement = xmlBuilder.create(certRequestObj);
-      return xml.end({pretty: true});
+      const xml: string = xmlBuilder.create(certRequestObj).end({pretty: true});
+      // console.log(xml);
+      // process.exit(0);
+
+      return xml;
     }
 
     if (this.gc.Command === 'RenewCertificate') {
