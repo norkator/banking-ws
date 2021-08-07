@@ -14,6 +14,10 @@ class XTRequestEnvelope {
   private readonly bodyUuid: string;
   private readonly binarySecurityTokenUuid: string;
 
+  private readonly CANONICALIZE_METHOD = 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments';
+  private readonly SIGNATURE_METHOD = 'rsa-sha1';
+  private readonly DIGEST_METHOD = 'sha1';
+
   constructor(xt: XTInterface, applicationRequest: string) {
     this.xt = xt;
     this.applicationRequest = applicationRequest;
@@ -66,10 +70,10 @@ class XTRequestEnvelope {
     const signedInfoNode = {
       'ds:SignedInfo': {
         'ds:CanonicalizationMethod': {
-          '@Algorithm': 'http://www.w3.org/2001/10/xml-exc-c14n#'
+          '@Algorithm': this.CANONICALIZE_METHOD
         },
         'ds:SignatureMethod': {
-          '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
+          '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.SIGNATURE_METHOD
         },
 
         'ds:Reference': [
@@ -77,10 +81,10 @@ class XTRequestEnvelope {
             '@URI': '#' + this.timeStampUuid,
             'ds:Transforms': {
               'ds:Transform': {
-                '@Algorithm': 'http://www.w3.org/2001/10/xml-exc-c14n#'
+                '@Algorithm': this.CANONICALIZE_METHOD
               },
               'ds:DigestMethod': {
-                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
+                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
               },
               'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
             },
@@ -89,10 +93,10 @@ class XTRequestEnvelope {
             '@URI': '#' + this.bodyUuid,
             'ds:Transforms': {
               'ds:Transform': {
-                '@Algorithm': 'http://www.w3.org/2001/10/xml-exc-c14n#'
+                '@Algorithm': this.CANONICALIZE_METHOD
               },
               'ds:DigestMethod': {
-                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
+                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
               },
               'ds:DigestValue': this.getDigestValue(bodyNodeXml),
             }
@@ -111,27 +115,38 @@ class XTRequestEnvelope {
             '@xmlns:wsse': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd',
             '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
             '@soapenv:mustUnderstand': '1',
-            'wsse:BinarySecurityToken': {
-              '@EncodingType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
-              '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3',
-              '@wsu:Id': this.binarySecurityTokenUuid,
-              '#text': signingCsr,
-            },
-            // 'wsu:Timestamp' node is appended here
-            'ds:Signature': {
-              '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
-              // 'ds:SignedInfo' node is appended here
-              'ds:SignatureValue': this.getSignatureValue(signingKey, bodyNodeXml),
-              'ds:KeyInfo': {
-                'wsse:SecurityTokenReference': {
-                  'wsse:Reference': {
-                    '@URI': '#' + this.binarySecurityTokenUuid,
-                    '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3'
-                  }
+            '#text': [
+              // 'wsu:Timestamp' node is appended here
+              {
+                'wsse:BinarySecurityToken': {
+                  '@EncodingType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
+                  '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3',
+                  '@wsu:Id': this.binarySecurityTokenUuid,
+                  '#text': signingCsr,
+                },
+              },
+              {
+                'ds:Signature': {
+                  '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
+                  '#text': [
+                    // 'ds:SignedInfo' node is appended here
+                    {
+                      'ds:SignatureValue': this.getSignatureValue(signingKey, bodyNodeXml),
+                    },
+                    {
+                      'ds:KeyInfo': {
+                        'wsse:SecurityTokenReference': {
+                          'wsse:Reference': {
+                            '@URI': '#' + this.binarySecurityTokenUuid,
+                            '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3'
+                          }
+                        }
+                      },
+                    }
+                  ],
                 }
               },
-
-            }
+            ]
           }
         },
         // 'soapenv:Body' node is appended here
@@ -139,15 +154,16 @@ class XTRequestEnvelope {
     };
 
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["wsu:Timestamp"] = timeStampNode["wsu:Timestamp"];
+    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["#text"].unshift({'wsu:Timestamp': timeStampNode["wsu:Timestamp"]});
     // @ts-ignore
     envelopeObject["soapenv:Envelope"]["soapenv:Body"] = bodyNode["soapenv:Body"];
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["ds:Signature"]["ds:SignedInfo"] = signedInfoNode["ds:SignedInfo"];
+    // envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["ds:Signature"]["ds:SignedInfo"] = signedInfoNode["ds:SignedInfo"];
+    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["#text"][2]["ds:Signature"]["#text"].unshift({'ds:SignedInfo': signedInfoNode["ds:SignedInfo"]});
 
 
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
-    const xml = xml_.end({pretty: true});
+    const xml = xml_.end({pretty: false});
 
     console.log(xml);
     process.exit(0);
@@ -171,14 +187,14 @@ class XTRequestEnvelope {
 
   // noinspection JSMethodCanBeStatic
   private getDigestValue(node: string): string {
-    const shaSum = createHash('sha1');
+    const shaSum = createHash(this.DIGEST_METHOD);
     shaSum.update(node);
     return shaSum.digest('base64');
   }
 
   // noinspection JSMethodCanBeStatic
   private getSignatureValue(signingKey: string, node: string): string {
-    const sign = createSign('rsa-sha1');
+    const sign = createSign(this.SIGNATURE_METHOD);
     sign.update(node);
     sign.end();
     const signature = sign.sign(signingKey);
