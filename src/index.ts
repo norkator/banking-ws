@@ -122,7 +122,6 @@ async function BankStatement(xt: XTInterface): Promise<string> {
     },
     httpsAgent: agent,
   });
-  // Todo, create response parser here, maybe try to transform it to json?
   const xtResponse = new XTApplicationResponse(xt, response.data);
   return await xtResponse.parseBody();
 }
