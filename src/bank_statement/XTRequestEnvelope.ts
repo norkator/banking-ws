@@ -37,13 +37,16 @@ class XTRequestEnvelope {
         'wsu:Expires': this.getExpires(),
       }
     };
+    let timeStampNodeXml: string = xmlBuilder.create(timeStampNode).end({pretty: false});
 
     const bodyNode = {
       'soapenv:Body': {
         '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         '@wsu:Id': this.bodyUuid,
         'cor:downloadFileListin': {
+          '@xmlns:mod': 'http://model.bxd.fi',
           'mod:RequestHeader': {
+            '@xmlns:mod': 'http://model.bxd.fi',
             'mod:SenderId': this.xt.userParams.customerId,
             'mod:RequestId': this.xt.RequestId,
             'mod:Timestamp': moment().format('YYYY-MM-DDThh:mm:ssZ'),
@@ -51,10 +54,14 @@ class XTRequestEnvelope {
             'mod:UserAgent': this.getSoftwareId(),
             'mod:ReceiverId': 'SAMLINK',
           },
-          'mod:ApplicationRequest': this.applicationRequest,
+          'mod:ApplicationRequest': {
+            '@xmlns:mod': 'http://model.bxd.fi',
+            '#text': this.applicationRequest
+          },
         },
       },
     };
+    let bodyNodeXml: string = xmlBuilder.create(bodyNode).end({pretty: false});
 
     const signedInfoNode = {
       'ds:SignedInfo': {
@@ -75,7 +82,7 @@ class XTRequestEnvelope {
               'ds:DigestMethod': {
                 '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
               },
-              'ds:DigestValue': this.getDigestValue(timeStampNode.toString()),
+              'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
             },
           },
           {
@@ -87,7 +94,7 @@ class XTRequestEnvelope {
               'ds:DigestMethod': {
                 '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
               },
-              'ds:DigestValue': this.getDigestValue(bodyNode.toString()),
+              'ds:DigestValue': this.getDigestValue(bodyNodeXml),
             }
           }
         ],
@@ -114,7 +121,7 @@ class XTRequestEnvelope {
             'ds:Signature': {
               '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
               // 'ds:SignedInfo' node is appended here
-              'ds:SignatureValue': this.getSignatureValue(signingKey, bodyNode.toString()),
+              'ds:SignatureValue': this.getSignatureValue(signingKey, bodyNodeXml),
               'ds:KeyInfo': {
                 'wsse:SecurityTokenReference': {
                   'wsse:Reference': {
@@ -142,8 +149,8 @@ class XTRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: true});
 
-    // console.log(xml);
-    // process.exit(0);
+    console.log(xml);
+    process.exit(0);
 
     return xml;
   }
