@@ -8,6 +8,7 @@ import {Base64EncodeStr, LoadFileAsString} from './utils';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
+import {XTApplicationResponse} from './bank_statement/XTApplicationResponse';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
@@ -122,7 +123,8 @@ async function BankStatement(xt: XTInterface): Promise<string> {
     httpsAgent: agent,
   });
   // Todo, create response parser here, maybe try to transform it to json?
-  return response.data;
+  const xtResponse = new XTApplicationResponse(xt, response.data);
+  return await xtResponse.parseBody();
 }
 
 
