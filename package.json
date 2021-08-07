@@ -19,7 +19,8 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:umd": "webpack",
-    "test": "mocha --reporter spec --require ts-node/register src/**/*.test.ts --forbid-only --bail"
+    "test": "mocha --reporter spec --require ts-node/register src/**/*.test.ts --forbid-only --bail",
+    "check:errors": "tsc --noEmit -p tsconfig.base.json"
   },
   "files": [
     "lib",
