@@ -9,7 +9,8 @@
 import moment from 'moment';
 import * as xmlBuilder from 'xmlbuilder';
 import {SoftwareIdInterface} from '../interfaces';
-import {Environment, FileType, Operations, Status, StatusValues} from '../constants';
+import {Environment, FileType, Status} from '../types';
+import {Operations, StatusValues} from '../constants';
 
 
 class ApplicationRequest {

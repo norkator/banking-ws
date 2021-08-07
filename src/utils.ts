@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import {createHash} from 'crypto';
-import {Bank, Environment, OutputEncoding, WsdlType} from './constants';
+import {Bank, Environment, OutputEncoding, WsdlType} from './types';
 import * as path from 'path';
 import {readFileSync} from 'fs';
 // @ts-ignore
