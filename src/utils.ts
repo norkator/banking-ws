@@ -7,9 +7,10 @@ import {readFileSync} from 'fs';
 import * as openssl from 'openssl-nodejs';
 // @ts-ignore
 import * as moment from 'moment';
-import xmlC14N = require('xml-c14n');
 import {Buffer} from 'buffer';
 import {DOMParser} from 'xmldom';
+import * as xmlC14n from 'xml-c14n';
+
 
 /**
  * @param fullPath, path and filenames with extension
@@ -139,8 +140,8 @@ function x509ExpirationDate(pem: string): Promise<any> {
 function Canonicalize(xmlStr: string, kind: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
-    const xmlC14n = xmlC14N();
-    const canonicalize = xmlC14n.createCanonicaliser(kind);
+    const xmlC14n_ = xmlC14n();
+    const canonicalize = xmlC14n_.createCanonicaliser(kind);
     // console.log("Canonicalize with algorithm: " + canonicalize.name());
     canonicalize.canonicalise(doc, (err: string, data: string) => {
       err ? reject(err) : resolve(data);
