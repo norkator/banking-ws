@@ -7,9 +7,9 @@ import {readFileSync} from 'fs';
 import * as openssl from 'openssl-nodejs';
 // @ts-ignore
 import * as moment from 'moment';
-import * as xmlC14N from 'xml-c14n';
 import {Buffer} from 'buffer';
 import {DOMParser} from 'xmldom';
+import * as xmlC14n from 'xml-c14n';
 
 
 /**
@@ -120,6 +120,7 @@ function x509ExpirationDate(pem: string): Promise<any> {
       }], function (err: string, buffer: any) {
         // console.log(err.toString(), buffer.toString());
         const res = buffer.toString().replace('\n', '').split('=');
+        // @ts-ignore
         const date = moment(res[1], 'MMM D HH:mm:ss yyyy').format('YYYY-MM-DD HH:mm:ss'); // Todo, this date formatting is big question mark
         resolve(date);
       });
@@ -139,8 +140,8 @@ function x509ExpirationDate(pem: string): Promise<any> {
 function Canonicalize(xmlStr: string, kind: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
-    const xmlC14n = xmlC14N();
-    const canonicalize = xmlC14n.createCanonicaliser(kind);
+    const xmlC14n_ = xmlC14n();
+    const canonicalize = xmlC14n_.createCanonicaliser(kind);
     // console.log("Canonicalize with algorithm: " + canonicalize.name());
     canonicalize.canonicalise(doc, (err: string, data: string) => {
       err ? reject(err) : resolve(data);
