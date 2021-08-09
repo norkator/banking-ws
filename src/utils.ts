@@ -7,10 +7,9 @@ import {readFileSync} from 'fs';
 import * as openssl from 'openssl-nodejs';
 // @ts-ignore
 import * as moment from 'moment';
-import * as xmlC14N from 'xml-c14n';
+import xmlC14N = require('xml-c14n');
 import {Buffer} from 'buffer';
 import {DOMParser} from 'xmldom';
-
 
 /**
  * @param fullPath, path and filenames with extension
@@ -120,6 +119,7 @@ function x509ExpirationDate(pem: string): Promise<any> {
       }], function (err: string, buffer: any) {
         // console.log(err.toString(), buffer.toString());
         const res = buffer.toString().replace('\n', '').split('=');
+        // @ts-ignore
         const date = moment(res[1], 'MMM D HH:mm:ss yyyy').format('YYYY-MM-DD HH:mm:ss'); // Todo, this date formatting is big question mark
         resolve(date);
       });
