@@ -2,7 +2,7 @@
 
 import * as xmlBuilder from 'xmlbuilder'
 import * as moment from 'moment';
-import {Base64DecodeStr, Canonicalize, CleanUpCertificate, GetUuid, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, Canonicalize, CleanUpCertificate, GetUuid, LoadFileFromPath} from '../utils';
 import {XTInterface} from '../interfaces';
 import {createHash, createSign} from 'crypto';
 
@@ -32,7 +32,7 @@ class XTRequestEnvelope {
     }
     const signingKey = Base64DecodeStr(this.xt.Base64EncodedClientPrivateKey);
 
-    const signingCsr = CleanUpCertificate(await LoadFileFromPath(this.xt.CsrPath, 'utf-8'));
+    const binarySecurityToken = CleanUpCertificate(await LoadFileFromPath(this.xt.BankCsrPath, 'utf-8'));
 
     const timeStampNode = {
       'wsu:Timestamp': {
@@ -102,6 +102,18 @@ class XTRequestEnvelope {
 
         'ds:Reference': [
           {
+            '@URI': '#' + this.timeStampUuid,
+            'ds:Transforms': {
+              'ds:Transform': {
+                '@Algorithm': this.CANONICALIZE_METHOD
+              },
+              'ds:DigestMethod': {
+                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
+              },
+              'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
+            },
+          },
+          {
             '@URI': '#' + this.bodyUuid,
             'ds:Transforms': {
               'ds:Transform': {
@@ -122,6 +134,7 @@ class XTRequestEnvelope {
         '@xmlns:cor': 'http://bxd.fi/CorporateFileService',
         '@xmlns:mod': 'http://model.bxd.fi',
         '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
+        '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
         'soapenv:Header': {
           'wsse:Security': {
             '@xmlns:wsse': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd',
@@ -134,7 +147,8 @@ class XTRequestEnvelope {
                   '@EncodingType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
                   '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3',
                   '@wsu:Id': this.binarySecurityTokenUuid,
-                  '#text': signingCsr,
+                  '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+                  '#text': binarySecurityToken,
                 },
               },
               {
@@ -148,6 +162,7 @@ class XTRequestEnvelope {
                     {
                       'ds:KeyInfo': {
                         'wsse:SecurityTokenReference': {
+                          '@xmlns': '',
                           'wsse:Reference': {
                             '@URI': '#' + this.binarySecurityTokenUuid,
                             '@ValueType': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3'
@@ -176,7 +191,7 @@ class XTRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: false});
 
-    // console.log(xml);
+    console.log(xml);
     // process.exit(0);
 
     return xml;
