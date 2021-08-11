@@ -233,6 +233,14 @@ console.log(bankStatement);
 ```
 
 
+#### Expected response
+In progress...
+```json5
+{
+  
+}
+```
+
 
 SEPA payment
 -----
