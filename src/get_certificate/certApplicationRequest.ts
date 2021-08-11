@@ -15,7 +15,7 @@ class CertApplicationRequest {
   }
 
   public async createXmlBody(): Promise<string | undefined> {
-    const csr = await LoadFileFromPath(this.gc.CsrPath, 'utf-8');
+    const csr = Base64DecodeStr(this.gc.Base64EncodedClientCsr);
 
     let certRequestObj: any = {
       'CertApplicationRequest': {
@@ -47,10 +47,10 @@ class CertApplicationRequest {
         throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
       }
       const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
-      if (this.gc.BankCsrPath === undefined) {
-        throw new Error('BankCsrPath is undefined')
+      if (this.gc.Base64EncodedBankCsr === undefined) {
+        throw new Error('Base64EncodedBankCsr is undefined')
       }
-      const bankCertificate = CleanUpCertificate(await LoadFileFromPath(this.gc.BankCsrPath, 'utf-8'));
+      const bankCertificate = CleanUpCertificate(Base64DecodeStr(this.gc.Base64EncodedBankCsr));
 
       const requestXml: string = xmlBuilder.create(certRequestObj).end({pretty: false});
 

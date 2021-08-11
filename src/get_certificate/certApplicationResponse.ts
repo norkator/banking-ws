@@ -8,7 +8,6 @@ class CertApplicationResponse {
 
   private readonly response: string;
   private readonly customerId: string;
-  private readonly csrPath: string;
 
   private certificate: CertificateInterface = {
     Name: undefined,
@@ -21,7 +20,6 @@ class CertApplicationResponse {
   constructor(gc: GetCertificateInterface, response: string) {
     this.response = response;
     this.customerId = gc.userParams.customerId;
-    this.csrPath = gc.CsrPath;
   }
 
   public async parseBody(): Promise<void> {

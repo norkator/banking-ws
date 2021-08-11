@@ -4,7 +4,7 @@ import {
   CertificateInterface,
   GetCertificateInterface, XTInterface
 } from './interfaces';
-import {Base64EncodeStr, LoadFileAsString} from './utils';
+import {Base64DecodeStr, Base64EncodeStr} from './utils';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
@@ -13,7 +13,6 @@ import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelo
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import * as https from 'https';
-import * as path from 'path';
 import axios from 'axios';
 
 
@@ -31,7 +30,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   const applicationRequest = Base64EncodeStr(body);
   const certRequestEnvelope = new CertRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
   const agent = new https.Agent({
-    ca: await LoadFileAsString(gc.userParams.rootCAPath)
+    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
   });
   const response = await axios.post(gc.requestUrl, certRequestEnvelope.createXmlBody(), {
     headers: {
@@ -68,7 +67,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   const applicationRequest = Base64EncodeStr(body);
   const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc, applicationRequest);
   const agent = new https.Agent({
-    ca: await LoadFileAsString(gc.userParams.rootCAPath)
+    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
   });
   const response = await axios.post(gc.requestUrl, await certRenewRequestEnvelope.createXmlBody(), {
     headers: {
@@ -113,7 +112,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   const applicationRequest = Base64EncodeStr(body);
   const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
   const agent = new https.Agent({
-    ca: await LoadFileAsString(xt.userParams.rootCAPath)
+    ca: Base64DecodeStr(xt.userParams.Base64EncodedRootCA)
   });
   const response = await axios.post(xt.requestUrl, await xtRequestEnvelope.createXmlBody(), {
     headers: {

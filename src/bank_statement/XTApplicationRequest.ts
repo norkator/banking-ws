@@ -23,10 +23,10 @@ class XTApplicationRequest {
       throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
     }
     const signingKey = Base64DecodeStr(this.xt.Base64EncodedClientPrivateKey);
-    if (this.xt.BankCsrPath === undefined) {
-      throw new Error('BankCsrPath is undefined')
+    if (this.xt.Base64EncodedBankCsr === undefined) {
+      throw new Error('Base64EncodedBankCsr is undefined')
     }
-    const bankCertificate = CleanUpCertificate(await LoadFileFromPath(this.xt.BankCsrPath, 'utf-8'));
+    const bankCertificate = CleanUpCertificate(Base64DecodeStr(this.xt.Base64EncodedBankCsr));
 
 
     let obj: any = {

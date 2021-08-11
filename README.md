@@ -13,6 +13,7 @@ Table of contents
     * [Links](#links)
     * [Documents](#documents)
 * [Installing](#installing)
+* [Terminology](#terminology)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
     * [Get certificate](#get-certificate)
@@ -45,6 +46,13 @@ todo...
 ```
 
 
+Terminology
+============
+* `SAMLINK_TEST_ROOT_CA` is used with axios ca config at Samlink test side. Taken from Samlink documentation provided with customerId.
+* `BANK_CERTIFICATE` is a base64 encoded certificate get after initial GetCertificate command and new ones after RenewCertificate.
+* `CLIENT_CERTIFICATE` is signing certificate you have created with OpenSSL.
+* `CLIENT_PRIVATE_KEY` is private key for upper signing certificate you created with OpenSSL
+
 
 Getting started
 ============
@@ -69,8 +77,8 @@ openssl req -out signing.csr -new -newkey rsa:2048 -nodes -keyout signing.key
 After this, you should have following files:
 
 ```
-signing.csr
-signing.key
+signing.csr  (CLIENT_CERTIFICATE)
+signing.key  (CLIENT_PRIVATE_KEY)
 ```
 
 ### Getting test credentials and firewall rule
@@ -92,14 +100,15 @@ Get certificate
 import * as moment from 'moment'
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {GetCertificate} from './src/index';
-import * as path from 'path';
 
+const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const CLIENT_CERTIFICATE = "base64-content-here";
 
 const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  rootCAPath: path.join(__dirname + '/../' + 'keys/samlink_test_root_ca.csr')
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
 };
 
 const gc: GetCertificateInterface = {
@@ -109,7 +118,7 @@ const gc: GetCertificateInterface = {
   SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
   Command: 'GetCertificate',
   Service: 'ISSUER',
-  CsrPath: path.join(__dirname + '/../' + '/keys/signing.csr'),
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
   TransferKey: '123123123123123123123',
   RequestId: '123456'
 };
@@ -119,6 +128,7 @@ console.log(certificate);
 ```
 
 #### Expected response
+This certificate is later used with `BANK_CERTIFICATE` variable.
 ```json5
 {
   Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
@@ -129,6 +139,11 @@ console.log(certificate);
 ```
 Certificate should be renewed with Renew Certificate method before it's expired. 
 
+You can see X509v3 certificate details after Base64 decoding response certificate and then
+using OpenSSL to view it:
+```shell script
+openssl x509 -in certificate_file_name.extension -text
+```
 
 
 Renew certificate
@@ -139,13 +154,17 @@ Renew certificate
 import * as moment from 'moment';
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {RenewCertificate} from './src/index';
-import * as path from 'path';
+
+const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const BANK_CERTIFICATE = "base64-content-here";
+const CLIENT_CERTIFICATE = "base64-content-here";
+const CLIENT_PRIVATE_KEY = "base64-content-here";
 
 const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  rootCAPath: path.join(__dirname + '/../' + 'keys/samlink_test_root_ca.csr')
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
 };
 
 const gc: GetCertificateInterface = {
@@ -154,9 +173,10 @@ const gc: GetCertificateInterface = {
   Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
   SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
   Command: 'RenewCertificate',
-  CsrPath: path.join(__dirname + '/../' + '/keys/signing.csr'),
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
+  Base64EncodedBankCsr: BANK_CERTIFICATE,
   RequestId: '123456',
-  Base64EncodedClientPrivateKey: "eW91cnByaXZhdGVrZXloZXJlLWRpZC15b3UtdGhpbmstaS1jb21taXR0ZWQtbWluZS1vbi1naXRodWI/",
+  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
 };
 
 const certificate = await RenewCertificate(gc);
@@ -179,6 +199,37 @@ Certificate should be renewed with Renew Certificate method before it's expired.
 Bank statement
 -----
 ```typescript
+import * as moment from 'moment';
+import {XTInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
+import {BankStatement} from './src/index';
+
+const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const BANK_CERTIFICATE = "base64-content-here";
+const CLIENT_CERTIFICATE = "base64-content-here";
+const CLIENT_PRIVATE_KEY = "base64-content-here";
+
+const userParams: UserParamsInterface = {
+  bank: 'Samlink',
+  environment: 'PRODUCTION',
+  customerId: '12345678',
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+};
+
+const xt: XTInterface = {
+  userParams: userParams,
+  requestUrl: 'https://185.251.49.57/services/CorporateFileService',
+  RequestId: '123456',
+  Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
+  ExecutionSerial: '123456',
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
+  Base64EncodedBankCsr: BANK_CERTIFICATE,
+  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
+  language: "FI",
+};
+
+const bankStatement = await BankStatement(xt);
+console.log(bankStatement);
 ```
 
 

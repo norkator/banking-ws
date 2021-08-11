@@ -28,7 +28,7 @@ class CertRenewRequestEnvelope {
     }
     const signingKey = Base64DecodeStr(this.gc.Base64EncodedClientPrivateKey);
 
-    const signingCsr = CleanUpCertificate(await LoadFileFromPath(this.gc.CsrPath, 'utf-8'));
+    const signingCsr = CleanUpCertificate(Base64DecodeStr(this.gc.Base64EncodedClientCsr));
 
     const timeStampNode = {
       'wsu:Timestamp': {
