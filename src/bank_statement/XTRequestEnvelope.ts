@@ -175,7 +175,7 @@ class XTRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: false});
 
-    console.log(xml);
+    // console.log(xml);
     // process.exit(0);
 
     return xml;
