@@ -34,6 +34,7 @@ class XTRequestEnvelope {
 
     const binarySecurityToken = CleanUpCertificate(await LoadFileFromPath(this.xt.BankCsrPath, 'utf-8'));
 
+
     const timeStampNode = {
       'wsu:Timestamp': {
         '@wsu:Id': this.timeStampUuid,
@@ -192,7 +193,7 @@ class XTRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: false});
 
-    // console.log(xml);
+    console.log(xml);
     // process.exit(0);
 
     return xml;
@@ -200,14 +201,12 @@ class XTRequestEnvelope {
 
   // noinspection JSMethodCanBeStatic
   private getCreated(): string {
-    // 2016-10-11T10:40:09Z
-    return moment().format('YYYY-MM-DDTHH:mm:ss') + 'Z';
+    return moment().toISOString();
   }
 
   // noinspection JSMethodCanBeStatic
   private getExpires(): string {
-    // 2016-10-11T10:40:09Z
-    return moment().add(60, 'minutes').format('YYYY-MM-DDTHH:mm:ss') + 'Z';
+    return moment().add(5, 'minutes').toISOString();
   }
 
   private getSoftwareId(): string {
