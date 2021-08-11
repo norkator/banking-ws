@@ -37,7 +37,7 @@ class XTRequestEnvelope {
     const timeStampNode = {
       'wsu:Timestamp': {
         '@wsu:Id': this.timeStampUuid,
-        'xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+        '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         'wsu:Created': this.getCreated(),
         'wsu:Expires': this.getExpires(),
       }
