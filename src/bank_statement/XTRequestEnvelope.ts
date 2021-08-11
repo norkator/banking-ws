@@ -44,6 +44,8 @@ class XTRequestEnvelope {
       }
     };
     let timeStampNodeXml: string = xmlBuilder.create(timeStampNode).end({pretty: false});
+    const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD);
+
 
     const bodyNode = {
       'soapenv:Body': {
@@ -109,11 +111,11 @@ class XTRequestEnvelope {
               'ds:Transform': {
                 '@Algorithm': this.CANONICALIZE_METHOD
               },
-              'ds:DigestMethod': {
-                '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
-              },
-              'ds:DigestValue': this.getDigestValue(timeStampNodeXml),
             },
+            'ds:DigestMethod': {
+              '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.DIGEST_METHOD
+            },
+            'ds:DigestValue': this.getDigestValue(canonicalizeTimeSampNodeXml),
           },
           {
             '@URI': '#' + this.bodyUuid,
