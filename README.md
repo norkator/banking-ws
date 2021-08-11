@@ -13,6 +13,7 @@ Table of contents
     * [Links](#links)
     * [Documents](#documents)
 * [Installing](#installing)
+* [Terminology](#terminology)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
     * [Get certificate](#get-certificate)
@@ -44,6 +45,13 @@ Installing
 todo...
 ```
 
+
+Terminology
+============
+* `SAMLINK_TEST_ROOT_CA` is used with axios ca config at Samlink test side. Taken from Samlink documentation provided with customerId.
+* `BANK_CERTIFICATE` is a base64 encoded certificate get after initial GetCertificate command and new ones after RenewCertificate.
+* `CLIENT_CERTIFICATE` is signing certificate you have created with OpenSSL.
+* `CLIENT_PRIVATE_KEY` is private key for upper signing certificate you created with OpenSSL
 
 
 Getting started
