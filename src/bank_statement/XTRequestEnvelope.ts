@@ -133,12 +133,25 @@ class XTRequestEnvelope {
       },
     };
     let signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
-    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD);
-
-    
-
-    process.exit(0)
-
+    let canonicalizeSignedInfoNodeXml = await Canonicalize(
+      signedInfoNodeXml
+        .replace(/ds:SignedInfo/g, 'SignedInfo')
+        .replace(/ds:CanonicalizationMethod/g, 'CanonicalizationMethod')
+        .replace(/ds:SignatureMethod/g, 'SignatureMethod')
+        .replace(/ds:Reference/g, 'Reference')
+        .replace(/ds:Transform/g, 'Transform')
+        .replace(/ds:DigestMethod/g, 'DigestMethod')
+        .replace(/ds:DigestValue/g, 'DigestValue')
+      , this.CANONICALIZE_METHOD);
+    canonicalizeSignedInfoNodeXml = canonicalizeSignedInfoNodeXml
+      .replace(/SignedInfo/g, 'ds:SignedInfo')
+      .replace(/CanonicalizationMethod/g, 'ds:CanonicalizationMethod')
+      .replace(/SignatureMethod/g, 'ds:SignatureMethod')
+      .replace(/Reference/g, 'ds:Reference')
+      .replace(/Transform/g, 'ds:Transform')
+      .replace(/DigestMethod/g, 'ds:DigestMethod')
+      .replace(/DigestValue/g, 'ds:DigestValue')
+    ;
 
 
     let envelopeObject = {
