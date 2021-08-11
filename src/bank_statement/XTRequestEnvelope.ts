@@ -31,8 +31,7 @@ class XTRequestEnvelope {
       throw new Error('Base64EncodedClientPrivateKey cannot be undefined')
     }
     const signingKey = Base64DecodeStr(this.xt.Base64EncodedClientPrivateKey);
-
-    const binarySecurityToken = CleanUpCertificate(await LoadFileFromPath(this.xt.BankCsrPath, 'utf-8'));
+    const binarySecurityToken = CleanUpCertificate(Base64DecodeStr(this.xt.Base64EncodedBankCsr));
 
 
     const timeStampNode = {

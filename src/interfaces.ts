@@ -10,7 +10,6 @@ export interface UserParamsInterface {
   environment: Environment;
   customerId: string;
   Base64EncodedRootCA: string;
-  intermediateCA?: string
 }
 
 /**
@@ -44,7 +43,7 @@ export interface GetCertificateInterface {
   SoftwareId: SoftwareIdInterface; // eases problem solving so good to specify
   Command: Command;
   ExecutionSerial?: string; // not in use with samlink
-  CsrPath: string;
+  Base64EncodedClientCsr: string;
   Base64EncodedBankCsr?: string;
   TransferKey?: string; // used in the first time request
   RequestId: string;
@@ -74,8 +73,8 @@ export interface XTInterface {
   Timestamp: string;
   SoftwareId: SoftwareIdInterface;
   ExecutionSerial: string;
-  CsrPath: string;
   Base64EncodedBankCsr: string;
+  Base64EncodedClientCsr: string;
   Base64EncodedClientPrivateKey?: string;
   language: Language;
 }

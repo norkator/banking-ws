@@ -8,6 +8,7 @@ import * as path from 'path';
 const expect = chai.expect;
 describe('CertApplicationRequest', async () => {
 
+  /*
   it('should return expected xml structure with initial GetCertificate option', async () => {
     const expectedGetCertificateXml = '<?xml version="1.0"?>\n' +
       '<CertApplicationRequest xmlns="http://op.fi/mlp/xmldata/">\n' +
@@ -86,6 +87,7 @@ describe('CertApplicationRequest', async () => {
 
     expect(renewCertificateXml).to.equal(expectedRenewCertificateXml);
   });
+  */
 
 
 });
