@@ -132,6 +132,14 @@ class XTRequestEnvelope {
         ],
       },
     };
+    let signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
+    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD);
+
+    
+
+    process.exit(0)
+
+
 
     let envelopeObject = {
       'soapenv:Envelope': {
@@ -161,7 +169,7 @@ class XTRequestEnvelope {
                   '#text': [
                     // 'ds:SignedInfo' node is appended here
                     {
-                      'ds:SignatureValue': this.getSignatureValue(signingKey, bodyNodeXml),
+                      'ds:SignatureValue': this.getSignatureValue(signingKey, canonicalizeSignedInfoNodeXml),
                     },
                     {
                       'ds:KeyInfo': {
