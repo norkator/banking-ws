@@ -160,6 +160,24 @@ function GetUuid(prefix: string | undefined) {
 }
 
 
+function CreateCertificate(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    try {
+      openssl([
+        // see https://www.switch.ch/pki/manage/request/csr-openssl/
+        // 'req', '-config', { name:'csr.conf', buffer: BufferVariable }, '-out', 'signing.csr', '-new', '-newkey', 'rsa:2048',
+        '-nodes', '-keyout', 'signing.key',
+      ], function (err: string, buffer: any) {
+        console.log(err.toString(), buffer.toString());
+        resolve('');
+      });
+    } catch (e) {
+      return undefined;
+    }
+  });
+}
+
+
 export {
   LoadFileAsString,
   GetWSDL,
@@ -173,4 +191,5 @@ export {
   x509ExpirationDate,
   Canonicalize,
   GetUuid,
+  CreateCertificate,
 }

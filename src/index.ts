@@ -4,7 +4,7 @@ import {
   CertificateInterface,
   GetCertificateInterface, XTInterface
 } from './interfaces';
-import {Base64DecodeStr, Base64EncodeStr} from './utils';
+import {Base64DecodeStr, Base64EncodeStr, CreateCertificate} from './utils';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
@@ -14,6 +14,11 @@ import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
+
+
+async function CreateOwnCertificate(): Promise<any> {
+  await CreateCertificate();
+}
 
 
 /**
@@ -127,6 +132,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
 
 
 export {
+  CreateOwnCertificate,
   GetCertificate,
   RenewCertificate,
   SEPAPayment,
