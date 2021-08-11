@@ -9,7 +9,7 @@ export interface UserParamsInterface {
   bank: Bank;
   environment: Environment;
   customerId: string;
-  rootCAPath: string;
+  Base64EncodedRootCA: string;
   intermediateCA?: string
 }
 
@@ -45,7 +45,7 @@ export interface GetCertificateInterface {
   Command: Command;
   ExecutionSerial?: string; // not in use with samlink
   CsrPath: string;
-  BankCsrPath?: string;
+  Base64EncodedBankCsr?: string;
   TransferKey?: string; // used in the first time request
   RequestId: string;
   Base64EncodedClientPrivateKey?: string; // used with renew certificate to sign xml with existing certificate
@@ -75,7 +75,7 @@ export interface XTInterface {
   SoftwareId: SoftwareIdInterface;
   ExecutionSerial: string;
   CsrPath: string;
-  BankCsrPath: string;
+  Base64EncodedBankCsr: string;
   Base64EncodedClientPrivateKey?: string;
   language: Language;
 }

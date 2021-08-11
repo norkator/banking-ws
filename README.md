@@ -129,6 +129,11 @@ console.log(certificate);
 ```
 Certificate should be renewed with Renew Certificate method before it's expired. 
 
+You can see X509v3 certificate details after Base64 decoding response certificate and then
+using OpenSSL to view it:
+```shell script
+openssl x509 -in certificate_file_name.extension -text
+```
 
 
 Renew certificate
