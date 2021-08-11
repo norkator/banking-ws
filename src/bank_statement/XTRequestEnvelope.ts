@@ -43,14 +43,17 @@ class XTRequestEnvelope {
         'wsu:Expires': this.getExpires(),
       }
     };
-    let timeStampNodeXml: string = xmlBuilder.create(timeStampNode).end({pretty: false});
+    const timeStampNodeXml: string = xmlBuilder.create(timeStampNode, {headless: true}).end({pretty: false});
     const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD);
 
 
     const bodyNode = {
       'soapenv:Body': {
-        '@wsu:Id': this.bodyUuid,
+        '@xmlns:cor': 'http://bxd.fi/CorporateFileService',
+        '@xmlns:mod': 'http://model.bxd.fi',
+        '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
         '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+        '@wsu:Id': this.bodyUuid,
         'cor:downloadFileListin': {
           'mod:RequestHeader': {
             'mod:SenderId': this.xt.userParams.customerId,
@@ -67,36 +70,11 @@ class XTRequestEnvelope {
       },
     };
     let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
-
-    let canonicalizeBodyNodeXml = await Canonicalize(
-      bodyNodeXml
-        .replace(/soapenv:Body/g, 'Body')
-        .replace('xmlns:wsu', 'xmlns')
-        .replace('wsu:Id', 'Id')
-        .replace(/cor:downloadFileListin/g, 'downloadFileListin')
-        .replace(/mod:/g, '')
-      , this.CANONICALIZE_METHOD
-    );
-
-
-    canonicalizeBodyNodeXml = canonicalizeBodyNodeXml
-      .replace(/Body/g, 'soapenv:Body')
-      .replace('xmlns', 'xmlns:wsu')
-      .replace('Id', 'wsu:Id')
-      .replace(/downloadFileListin/g, 'cor:downloadFileListin')
-      .replace(/RequestHeader/g, 'mod:RequestHeader')
-      .replace(/SenderId/g, 'mod:SenderId')
-      .replace(/RequestId/g, 'mod:RequestId')
-      .replace(/Timestamp/g, 'mod:Timestamp')
-      .replace(/Language/g, 'mod:Language')
-      .replace(/UserAgent/g, 'mod:UserAgent')
-      .replace(/ReceiverId/g, 'mod:ReceiverId')
-      .replace(/ApplicationRequest/g, 'mod:ApplicationRequest')
-    ;
-
+    let canonicalizeBodyNodeXml = await Canonicalize(bodyNodeXml, this.CANONICALIZE_METHOD);
 
     const signedInfoNode = {
       'ds:SignedInfo': {
+        '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
         'ds:CanonicalizationMethod': {
           '@Algorithm': this.CANONICALIZE_METHOD
         },
@@ -132,6 +110,8 @@ class XTRequestEnvelope {
         ],
       },
     };
+    const signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
+    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD);
 
     let envelopeObject = {
       'soapenv:Envelope': {
@@ -161,7 +141,7 @@ class XTRequestEnvelope {
                   '#text': [
                     // 'ds:SignedInfo' node is appended here
                     {
-                      'ds:SignatureValue': this.getSignatureValue(signingKey, bodyNodeXml),
+                      'ds:SignatureValue': this.getSignatureValue(signingKey, canonicalizeSignedInfoNodeXml),
                     },
                     {
                       'ds:KeyInfo': {
