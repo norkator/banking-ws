@@ -43,14 +43,14 @@ class XTRequestEnvelope {
         'wsu:Expires': this.getExpires(),
       }
     };
-    let timeStampNodeXml: string = xmlBuilder.create(timeStampNode).end({pretty: false});
+    const timeStampNodeXml: string = xmlBuilder.create(timeStampNode, {headless: true}).end({pretty: false});
     const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD);
 
 
     const bodyNode = {
       'soapenv:Body': {
-        '@wsu:Id': this.bodyUuid,
         '@xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+        '@wsu:Id': this.bodyUuid,
         'cor:downloadFileListin': {
           'mod:RequestHeader': {
             'mod:SenderId': this.xt.userParams.customerId,
@@ -61,13 +61,12 @@ class XTRequestEnvelope {
             'mod:ReceiverId': 'SAMLINK',
           },
           'mod:ApplicationRequest': {
-            '#text': this.applicationRequest
+            '#text': 'sample-content' // this.applicationRequest
           },
         },
       },
     };
     let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
-
     let canonicalizeBodyNodeXml = await Canonicalize(
       bodyNodeXml
         .replace(/soapenv:Body/g, 'Body')
@@ -77,8 +76,6 @@ class XTRequestEnvelope {
         .replace(/mod:/g, '')
       , this.CANONICALIZE_METHOD
     );
-
-
     canonicalizeBodyNodeXml = canonicalizeBodyNodeXml
       .replace(/Body/g, 'soapenv:Body')
       .replace('xmlns', 'xmlns:wsu')
@@ -93,6 +90,7 @@ class XTRequestEnvelope {
       .replace(/ReceiverId/g, 'mod:ReceiverId')
       .replace(/ApplicationRequest/g, 'mod:ApplicationRequest')
     ;
+    // process.exit(0);
 
 
     const signedInfoNode = {
@@ -217,7 +215,7 @@ class XTRequestEnvelope {
     const xml = xml_.end({pretty: false});
 
     console.log(xml);
-    // process.exit(0);
+    process.exit(0);
 
     return xml;
   }
