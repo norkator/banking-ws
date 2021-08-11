@@ -37,6 +37,7 @@ class XTRequestEnvelope {
     const timeStampNode = {
       'wsu:Timestamp': {
         '@wsu:Id': this.timeStampUuid,
+        'xmlns:wsu': 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         'wsu:Created': this.getCreated(),
         'wsu:Expires': this.getExpires(),
       }
@@ -191,7 +192,7 @@ class XTRequestEnvelope {
     let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
     const xml = xml_.end({pretty: false});
 
-    console.log(xml);
+    // console.log(xml);
     // process.exit(0);
 
     return xml;
@@ -199,12 +200,14 @@ class XTRequestEnvelope {
 
   // noinspection JSMethodCanBeStatic
   private getCreated(): string {
-    return moment().format('YYYY-MM-DDThh:mm:ssZ');
+    // 2016-10-11T10:40:09Z
+    return moment().format('YYYY-MM-DDTHH:mm:ss') + 'Z';
   }
 
   // noinspection JSMethodCanBeStatic
   private getExpires(): string {
-    return moment().add(5, 'minutes').format('YYYY-MM-DDThh:mm:ssZ');
+    // 2016-10-11T10:40:09Z
+    return moment().add(60, 'minutes').format('YYYY-MM-DDTHH:mm:ss') + 'Z';
   }
 
   private getSoftwareId(): string {
