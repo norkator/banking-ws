@@ -20,7 +20,15 @@ class XTApplicationResponse {
     const envelopeXML: any = await this.parseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
-    await envelopeSignature.validateEnvelopeSignature(envelopeXML, this.xt.Base64EncodedClientPrivateKey);
+    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(envelopeXML, this.xt.Base64EncodedClientPrivateKey);
+    if (!envelopeValid) {
+      throw {
+        RequestId: this.xt.RequestId,
+        Timestamp: this.xt.Timestamp,
+        SoftwareId: this.xt.SoftwareId,
+        error: new Error('XT response envelope did not pass signature verification')
+      };
+    }
 
     const envelope = envelopeXML['soapenv:Envelope'];
     const body = envelope['soapenv:Body'];
