@@ -16,6 +16,7 @@ Table of contents
 * [Terminology](#terminology)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
+    * [Generate new certificate](#generate-new-certificate)
     * [Get certificate](#get-certificate)
     * [Renew certificate](#renew-certificate)
     * [Bank Statement](#bank-statement)
@@ -40,6 +41,9 @@ See under `./documents` folder.
 
 Installing
 ============
+1. Mac and Linux already has OpenSSL pre installed but with Windows you need to download binary somewhere like [here](https://slproweb.com/products/Win32OpenSSL.html).
+    * Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
+2. ...
 
 ```shell script
 todo...
@@ -90,6 +94,39 @@ signing.key  (CLIENT_PRIVATE_KEY)
 Examples
 ============
 Below are examples for each step.
+
+
+Generate new certificate
+-----
+
+#### Creating
+Note that `customerId` must be exact Samlink customer id.
+```typescript
+import {CreatedCertificateInterface} from './src/interfaces';
+import {CreateOwnCertificate} from './src/index';
+
+CreateOwnCertificate({
+  twoLetterCountryCode: 'FI',
+  stateOrProvince: 'Province',
+  city: 'City',
+  companyName: 'Company name',
+  companyUnitName: 'Company unit',
+  customerId: '12345678',
+  emailAddress: 'somemail@company.fi',
+}).then((certificate: CreatedCertificateInterface) => {
+  console.log(certificate);
+});
+```
+
+#### Expected response
+```json5
+{
+  clientCertificate: 'base64-encoded-content',
+  clientPrivateKey: 'base64-encoded-content'
+}
+```
+You can decode `clientCertificate` and then its pem base64 and then see 
+that your given parameters exists.
 
 
 Get certificate

@@ -1,10 +1,11 @@
 'use strict';
 
 import {
-  CertificateInterface,
+  CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
   GetCertificateInterface, XTInterface
 } from './interfaces';
 import {Base64DecodeStr, Base64EncodeStr} from './utils';
+import {CreateCertificate} from './create_certificate/CreateCertificate';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
@@ -14,6 +15,17 @@ import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
+
+
+/**
+ * Create your own client side certificate
+ * @param cc, certificate parameters
+ * @constructor
+ */
+async function CreateOwnCertificate(cc: CreateCertificateInterface): Promise<CreatedCertificateInterface> {
+  const ownCertificate = new CreateCertificate(cc);
+  return await ownCertificate.createCertificate();
+}
 
 
 /**
@@ -127,6 +139,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
 
 
 export {
+  CreateOwnCertificate,
   GetCertificate,
   RenewCertificate,
   SEPAPayment,
