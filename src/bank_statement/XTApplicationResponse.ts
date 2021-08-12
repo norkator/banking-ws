@@ -20,7 +20,7 @@ class XTApplicationResponse {
     const envelopeXML: any = await this.parseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
-    await envelopeSignature.validateEnvelopeSignature(envelopeXML);
+    await envelopeSignature.validateEnvelopeSignature(envelopeXML, this.xt.Base64EncodedClientPrivateKey);
 
     const envelope = envelopeXML['soapenv:Envelope'];
     const body = envelope['soapenv:Body'];

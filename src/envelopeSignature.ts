@@ -1,8 +1,8 @@
 /**
  * This class canonicalize, sign and appends right nodes into envelope basically creating ready to send envelope
  */
-import {createHash, createSign} from 'crypto';
-import {Canonicalize, GetUuid} from './utils';
+import {createHash, createSign, createVerify} from 'crypto';
+import {Base64DecodeStr, Canonicalize, GetUuid, RemoveWhiteSpacesAndNewLines} from './utils';
 import * as xmlBuilder from 'xmlbuilder';
 import * as moment from 'moment';
 import {Builder} from 'xml2js';
@@ -152,14 +152,25 @@ class EnvelopeSignature {
   }
 
 
-  public async validateEnvelopeSignature(envelopeXml: any): Promise<string> {
-    const signatureNode = envelopeXml['soapenv:Envelope']['soapenv:Header'][0]['wsse:Security'][0]['ds:Signature'][0];
+  public async validateEnvelopeSignature(envelopeXml: any, clientPrivateKey: string): Promise<string> {
+    const securityNode = envelopeXml['soapenv:Envelope']['soapenv:Header'][0]['wsse:Security'][0];
+    // const binarySecurityToken = RemoveWhiteSpacesAndNewLines(securityNode['wsse:BinarySecurityToken'][0]['_']);
+    const signatureNode = securityNode['ds:Signature'][0];
     const signedInfoNode = signatureNode['ds:SignedInfo'][0];
-    const signatureValue = signatureNode['ds:SignatureValue'][0]; // Todo, clean white spaces etc stuff
+    const signatureValue = RemoveWhiteSpacesAndNewLines(signatureNode['ds:SignatureValue'][0]);
 
-    const signedInfoXml = new Builder().buildObject(signedInfoNode); // Todo, good but adds some <root> and head elements, tweak these
 
-    console.log(signedInfoXml);
+    const signedInfoXml = new Builder({
+      headless: true, allowSurrogateChars: true, rootName: 'ds:Signature',
+    }).buildObject(signedInfoNode);
+
+
+    const signature = this.getSignatureValue(
+      Base64DecodeStr(clientPrivateKey),
+      signedInfoXml
+    );
+    console.log(this.verifySignature(Base64DecodeStr(clientPrivateKey), signedInfoXml, signatureValue));
+
 
     process.exit(0);
     return '';
@@ -188,6 +199,13 @@ class EnvelopeSignature {
     sign.end();
     const signature = sign.sign(signingKey);
     return signature.toString('base64');
+  }
+
+  // public keys can be derived from private keys, a private key may be passed instead of a public key.
+  private verifySignature(clientPrivateKey: string, node: string, envelopeSignatureValue: string): boolean {
+    const verifier = createVerify(this.SIGNATURE_METHOD);
+    verifier.update(node);
+    return verifier.verify(clientPrivateKey, envelopeSignatureValue);
   }
 
 }
