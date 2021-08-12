@@ -10,7 +10,8 @@ import {Builder} from 'xml2js';
 
 class EnvelopeSignature {
 
-  private readonly CANONICALIZE_METHOD = 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments';
+  private readonly CANONICALIZE_METHOD_REQUEST = 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments';
+  private readonly CANONICALIZE_METHOD_RESPONSE = 'http://www.w3.org/2001/10/xml-exc-c14n#';
   private readonly SIGNATURE_METHOD = 'rsa-sha1';
   private readonly DIGEST_METHOD = 'sha1';
 
@@ -42,17 +43,17 @@ class EnvelopeSignature {
       }
     };
     const timeStampNodeXml: string = xmlBuilder.create(timeStampNode, {headless: true}).end({pretty: false});
-    const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD);
+    const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
 
     let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
-    let canonicalizeBodyNodeXml = await Canonicalize(bodyNodeXml, this.CANONICALIZE_METHOD);
+    let canonicalizeBodyNodeXml = await Canonicalize(bodyNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     const signedInfoNode = {
       'ds:SignedInfo': {
         '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
         'ds:CanonicalizationMethod': {
-          '@Algorithm': this.CANONICALIZE_METHOD
+          '@Algorithm': this.CANONICALIZE_METHOD_REQUEST
         },
         'ds:SignatureMethod': {
           '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.SIGNATURE_METHOD
@@ -63,7 +64,7 @@ class EnvelopeSignature {
             '@URI': '#' + this.timeStampUuid,
             'ds:Transforms': {
               'ds:Transform': {
-                '@Algorithm': this.CANONICALIZE_METHOD
+                '@Algorithm': this.CANONICALIZE_METHOD_REQUEST
               },
             },
             'ds:DigestMethod': {
@@ -75,7 +76,7 @@ class EnvelopeSignature {
             '@URI': '#' + bodyUuid,
             'ds:Transforms': {
               'ds:Transform': {
-                '@Algorithm': this.CANONICALIZE_METHOD
+                '@Algorithm': this.CANONICALIZE_METHOD_REQUEST
               },
             },
             'ds:DigestMethod': {
@@ -87,7 +88,7 @@ class EnvelopeSignature {
       },
     };
     const signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
-    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD);
+    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     let envelopeObject = {
       'soapenv:Envelope': {
@@ -152,28 +153,30 @@ class EnvelopeSignature {
   }
 
 
-  public async validateEnvelopeSignature(envelopeXml: any, clientPrivateKey: string): Promise<string> {
-    const securityNode = envelopeXml['soapenv:Envelope']['soapenv:Header'][0]['wsse:Security'][0];
-    // const binarySecurityToken = RemoveWhiteSpacesAndNewLines(securityNode['wsse:BinarySecurityToken'][0]['_']);
-    const signatureNode = securityNode['ds:Signature'][0];
-    const signedInfoNode = signatureNode['ds:SignedInfo'][0];
-    const signatureValue = RemoveWhiteSpacesAndNewLines(signatureNode['ds:SignatureValue'][0]);
+  public async validateEnvelopeSignature(envelopeXml: any, clientPrivateKey: string): Promise<boolean> {
+    try {
+      const securityNode = envelopeXml['soapenv:Envelope']['soapenv:Header'][0]['wsse:Security'][0];
+      // const binarySecurityToken = RemoveWhiteSpacesAndNewLines(securityNode['wsse:BinarySecurityToken'][0]['_']);
+      const signatureNode = securityNode['ds:Signature'][0];
+      let signedInfoNode = signatureNode['ds:SignedInfo'][0];
+      signedInfoNode['$'] = {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#"'};
+      const signatureValue = RemoveWhiteSpacesAndNewLines(signatureNode['ds:SignatureValue'][0]);
 
+      const signedInfoXml = new Builder({headless: true, rootName: 'ds:SignedInfo'}).buildObject(signedInfoNode);
+      let canonicalizeSignedInfoXml = await Canonicalize(signedInfoXml, this.CANONICALIZE_METHOD_RESPONSE);
+      canonicalizeSignedInfoXml = canonicalizeSignedInfoXml.replace(' xmlns:ds="http://www.w3.org/2000/09/xmldsig#&quot;"', '');
 
-    const signedInfoXml = new Builder({
-      headless: true, allowSurrogateChars: true, rootName: 'ds:Signature',
-    }).buildObject(signedInfoNode);
-
-
-    const signature = this.getSignatureValue(
-      Base64DecodeStr(clientPrivateKey),
-      signedInfoXml
-    );
-    console.log(this.verifySignature(Base64DecodeStr(clientPrivateKey), signedInfoXml, signatureValue));
-
-
-    process.exit(0);
-    return '';
+      // Todo.. find a way to parse signedInfoNode without ruining content with Builder
+      // console.log(signatureValue);
+      // console.log(this.getSignatureValue(Base64DecodeStr(clientPrivateKey), canonicalizeSignedInfoXml));
+      console.log(
+        this.verifySignature(Base64DecodeStr(clientPrivateKey), canonicalizeSignedInfoXml, signatureValue)
+      );
+      process.exit(0);
+      return true;
+    } catch (e) {
+      throw new Error('validateEnvelopeSignature has failed - ' + e);
+    }
   }
 
 
