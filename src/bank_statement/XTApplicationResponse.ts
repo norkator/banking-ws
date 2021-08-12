@@ -3,6 +3,7 @@
 import {parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
 import {XTInterface} from '../interfaces';
+import {EnvelopeSignature} from "../envelopeSignature";
 
 class XTApplicationResponse {
 
@@ -17,6 +18,10 @@ class XTApplicationResponse {
   public async parseBody(): Promise<string> {
     // parse, handle application response envelope
     const envelopeXML: any = await this.parseXml(this.response);
+
+    const envelopeSignature = new EnvelopeSignature();
+    await envelopeSignature.validateEnvelopeSignature(envelopeXML);
+
     const envelope = envelopeXML['soapenv:Envelope'];
     const body = envelope['soapenv:Body'];
 

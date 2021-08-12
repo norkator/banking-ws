@@ -151,6 +151,17 @@ class EnvelopeSignature {
   }
 
 
+  public async validateEnvelopeSignature(envelopeXml: any): Promise<string> {
+    console.log(envelopeXml);
+
+    // Todo ...
+
+
+    process.exit(0);
+    return '';
+  }
+
+
   // noinspection JSMethodCanBeStatic
   private getCreated(): string {
     return moment().toISOString();
