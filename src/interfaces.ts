@@ -2,7 +2,13 @@ import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Langu
 
 
 export interface CreateCertificateInterface {
-
+  twoLetterCountryCode: string;
+  stateOrProvince: string;
+  city: string;
+  companyName: string;
+  companyUnitName: string;
+  customerId: string;
+  emailAddress: string;
 }
 
 export interface CreatedCertificateInterface {
