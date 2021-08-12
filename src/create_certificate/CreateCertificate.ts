@@ -50,22 +50,33 @@ class CreateCertificate {
 
   private getConfiguration(): string {
     return `
-FQDN = foo.example.org
-ORGNAME = Example University
-ALTNAMES = DNS:$FQDN   # , DNS:bar.example.org , DNS:www.foo.example.org
+[ ca ]
+default_ca = CA_default
+
 [ req ]
 default_bits = 2048
 default_md = sha256
 prompt = no
 encrypt_key = no
-distinguished_name = dn
-req_extensions = req_ext
-[ dn ]
-C = CH
-O = $ORGNAME
-CN = $FQDN
-[ req_ext ]
-subjectAltName = $ALTNAMES
+distinguished_name = req_distinguished_name
+
+[ req_distinguished_name ]
+countryName = ` + this.cc.twoLetterCountryCode + `
+stateOrProvinceName = ` + this.cc.stateOrProvince + `
+localityName = ` + this.cc.city + `
+organizationName = ` + this.cc.companyName + `
+organizationalUnitName = ` + this.cc.companyUnitName + `
+commonName = ` + this.cc.customerId + `
+emailAddress = ` + this.cc.emailAddress + `
+
+[ policy_match ]
+countryName = ` + this.cc.twoLetterCountryCode + `
+stateOrProvinceName = ` + this.cc.stateOrProvince + `
+localityName = ` + this.cc.city + `
+organizationName = ` + this.cc.companyName + `
+organizationalUnitName = ` + this.cc.companyUnitName + `
+commonName = ` + this.cc.customerId + `
+emailAddress = ` + this.cc.emailAddress + `
 `;
   }
 
