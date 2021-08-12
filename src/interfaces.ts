@@ -1,6 +1,15 @@
 import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language} from './types';
 
 
+export interface CreateCertificateInterface {
+
+}
+
+export interface CreatedCertificateInterface {
+  clientCertificate: string;
+  clientPrivateKey: string;
+}
+
 /**
  * User environment params like secrets
  * used with each and every functionality
