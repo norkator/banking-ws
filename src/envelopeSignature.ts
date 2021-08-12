@@ -5,6 +5,7 @@ import {createHash, createSign} from 'crypto';
 import {Canonicalize, GetUuid} from './utils';
 import * as xmlBuilder from 'xmlbuilder';
 import * as moment from 'moment';
+import {Builder} from 'xml2js';
 
 
 class EnvelopeSignature {
@@ -152,10 +153,13 @@ class EnvelopeSignature {
 
 
   public async validateEnvelopeSignature(envelopeXml: any): Promise<string> {
-    console.log(envelopeXml);
+    const signatureNode = envelopeXml['soapenv:Envelope']['soapenv:Header'][0]['wsse:Security'][0]['ds:Signature'][0];
+    const signedInfoNode = signatureNode['ds:SignedInfo'][0];
+    const signatureValue = signatureNode['ds:SignatureValue'][0]; // Todo, clean white spaces etc stuff
 
-    // Todo ...
+    const signedInfoXml = new Builder().buildObject(signedInfoNode); // Todo, good but adds some <root> and head elements, tweak these
 
+    console.log(signedInfoXml);
 
     process.exit(0);
     return '';
