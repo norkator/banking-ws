@@ -40,6 +40,9 @@ See under `./documents` folder.
 
 Installing
 ============
+1. Mac and Linux already has OpenSSL pre installed but with Windows you need to download binary somewhere like [here](https://slproweb.com/products/Win32OpenSSL.html).
+    * Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
+2. ...
 
 ```shell script
 todo...
