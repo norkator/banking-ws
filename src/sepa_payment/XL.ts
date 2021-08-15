@@ -149,8 +149,7 @@ class XL {
       }
     };
 
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create(xlObj, {version: '1.0', encoding: 'utf-8'});
-    return xml.end({pretty: true});
+    return xmlBuilder.create(xlObj, {version: '1.0', encoding: 'utf-8'}).end({pretty: false});
   }
 
 }
