@@ -4,7 +4,9 @@
 
 Library to construct, validate and make corporate banking web service request with SOAP.
 
-Works only with Samlink.
+Supported banks
+-----
+* Banks supported by Samlink.
 
 
 Table of contents
