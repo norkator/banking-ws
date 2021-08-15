@@ -1,7 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import {createHash} from 'crypto';
-import {Bank, Environment, OutputEncoding, WsdlType} from './types';
-import * as path from 'path';
+import {OutputEncoding} from './types';
 import {readFileSync} from 'fs';
 // @ts-ignore
 import * as openssl from 'openssl-nodejs';
@@ -21,14 +19,6 @@ function LoadFileAsString(fullPath: string): string {
   return Buffer.from(file).toString('utf-8');
 }
 
-/**
- * @return {string} wsdl file path and name
- */
-function GetWSDL(environment: Environment, bank: Bank, type: WsdlType): string {
-  const path_ = path.join(__dirname + '/wsdl/wsdl_' + bank.toLowerCase() + '_' + type + environment.toLowerCase() + '.xml');
-  console.log(path_);
-  return path_;
-}
 
 /**
  * @param b64string
@@ -57,22 +47,6 @@ async function LoadFileFromPath(filePath: string, outputEncoding: OutputEncoding
   return Buffer.from(file).toString('utf-8');
 }
 
-/**
- * @param csr, without modifications
- * @example
- * -----BEGIN CERTIFICATE REQUEST-----
- * MIIC5DCCAcaCAQAwgZ4xCzAJBgNVBAYTAkZJMRIwEAYDVwhIdAlQaXErYW5tYWEx
- * EDAOBgNVBAcMB1RhbXBlciUxFTATBgNVBAoMDEZpbmFuc2VsbCcPeTEVMBMGA1UE
- * .....
- * -----END CERTIFICATE REQUEST-----
- * @constructor
- */
-function FormatCertificate(csr: string): string {
-  return csr
-    .replace('-----BEGIN CERTIFICATE REQUEST-----', '-----BEGIN CERTIFICATE-----')
-    .replace('-----END CERTIFICATE REQUEST-----', '-----END CERTIFICATE-----')
-    .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
-}
 
 /**
  * Removes first and last lines
@@ -96,16 +70,6 @@ function RemoveWhiteSpacesAndNewLines(content: string): string {
   return content.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // remove white spaces
 }
 
-/**
- * @param content to digest
- * @return base64 encoded sha1 digest
- * @constructor
- */
-function Base64EncodedSHA1Digest(content: string): string {
-  const shaSum = createHash('sha1');
-  shaSum.update(content);
-  return Base64EncodeStr(shaSum.digest('hex'));
-}
 
 /**
  * Get expiration date for certificate
@@ -194,14 +158,11 @@ function FormatResponseCertificate(certificate: string, maxLength: number = 64):
 
 export {
   LoadFileAsString,
-  GetWSDL,
   Base64DecodeStr,
   Base64EncodeStr,
   LoadFileFromPath,
-  FormatCertificate,
   CleanUpCertificate,
   RemoveWhiteSpacesAndNewLines,
-  Base64EncodedSHA1Digest,
   x509ExpirationDate,
   CanonicalizeWithDomParser,
   Canonicalize,
