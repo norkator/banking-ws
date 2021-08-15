@@ -2,7 +2,7 @@
  * This class canonicalize, sign and appends right nodes into envelope basically creating ready to send envelope
  */
 import {createHash, createSign, createVerify} from 'crypto';
-import {Base64DecodeStr, Canonicalize, CanonicalizeWithDomParser, GetUuid, RemoveWhiteSpacesAndNewLines} from './utils';
+import {Canonicalize, CanonicalizeWithDomParser, GetUuid} from './utils';
 import * as xmlBuilder from 'xmlbuilder';
 import {DOMParser} from 'xmldom';
 import * as moment from 'moment';
@@ -155,7 +155,7 @@ class EnvelopeSignature {
   }
 
 
-  public async validateEnvelopeSignature(envelopeXml: string, clientPrivateKey: string): Promise<boolean> {
+  public async validateEnvelopeSignature(envelopeXml: string, clientPrivateKey: string | undefined): Promise<boolean> {
     try {
       const doc = new DOMParser().parseFromString(envelopeXml, 'text/xml');
       const signedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc);

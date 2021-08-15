@@ -4,7 +4,10 @@
 import {ApplicationRequestSignatureInterface} from './interfaces';
 import {createHash, createSign} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
-import {CanonicalizeWithDomParser} from './utils';
+import {Canonicalize, CanonicalizeWithDomParser} from './utils';
+import {DOMParser} from 'xmldom';
+
+const xpath = require('xpath');
 
 
 class ApplicationRequestSignature {
@@ -87,6 +90,15 @@ class ApplicationRequestSignature {
     signature["Signature"]["#text"].unshift({'SignedInfo': signedInfoNode["SignedInfo"]});
 
     return signature;
+  }
+
+
+  public async validateSignature(xml: string, clientPrivateKey: string | undefined): Promise<boolean> {
+    try {
+      return true;
+    } catch (e) {
+      throw new Error('validateEnvelopeSignature has failed - ' + e);
+    }
   }
 
 

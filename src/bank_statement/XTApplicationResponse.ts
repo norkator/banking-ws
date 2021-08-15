@@ -4,6 +4,7 @@ import {parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
 import {XTInterface} from '../interfaces';
 import {EnvelopeSignature} from "../envelopeSignature";
+import {ApplicationRequestSignature} from "../signature";
 
 class XTApplicationResponse {
 
@@ -38,6 +39,17 @@ class XTApplicationResponse {
     const encodedApplicationResponse = getDownloadFileListOut[0]['mod:ApplicationResponse'][0];
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
+
+    const signature = new ApplicationRequestSignature();
+    const validResponse = await signature.validateSignature(applicationResponseXML, this.xt.Base64EncodedClientPrivateKey);
+    if (!validResponse) {
+      throw {
+        RequestId: this.xt.RequestId,
+        Timestamp: this.xt.Timestamp,
+        SoftwareId: this.xt.SoftwareId,
+        error: new Error('XT application response did not pass signature verification')
+      };
+    }
 
     // parse, handle response itself
     const xml: any = await this.parseXml(applicationResponseXML);
