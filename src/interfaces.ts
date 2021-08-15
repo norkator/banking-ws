@@ -100,88 +100,51 @@ export interface XTInterface {
  * pain.001.001.02
  */
 export interface XLInterface {
-  CcyOfTrf: Currency; // Currency of transfer
-  GrpHdr: { // Group Header
-    MsgId: string; // Message Identification
-    CreDtTm: string; // Creation Date Time
-    NbOfTxs: number; // Number Of Transactions
-    InitgPty: {
-      Nm: string;
-      PstlAdr: {
-        Ctry: string;
-        AdrLine: string;
-        AdrLine2: string;
-      },
-      Id: {
-        OrgId: {
-          Othr: {
-            Id: string;
-            SchmeNm: {
-              Cd: string;
-            }
-          }
-        }
-      }
-    }
-  },
-  PmtInf: {
-    PmtInfId: string;
-    PmtMtd: PaymentMethod;
-    PmtTpInf: {
-      SvcLvl: {
-        Cd: string;
-      }
-    },
-    ReqdExctnDt: string,
-    Dbtr: {
-      Nm: string;
-      PstlAdr: {
-        Ctry: string;
-        AdrLine: string;
-        AdrLine2: string;
-      },
-      Id: {
-        OrgId: {
-          Othr: {
-            Id: string;
-            SchmeNm: {
-              Cd: string;
+  userParams: UserParamsInterface;
+  requestUrl: string;
+  RequestId: string;
+  Timestamp: string;
+  SoftwareId: SoftwareIdInterface;
+  ExecutionSerial: string;
+  Base64EncodedBankCsr: string;
+  Base64EncodedClientCsr: string;
+  Base64EncodedClientPrivateKey?: string;
+  language: Language;
+  sepa: {
+    CcyOfTrf: Currency; // Currency of transfer
+    GrpHdr: { // Group Header
+      MsgId: string; // Message Identification
+      CreDtTm: string; // Creation Date Time
+      NbOfTxs: number; // Number Of Transactions
+      InitgPty: {
+        Nm: string;
+        PstlAdr: {
+          Ctry: string;
+          AdrLine: string;
+          AdrLine2: string;
+        },
+        Id: {
+          OrgId: {
+            Othr: {
+              Id: string;
+              SchmeNm: {
+                Cd: string;
+              }
             }
           }
         }
       }
     },
-    DbtrAcct: {
-      Id: {
-        IBAN: string;
-      }
-    },
-    DbtrAgt: {
-      FinInstnId: {
-        BIC: string;
-      }
-    },
-    ChrgBr: ServiceLevel;
-    CdtTrfTxInf: {
-      PmtId: {
-        InstrId: string;
-        EndToEndId: string;
-      },
+    PmtInf: {
+      PmtInfId: string;
+      PmtMtd: PaymentMethod;
       PmtTpInf: {
         SvcLvl: {
           Cd: string;
         }
       },
-      Amt: {
-        InstdAmt: number;
-      },
-      ChrgBr: ServiceLevel;
-      CdtrAgt: {
-        FinInstnId: {
-          BIC: string;
-        }
-      },
-      Cdtr: {
+      ReqdExctnDt: string,
+      Dbtr: {
         Nm: string;
         PstlAdr: {
           Ctry: string;
@@ -199,13 +162,62 @@ export interface XLInterface {
           }
         }
       },
-      CdtrAcct: {
+      DbtrAcct: {
         Id: {
           IBAN: string;
         }
       },
-      RmtInf: {
-        Ustrd: string;
+      DbtrAgt: {
+        FinInstnId: {
+          BIC: string;
+        }
+      },
+      ChrgBr: ServiceLevel;
+      CdtTrfTxInf: {
+        PmtId: {
+          InstrId: string;
+          EndToEndId: string;
+        },
+        PmtTpInf: {
+          SvcLvl: {
+            Cd: string;
+          }
+        },
+        Amt: {
+          InstdAmt: number;
+        },
+        ChrgBr: ServiceLevel;
+        CdtrAgt: {
+          FinInstnId: {
+            BIC: string;
+          }
+        },
+        Cdtr: {
+          Nm: string;
+          PstlAdr: {
+            Ctry: string;
+            AdrLine: string;
+            AdrLine2: string;
+          },
+          Id: {
+            OrgId: {
+              Othr: {
+                Id: string;
+                SchmeNm: {
+                  Cd: string;
+                }
+              }
+            }
+          }
+        },
+        CdtrAcct: {
+          Id: {
+            IBAN: string;
+          }
+        },
+        RmtInf: {
+          Ustrd: string;
+        }
       }
     }
   }

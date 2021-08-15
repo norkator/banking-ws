@@ -8,45 +8,17 @@
 // @ts-ignore
 import moment from 'moment';
 import * as xmlBuilder from 'xmlbuilder';
-import {SoftwareIdInterface} from '../interfaces';
+import {XLInterface} from '../interfaces';
 import {Environment, FileType, Status} from '../types';
 import {Operations, StatusValues} from '../constants';
 
 
-class ApplicationRequest {
+class XLApplicationRequest {
 
-  environment: Environment;
-  customerId: string; // Web service customer id
-  command: string; // command, same as SOAP operation
-  startDate: string; // startDate, only needed with DownloadFileList command
-  endDate: string; // endDate, only needed with DownloadFileList command
-  status: Status; // status, only needed with DownloadFileList command (StatusValues)
-  fileReferences: String[]; // fileReferences, names of created files wanted to be queried
-  userFilename: string; // userFilename, when uploading file, this is the name it will be created with
-  compression: boolean; // compression, defined is CompressionMethod GZIP in use
-  amountTotal: number; // amountTotal, amount to be sent, is read only if UploadFile and XL fileType in use
-  transactionCount: number;
-  softwareId: SoftwareIdInterface;
-  fileType: FileType; // fileType, selected fileType from fileTypes
+  private xl: XLInterface;
 
-  constructor(environment: Environment, customerId: string, command: string, startDate: string, endDate: string,
-              status: Status, fileReferences: String[], userFilename: string,
-              compression: boolean, amountTotal: number, transactionCount: number,
-              softwareId: SoftwareIdInterface, fileType: FileType
-  ) {
-    this.environment = environment;
-    this.customerId = customerId;
-    this.command = command;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.status = status;
-    this.fileReferences = fileReferences;
-    this.userFilename = userFilename;
-    this.compression = compression;
-    this.amountTotal = amountTotal;
-    this.transactionCount = transactionCount;
-    this.softwareId = softwareId;
-    this.fileType = fileType;
+  constructor(xl: XLInterface) {
+    this.xl = xl;
   }
 
   public createXmlBody(): string {
@@ -149,5 +121,5 @@ class ApplicationRequest {
 }
 
 export {
-  ApplicationRequest
+  XLApplicationRequest
 };
