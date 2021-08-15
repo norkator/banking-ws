@@ -284,4 +284,161 @@ In progress...
 SEPA payment
 -----
 ```typescript
+import * as moment from 'moment';
+import {XLInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
+import {SEPAPayment} from './src/index';
+
+const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const BANK_CERTIFICATE = "base64-content-here";
+const CLIENT_CERTIFICATE = "base64-content-here";
+const CLIENT_PRIVATE_KEY = "base64-content-here";
+
+const userParams: UserParamsInterface = {
+  bank: 'Samlink',
+  environment: 'PRODUCTION',
+  customerId: '12345678',
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+};
+
+const xl: XLInterface = {
+  userParams: userParams,
+  requestUrl: 'https://185.251.49.57/services/CorporateFileService',
+  RequestId: '123456',
+  Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
+  ExecutionSerial: '123456',
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
+  Base64EncodedBankCsr: BANK_CERTIFICATE,
+  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
+  language: "FI",
+  StartDate: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  EndDate: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  Status: '',
+  UserFilename: '',
+  AmountTotal: 0,
+  TransactionCount: 0,
+  sepa: {
+    CcyOfTrf: 'EUR',
+    GrpHdr: {
+      MsgId: 'MSGID000001',
+      CreDtTm: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+      NbOfTxs: 1,
+      InitgPty: {
+        Nm: 'Origin Company',
+        PstlAdr: {
+          Ctry: 'FI',
+          AdrLine: 'Test street 123',
+          AdrLine2: 'FI-00100 Helsinki',
+        },
+        Id: {
+          OrgId: {
+            Othr: {
+              Id: '1234567890',
+              SchmeNm: {
+                Cd: 'BANK',
+              }
+            }
+          }
+        }
+      }
+    },
+    PmtInf: {
+      PmtInfId: '20210815-12345678912',
+      PmtMtd: 'TRF',
+      PmtTpInf: {
+        SvcLvl: {
+          Cd: 'BANK',
+        }
+      },
+      ReqdExctnDt: '2021-08-15',
+      Dbtr: {
+        Nm: 'Origin Company',
+        PstlAdr: {
+          Ctry: 'FI',
+          AdrLine: 'Test street 123',
+          AdrLine2: 'FI-00100 Helsinki',
+        },
+        Id: {
+          OrgId: {
+            Othr: {
+              Id: '12345678912',
+              SchmeNm: {
+                Cd: 'BANK',
+              }
+            }
+          }
+        }
+      },
+      DbtrAcct: {
+        Id: {
+          IBAN: 'FI1234567891234567',
+        }
+      },
+      DbtrAgt: {
+        FinInstnId: {
+          BIC: 'ITELFIHH',
+        }
+      },
+      ChrgBr: 'SLEV',
+      CdtTrfTxInf: {
+        PmtId: {
+          InstrId: 'InstrId000001',
+          EndToEndId: 'EndToEndId000001',
+        },
+        PmtTpInf: {
+          SvcLvl: {
+            Cd: 'BANK',
+          }
+        },
+        Amt: {
+          InstdAmt: 0,
+        },
+        ChrgBr: 'SLEV',
+        CdtrAgt: {
+          FinInstnId: {
+            BIC: 'ITELFIHH',
+          }
+        },
+        Cdtr: {
+          Nm: 'Testi Testinen',
+          PstlAdr: {
+            Ctry: 'FI',
+            AdrLine: 'Test street 321',
+            AdrLine2: 'FI-00200 Helsinki',
+          },
+          Id: {
+            OrgId: {
+              Othr: {
+                Id: '12345678913',
+                SchmeNm: {
+                  Cd: 'BANK',
+                }
+              }
+            }
+          }
+        },
+        CdtrAcct: {
+          Id: {
+            IBAN: 'FI1234567891234568',
+          }
+        },
+        RmtInf: {
+          Ustrd: 'Sample invoice 123',
+        }
+      }
+    }
+  }
+};
+
+const sepaPayment = await SEPAPayment(xl);
+console.log(sepaPayment);
+```
+
+
+#### Expected response
+In progress...
+```json5
+{
+  
+}
 ```
