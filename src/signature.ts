@@ -2,9 +2,12 @@
  * These class canonicalize, sign and appends right signature node info into bank messages
  */
 import {ApplicationRequestSignatureInterface} from './interfaces';
-import {createHash, createSign} from 'crypto';
+import {createHash, createSign, createVerify} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
-import {Canonicalize} from './utils';
+import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate} from './utils';
+import {DOMParser} from 'xmldom';
+
+const xpath = require('xpath');
 
 
 class ApplicationRequestSignature {
@@ -21,7 +24,7 @@ class ApplicationRequestSignature {
    * @param ars, ApplicationRequestSignatureInterface requirements
    */
   public async createSignature(ars: ApplicationRequestSignatureInterface): Promise<Object> {
-    const canonicalRequestXml = await Canonicalize(ars.requestXml, this.CANONICALIZE_METHOD);
+    const canonicalRequestXml = await CanonicalizeWithDomParser(ars.requestXml, this.CANONICALIZE_METHOD);
 
     const signedInfoNode = {
       'SignedInfo': {
@@ -54,7 +57,7 @@ class ApplicationRequestSignature {
     };
 
     const signedInfoXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
-    const canonicalSignedInfoXml = await Canonicalize(signedInfoXml, this.CANONICALIZE_METHOD);
+    const canonicalSignedInfoXml = await CanonicalizeWithDomParser(signedInfoXml, this.CANONICALIZE_METHOD);
 
     let signature = {
       'Signature': {
@@ -90,6 +93,30 @@ class ApplicationRequestSignature {
   }
 
 
+  /**
+   * Validate response signature from SignedInfo node
+   * @param xml
+   */
+  public async validateSignature(xml: string): Promise<boolean> {
+    try {
+      const doc = new DOMParser().parseFromString(xml, 'text/xml');
+      const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
+      const X509Certificate = xpath.select("//*[local-name()='X509Certificate']", doc)[0].textContent;
+      const formattedCertificate = FormatResponseCertificate(X509Certificate);
+
+      const SignedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc)[0];
+      const canonicalize = await Canonicalize(SignedInfoNode, this.CANONICALIZE_METHOD);
+
+      return this.verifySignature(
+        formattedCertificate,
+        canonicalize,
+        signatureValue);
+    } catch (e) {
+      throw new Error('validateEnvelopeSignature has failed - ' + e);
+    }
+  }
+
+
   private getDigestValue(node: string): string {
     const shaSum = createHash(this.DIGEST_METHOD);
     shaSum.update(node);
@@ -102,6 +129,13 @@ class ApplicationRequestSignature {
     sign.end();
     const signature = sign.sign(signingKey);
     return signature.toString('base64');
+  }
+
+  // public keys can be derived from private keys, a private key may be passed instead of a public key.
+  private verifySignature(certificate: string, node: string, envelopeSignatureValue: string): boolean {
+    const verifier = createVerify(this.SIGNATURE_METHOD);
+    verifier.update(node);
+    return verifier.verify(certificate, envelopeSignatureValue, 'base64');
   }
 
 }

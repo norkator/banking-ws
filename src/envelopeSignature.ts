@@ -1,15 +1,19 @@
 /**
  * This class canonicalize, sign and appends right nodes into envelope basically creating ready to send envelope
  */
-import {createHash, createSign} from 'crypto';
-import {Canonicalize, GetUuid} from './utils';
+import {createHash, createSign, createVerify} from 'crypto';
+import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetUuid} from './utils';
 import * as xmlBuilder from 'xmlbuilder';
+import {DOMParser} from 'xmldom';
 import * as moment from 'moment';
+
+const xpath = require('xpath');
 
 
 class EnvelopeSignature {
 
-  private readonly CANONICALIZE_METHOD = 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments';
+  private readonly CANONICALIZE_METHOD_REQUEST = 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments';
+  private readonly CANONICALIZE_METHOD_RESPONSE = 'http://www.w3.org/2001/10/xml-exc-c14n#';
   private readonly SIGNATURE_METHOD = 'rsa-sha1';
   private readonly DIGEST_METHOD = 'sha1';
 
@@ -41,17 +45,17 @@ class EnvelopeSignature {
       }
     };
     const timeStampNodeXml: string = xmlBuilder.create(timeStampNode, {headless: true}).end({pretty: false});
-    const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD);
+    const canonicalizeTimeSampNodeXml = await CanonicalizeWithDomParser(timeStampNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
 
     let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
-    let canonicalizeBodyNodeXml = await Canonicalize(bodyNodeXml, this.CANONICALIZE_METHOD);
+    let canonicalizeBodyNodeXml = await CanonicalizeWithDomParser(bodyNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     const signedInfoNode = {
       'ds:SignedInfo': {
         '@xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#',
         'ds:CanonicalizationMethod': {
-          '@Algorithm': this.CANONICALIZE_METHOD
+          '@Algorithm': this.CANONICALIZE_METHOD_REQUEST
         },
         'ds:SignatureMethod': {
           '@Algorithm': 'http://www.w3.org/2000/09/xmldsig#' + this.SIGNATURE_METHOD
@@ -62,7 +66,7 @@ class EnvelopeSignature {
             '@URI': '#' + this.timeStampUuid,
             'ds:Transforms': {
               'ds:Transform': {
-                '@Algorithm': this.CANONICALIZE_METHOD
+                '@Algorithm': this.CANONICALIZE_METHOD_REQUEST
               },
             },
             'ds:DigestMethod': {
@@ -74,7 +78,7 @@ class EnvelopeSignature {
             '@URI': '#' + bodyUuid,
             'ds:Transforms': {
               'ds:Transform': {
-                '@Algorithm': this.CANONICALIZE_METHOD
+                '@Algorithm': this.CANONICALIZE_METHOD_REQUEST
               },
             },
             'ds:DigestMethod': {
@@ -86,7 +90,7 @@ class EnvelopeSignature {
       },
     };
     const signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
-    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD);
+    const canonicalizeSignedInfoNodeXml = await CanonicalizeWithDomParser(signedInfoNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     let envelopeObject = {
       'soapenv:Envelope': {
@@ -151,6 +155,26 @@ class EnvelopeSignature {
   }
 
 
+  public async validateEnvelopeSignature(envelopeXml: string): Promise<boolean> {
+    try {
+      const doc = new DOMParser().parseFromString(envelopeXml, 'text/xml');
+      const signedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc);
+      const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
+      let canonicalizeSignedInfoXml = await Canonicalize(signedInfoNode[0], this.CANONICALIZE_METHOD_RESPONSE);
+
+      const X509Certificate = xpath.select("//*[local-name()='BinarySecurityToken']", doc)[0].textContent;
+      const formattedCertificate = FormatResponseCertificate(X509Certificate);
+
+      return this.verifySignature(
+        formattedCertificate,
+        canonicalizeSignedInfoXml,
+        signatureValue);
+    } catch (e) {
+      throw new Error('validateEnvelopeSignature has failed - ' + e);
+    }
+  }
+
+
   // noinspection JSMethodCanBeStatic
   private getCreated(): string {
     return moment().toISOString();
@@ -173,6 +197,13 @@ class EnvelopeSignature {
     sign.end();
     const signature = sign.sign(signingKey);
     return signature.toString('base64');
+  }
+
+  // public keys can be derived from private keys, a private key may be passed instead of a public key.
+  private verifySignature(certificate: string, node: string, envelopeSignatureValue: string): boolean {
+    const verifier = createVerify(this.SIGNATURE_METHOD);
+    verifier.update(node);
+    return verifier.verify(certificate, envelopeSignatureValue, 'base64');
   }
 
 }

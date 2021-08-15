@@ -102,15 +102,6 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
 
 
 /**
- * Initiate outgoing SEPA payment with using pain.001.001.02 standard
- * @constructor
- */
-async function SEPAPayment() {
-  // Todo...
-}
-
-
-/**
  * Bank statement returns account info with camt.053.001.02 standard
  * @param xt interface describes mandatory parameters
  * @constructor
@@ -135,6 +126,15 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   });
   const xtResponse = new XTApplicationResponse(xt, response.data);
   return await xtResponse.parseBody();
+}
+
+
+/**
+ * Initiate outgoing SEPA payment with using pain.001.001.02 standard
+ * @constructor
+ */
+async function SEPAPayment() {
+  // Todo...
 }
 
 
