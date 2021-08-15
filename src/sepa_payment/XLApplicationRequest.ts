@@ -30,6 +30,9 @@ class XLApplicationRequest {
     const xl = new XL(this.xl);
     const xlContent = Base64EncodeStr(await xl.createSepaXmlMessage());
 
+    console.log(xlContent);
+    process.exit(0);
+
     let obj: any = {
       'ApplicationRequest': {
         '@xmlns': 'http://bxd.fi/xmldata/',

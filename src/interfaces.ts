@@ -1,4 +1,4 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language} from './types';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language, Country, Code, BIC} from './types';
 
 
 export interface CreateCertificateInterface {
@@ -125,7 +125,7 @@ export interface XLInterface {
       InitgPty: {
         Nm: string;
         PstlAdr: {
-          Ctry: string;
+          Ctry: Country;
           AdrLine: string;
           AdrLine2: string;
         },
@@ -134,7 +134,7 @@ export interface XLInterface {
             Othr: {
               Id: string;
               SchmeNm: {
-                Cd: string;
+                Cd: Code;
               }
             }
           }
@@ -146,7 +146,7 @@ export interface XLInterface {
       PmtMtd: PaymentMethod;
       PmtTpInf: {
         SvcLvl: {
-          Cd: string;
+          Cd: Code;
         }
       },
       ReqdExctnDt: string,
@@ -162,7 +162,7 @@ export interface XLInterface {
             Othr: {
               Id: string;
               SchmeNm: {
-                Cd: string;
+                Cd: Code;
               }
             }
           }
@@ -175,7 +175,7 @@ export interface XLInterface {
       },
       DbtrAgt: {
         FinInstnId: {
-          BIC: string;
+          BIC: BIC;
         }
       },
       ChrgBr: ServiceLevel;
@@ -186,7 +186,7 @@ export interface XLInterface {
         },
         PmtTpInf: {
           SvcLvl: {
-            Cd: string;
+            Cd: Code;
           }
         },
         Amt: {
@@ -195,7 +195,7 @@ export interface XLInterface {
         ChrgBr: ServiceLevel;
         CdtrAgt: {
           FinInstnId: {
-            BIC: string;
+            BIC: BIC;
           }
         },
         Cdtr: {
@@ -210,7 +210,7 @@ export interface XLInterface {
               Othr: {
                 Id: string;
                 SchmeNm: {
-                  Cd: string;
+                  Cd: Code;
                 }
               }
             }
