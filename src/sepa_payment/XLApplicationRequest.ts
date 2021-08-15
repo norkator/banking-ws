@@ -3,7 +3,7 @@
 // @ts-ignore
 import * as xmlBuilder from 'xmlbuilder';
 import {XLInterface} from '../interfaces';
-import {Base64DecodeStr, CleanUpCertificate} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
 import {XL} from './XL';
 
@@ -27,16 +27,16 @@ class XLApplicationRequest {
     const bankCertificate = CleanUpCertificate(Base64DecodeStr(this.xl.Base64EncodedBankCsr));
 
     // Build up XL SEPA message
-    const xlContent = new XL(this.xl);
+    const xl = new XL(this.xl);
+    const xlContent = Base64EncodeStr(await xl.createSepaXmlMessage());
 
     let obj: any = {
       'ApplicationRequest': {
         '@xmlns': 'http://bxd.fi/xmldata/',
         '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
         '@xsi:schemaLocation': 'http://bxd.fi/xmldata/',
-
         'CustomerId': this.xl.userParams.customerId,
-        'Command': 'Uploadfile', // Todo, verify this
+        'Command': 'UploadFile',
         'Timestamp': this.xl.Timestamp,
         'StartDate': this.xl.StartDate,
         'EndDate': this.xl.EndDate,
@@ -46,7 +46,6 @@ class XLApplicationRequest {
         'FileReferences': [
           // { FileReference }
         ],
-
         'UserFilename': this.xl.UserFilename,
         'TargetId': 'NONE',
         'ExecutionSerial': this.xl.ExecutionSerial, // not in use

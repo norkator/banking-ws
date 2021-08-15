@@ -114,7 +114,7 @@ export interface XLInterface {
   EndDate: string;
   Status: string;
   UserFilename: string;
-  AmountTotal: string;
+  AmountTotal: number;
   TransactionCount: number;
   sepa: {
     CcyOfTrf: Currency; // Currency of transfer
