@@ -160,9 +160,9 @@ async function SEPAPayment(xl: XLInterface): Promise<string> {
   // const response = {
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test_response_original.xml'))
   // };
-  //const xtResponse = new XTApplicationResponse(xl, response.data);
+  // const xtResponse = new XTApplicationResponse(xl, response.data);
   // return await xtResponse.parseBody();
-  return '';
+  return response.data;
 }
 
 

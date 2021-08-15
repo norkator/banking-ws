@@ -71,8 +71,8 @@ class XLApplicationRequest {
     // noinspection UnnecessaryLocalVariableJS
     let xml: string = xmlBuilder.create(obj).end({pretty: false});
 
-    console.log(xml);
-    process.exit(0);
+    // console.log(xml);
+    // process.exit(0);
     return xml;
   }
 

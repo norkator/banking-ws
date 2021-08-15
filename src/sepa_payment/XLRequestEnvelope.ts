@@ -53,8 +53,8 @@ class XLRequestEnvelope {
       bodyNode, this.bodyUuid, signingKey, binarySecurityToken
     );
 
-    console.log(xml);
-    process.exit(0);
+    // console.log(xml);
+    // process.exit(0);
     return xml;
   }
 
