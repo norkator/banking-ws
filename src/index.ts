@@ -13,11 +13,12 @@ import {CertApplicationResponse} from './get_certificate/certApplicationResponse
 import {XTApplicationResponse} from './bank_statement/XTApplicationResponse';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
+import {XLApplicationResponse} from './sepa_payment/XLApplicationResponse';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
+import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
-import * as path from "path";
-import {XLRequestEnvelope} from "./sepa_payment/XLRequestEnvelope";
+import * as path from 'path';
 
 
 /**
@@ -150,19 +151,18 @@ async function SEPAPayment(xl: XLInterface): Promise<string> {
   const agent = new https.Agent({
     ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA)
   });
-  const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
-    headers: {
-      'Content-Type': 'text/xml',
-      SOAPAction: '',
-    },
-    httpsAgent: agent,
-  });
-  // const response = {
-  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test_response_original.xml'))
-  // };
-  // const xtResponse = new XTApplicationResponse(xl, response.data);
-  // return await xtResponse.parseBody();
-  return response.data;
+  // const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
+  //   headers: {
+  //     'Content-Type': 'text/xml',
+  //     SOAPAction: '',
+  //   },
+  //   httpsAgent: agent,
+  // });
+  const response = {
+    data: LoadFileAsString(path.join(__dirname + '/../' + 'sepa_response_test.xml'))
+  };
+  const xlResponse = new XLApplicationResponse(xl, response.data);
+  return await xlResponse.parseBody();
 }
 
 
