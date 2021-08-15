@@ -2,10 +2,12 @@
  * This class canonicalize, sign and appends right nodes into envelope basically creating ready to send envelope
  */
 import {createHash, createSign, createVerify} from 'crypto';
-import {Base64DecodeStr, Canonicalize, GetUuid, RemoveWhiteSpacesAndNewLines} from './utils';
+import {Base64DecodeStr, Canonicalize, CanonicalizeWithDomParser, GetUuid, RemoveWhiteSpacesAndNewLines} from './utils';
 import * as xmlBuilder from 'xmlbuilder';
+import {DOMParser} from 'xmldom';
 import * as moment from 'moment';
-import {Builder} from 'xml2js';
+
+const xpath = require('xpath');
 
 
 class EnvelopeSignature {
@@ -43,11 +45,11 @@ class EnvelopeSignature {
       }
     };
     const timeStampNodeXml: string = xmlBuilder.create(timeStampNode, {headless: true}).end({pretty: false});
-    const canonicalizeTimeSampNodeXml = await Canonicalize(timeStampNodeXml, this.CANONICALIZE_METHOD_REQUEST);
+    const canonicalizeTimeSampNodeXml = await CanonicalizeWithDomParser(timeStampNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
 
     let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
-    let canonicalizeBodyNodeXml = await Canonicalize(bodyNodeXml, this.CANONICALIZE_METHOD_REQUEST);
+    let canonicalizeBodyNodeXml = await CanonicalizeWithDomParser(bodyNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     const signedInfoNode = {
       'ds:SignedInfo': {
@@ -88,7 +90,7 @@ class EnvelopeSignature {
       },
     };
     const signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
-    const canonicalizeSignedInfoNodeXml = await Canonicalize(signedInfoNodeXml, this.CANONICALIZE_METHOD_REQUEST);
+    const canonicalizeSignedInfoNodeXml = await CanonicalizeWithDomParser(signedInfoNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     let envelopeObject = {
       'soapenv:Envelope': {
@@ -153,26 +155,18 @@ class EnvelopeSignature {
   }
 
 
-  public async validateEnvelopeSignature(envelopeXml: any, clientPrivateKey: string): Promise<boolean> {
+  public async validateEnvelopeSignature(envelopeXml: string, clientPrivateKey: string): Promise<boolean> {
     try {
-      const securityNode = envelopeXml['soapenv:Envelope']['soapenv:Header'][0]['wsse:Security'][0];
-      // const binarySecurityToken = RemoveWhiteSpacesAndNewLines(securityNode['wsse:BinarySecurityToken'][0]['_']);
-      const signatureNode = securityNode['ds:Signature'][0];
-      let signedInfoNode = signatureNode['ds:SignedInfo'][0];
-      signedInfoNode['$'] = {'xmlns:ds': 'http://www.w3.org/2000/09/xmldsig#"'};
-      const signatureValue = RemoveWhiteSpacesAndNewLines(signatureNode['ds:SignatureValue'][0]);
-
-      const signedInfoXml = new Builder({headless: true, rootName: 'ds:SignedInfo'}).buildObject(signedInfoNode);
-      let canonicalizeSignedInfoXml = await Canonicalize(signedInfoXml, this.CANONICALIZE_METHOD_RESPONSE);
-      canonicalizeSignedInfoXml = canonicalizeSignedInfoXml.replace(' xmlns:ds="http://www.w3.org/2000/09/xmldsig#&quot;"', '');
-
-      // Todo.. find a way to parse signedInfoNode without ruining content with Builder
-      // console.log(signatureValue);
-      // console.log(this.getSignatureValue(Base64DecodeStr(clientPrivateKey), canonicalizeSignedInfoXml));
-      console.log(
-        this.verifySignature(Base64DecodeStr(clientPrivateKey), canonicalizeSignedInfoXml, signatureValue)
-      );
-      process.exit(0);
+      const doc = new DOMParser().parseFromString(envelopeXml, 'text/xml');
+      const signedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc);
+      const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
+      let canonicalizeSignedInfoXml = await Canonicalize(signedInfoNode[0], this.CANONICALIZE_METHOD_RESPONSE);
+      // console.log(
+      //   this.verifySignature(
+      //     Base64DecodeStr(''),
+      //     canonicalizeSignedInfoXml,
+      //     signatureValue)
+      // );
       return true;
     } catch (e) {
       throw new Error('validateEnvelopeSignature has failed - ' + e);

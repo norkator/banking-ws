@@ -20,7 +20,7 @@ class XTApplicationResponse {
     const envelopeXML: any = await this.parseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
-    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(envelopeXML, this.xt.Base64EncodedClientPrivateKey);
+    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response, this.xt.Base64EncodedClientPrivateKey);
     if (!envelopeValid) {
       throw {
         RequestId: this.xt.RequestId,

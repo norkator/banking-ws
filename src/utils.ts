@@ -137,12 +137,23 @@ function x509ExpirationDate(pem: string): Promise<any> {
  * @param kind, example: http://www.w3.org/TR/2001/REC-xml-c14n-20010315
  * @constructor
  */
-function Canonicalize(xmlStr: string, kind: string): Promise<string> {
+function CanonicalizeWithDomParser(xmlStr: string, kind: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
     const xmlC14n_ = xmlC14n();
     const canonicalize = xmlC14n_.createCanonicaliser(kind);
     // console.log("Canonicalize with algorithm: " + canonicalize.name());
+    canonicalize.canonicalise(doc, (err: string, data: string) => {
+      err ? reject(err) : resolve(data);
+    });
+  });
+}
+
+
+function Canonicalize(doc: Node, kind: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const xmlC14n_ = xmlC14n();
+    const canonicalize = xmlC14n_.createCanonicaliser(kind);
     canonicalize.canonicalise(doc, (err: string, data: string) => {
       err ? reject(err) : resolve(data);
     });
@@ -171,6 +182,7 @@ export {
   RemoveWhiteSpacesAndNewLines,
   Base64EncodedSHA1Digest,
   x509ExpirationDate,
+  CanonicalizeWithDomParser,
   Canonicalize,
   GetUuid,
 }

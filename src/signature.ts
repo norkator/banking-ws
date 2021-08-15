@@ -4,7 +4,7 @@
 import {ApplicationRequestSignatureInterface} from './interfaces';
 import {createHash, createSign} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
-import {Canonicalize} from './utils';
+import {CanonicalizeWithDomParser} from './utils';
 
 
 class ApplicationRequestSignature {
@@ -21,7 +21,7 @@ class ApplicationRequestSignature {
    * @param ars, ApplicationRequestSignatureInterface requirements
    */
   public async createSignature(ars: ApplicationRequestSignatureInterface): Promise<Object> {
-    const canonicalRequestXml = await Canonicalize(ars.requestXml, this.CANONICALIZE_METHOD);
+    const canonicalRequestXml = await CanonicalizeWithDomParser(ars.requestXml, this.CANONICALIZE_METHOD);
 
     const signedInfoNode = {
       'SignedInfo': {
@@ -54,7 +54,7 @@ class ApplicationRequestSignature {
     };
 
     const signedInfoXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
-    const canonicalSignedInfoXml = await Canonicalize(signedInfoXml, this.CANONICALIZE_METHOD);
+    const canonicalSignedInfoXml = await CanonicalizeWithDomParser(signedInfoXml, this.CANONICALIZE_METHOD);
 
     let signature = {
       'Signature': {
