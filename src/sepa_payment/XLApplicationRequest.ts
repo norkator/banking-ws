@@ -30,8 +30,8 @@ class XLApplicationRequest {
     const xl = new XL(this.xl);
     const xlContent = Base64EncodeStr(await xl.createSepaXmlMessage());
 
-    console.log(xlContent);
-    process.exit(0);
+    // console.log(xlContent);
+    // process.exit(0);
 
     let obj: any = {
       'ApplicationRequest': {
@@ -41,23 +41,12 @@ class XLApplicationRequest {
         'CustomerId': this.xl.userParams.customerId,
         'Command': 'UploadFile',
         'Timestamp': this.xl.Timestamp,
-        'StartDate': this.xl.StartDate,
-        'EndDate': this.xl.EndDate,
-        'Status': this.xl.Status,
-        'ServiceId': '', // not in use
         'Environment': this.xl.userParams.environment,
-        'FileReferences': [
-          // { FileReference }
-        ],
-        'UserFilename': this.xl.UserFilename,
         'TargetId': 'NONE',
         'ExecutionSerial': this.xl.ExecutionSerial, // not in use
-        'Encryption': '', // not in use
-        'EncryptionMethod': '', // not in use
         'Compression': false,
-        'CompressionMethod': '', // not in use
-        'AmountTotal': this.xl.AmountTotal,
-        'TransactionCount': this.xl.TransactionCount,
+        'AmountTotal': this.xl.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt,
+        'TransactionCount': this.xl.sepa.GrpHdr.NbOfTxs,
         'SoftwareId': this.getSoftwareId(),
         'CustomerExtension': '',
         'FileType': 'XL',

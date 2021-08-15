@@ -110,12 +110,6 @@ export interface XLInterface {
   Base64EncodedClientCsr: string;
   Base64EncodedClientPrivateKey?: string;
   language: Language;
-  StartDate: string;
-  EndDate: string;
-  Status: string;
-  UserFilename: string;
-  AmountTotal: number;
-  TransactionCount: number;
   sepa: {
     CcyOfTrf: Currency; // Currency of transfer
     GrpHdr: { // Group Header

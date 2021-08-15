@@ -311,12 +311,6 @@ const xl: XLInterface = {
   Base64EncodedBankCsr: BANK_CERTIFICATE,
   Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
   language: "FI",
-  StartDate: moment().format('YYYY-MM-DDThh:mm:ssZ'),
-  EndDate: moment().format('YYYY-MM-DDThh:mm:ssZ'),
-  Status: '',
-  UserFilename: '',
-  AmountTotal: 0,
-  TransactionCount: 0,
   sepa: {
     CcyOfTrf: 'EUR',
     GrpHdr: {
@@ -391,7 +385,7 @@ const xl: XLInterface = {
           }
         },
         Amt: {
-          InstdAmt: 0,
+          InstdAmt: 500.00,
         },
         ChrgBr: 'SLEV',
         CdtrAgt: {
