@@ -93,15 +93,22 @@ class ApplicationRequestSignature {
   }
 
 
-  public async validateSignature(xml: string, clientPrivateKey: string | undefined): Promise<boolean> {
+  /**
+   * Validate response signature from SignedInfo node
+   * @param xml
+   */
+  public async validateSignature(xml: string): Promise<boolean> {
     try {
       const doc = new DOMParser().parseFromString(xml, 'text/xml');
       const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
-      const canonicalize = await Canonicalize(doc, this.CANONICALIZE_METHOD);
-      // Todo, remove signature node
+      const X509Certificate = xpath.select("//*[local-name()='X509Certificate']", doc)[0].textContent;
+      const formattedCertificate = this.formatResponseCertificate(X509Certificate);
+
+      const SignedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc)[0];
+      const canonicalize = await Canonicalize(SignedInfoNode, this.CANONICALIZE_METHOD);
 
       return this.verifySignature(
-        Base64DecodeStr(clientPrivateKey),
+        formattedCertificate,
         canonicalize,
         signatureValue);
     } catch (e) {
@@ -124,11 +131,26 @@ class ApplicationRequestSignature {
     return signature.toString('base64');
   }
 
+  // noinspection JSMethodCanBeStatic
+  private formatResponseCertificate(certificate: string, maxLength: number = 64): string {
+    let cert = '-----BEGIN CERTIFICATE-----\n';
+    let numOfLines = Math.floor(certificate.length / maxLength);
+    for (let i = 0; i < numOfLines + 1; i++) {
+      cert += certificate.substr(i * maxLength, maxLength);
+      if (i !== numOfLines) {
+        cert += "\n";
+      }
+    }
+    cert += '\n';
+    cert += '-----END CERTIFICATE-----';
+    return cert;
+  }
+
   // public keys can be derived from private keys, a private key may be passed instead of a public key.
   private verifySignature(clientPrivateKey: string, node: string, envelopeSignatureValue: string): boolean {
     const verifier = createVerify(this.SIGNATURE_METHOD);
     verifier.update(node);
-    return verifier.verify(clientPrivateKey, envelopeSignatureValue);
+    return verifier.verify(clientPrivateKey, envelopeSignatureValue, 'base64');
   }
 
 }

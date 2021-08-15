@@ -41,7 +41,7 @@ class XTApplicationResponse {
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
     const signature = new ApplicationRequestSignature();
-    const validResponse = await signature.validateSignature(applicationResponseXML, this.xt.Base64EncodedClientPrivateKey);
+    const validResponse = await signature.validateSignature(applicationResponseXML);
     if (!validResponse) {
       throw {
         RequestId: this.xt.RequestId,
