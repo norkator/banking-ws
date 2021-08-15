@@ -2,9 +2,9 @@
  * These class canonicalize, sign and appends right signature node info into bank messages
  */
 import {ApplicationRequestSignatureInterface} from './interfaces';
-import {createHash, createSign} from 'crypto';
+import {createHash, createSign, createVerify} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
-import {Canonicalize, CanonicalizeWithDomParser} from './utils';
+import {Base64DecodeStr, Canonicalize, CanonicalizeWithDomParser} from './utils';
 import {DOMParser} from 'xmldom';
 
 const xpath = require('xpath');
@@ -95,7 +95,15 @@ class ApplicationRequestSignature {
 
   public async validateSignature(xml: string, clientPrivateKey: string | undefined): Promise<boolean> {
     try {
-      return true;
+      const doc = new DOMParser().parseFromString(xml, 'text/xml');
+      const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
+      const canonicalize = await Canonicalize(doc, this.CANONICALIZE_METHOD);
+      // Todo, remove signature node
+
+      return this.verifySignature(
+        Base64DecodeStr(clientPrivateKey),
+        canonicalize,
+        signatureValue);
     } catch (e) {
       throw new Error('validateEnvelopeSignature has failed - ' + e);
     }
@@ -114,6 +122,13 @@ class ApplicationRequestSignature {
     sign.end();
     const signature = sign.sign(signingKey);
     return signature.toString('base64');
+  }
+
+  // public keys can be derived from private keys, a private key may be passed instead of a public key.
+  private verifySignature(clientPrivateKey: string, node: string, envelopeSignatureValue: string): boolean {
+    const verifier = createVerify(this.SIGNATURE_METHOD);
+    verifier.update(node);
+    return verifier.verify(clientPrivateKey, envelopeSignatureValue);
   }
 
 }
