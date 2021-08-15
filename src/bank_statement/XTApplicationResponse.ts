@@ -3,8 +3,8 @@
 import {parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
 import {XTInterface} from '../interfaces';
-import {EnvelopeSignature} from "../envelopeSignature";
-import {ApplicationRequestSignature} from "../signature";
+import {EnvelopeSignature} from '../envelopeSignature';
+import {ApplicationRequestSignature} from '../signature';
 
 class XTApplicationResponse {
 
@@ -21,7 +21,7 @@ class XTApplicationResponse {
     const envelopeXML: any = await this.parseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
-    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response, this.xt.Base64EncodedClientPrivateKey);
+    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
     if (!envelopeValid) {
       throw {
         RequestId: this.xt.RequestId,

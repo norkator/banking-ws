@@ -4,7 +4,7 @@
 import {ApplicationRequestSignatureInterface} from './interfaces';
 import {createHash, createSign, createVerify} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
-import {Base64DecodeStr, Canonicalize, CanonicalizeWithDomParser} from './utils';
+import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate} from './utils';
 import {DOMParser} from 'xmldom';
 
 const xpath = require('xpath');
@@ -102,7 +102,7 @@ class ApplicationRequestSignature {
       const doc = new DOMParser().parseFromString(xml, 'text/xml');
       const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
       const X509Certificate = xpath.select("//*[local-name()='X509Certificate']", doc)[0].textContent;
-      const formattedCertificate = this.formatResponseCertificate(X509Certificate);
+      const formattedCertificate = FormatResponseCertificate(X509Certificate);
 
       const SignedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc)[0];
       const canonicalize = await Canonicalize(SignedInfoNode, this.CANONICALIZE_METHOD);
@@ -131,26 +131,11 @@ class ApplicationRequestSignature {
     return signature.toString('base64');
   }
 
-  // noinspection JSMethodCanBeStatic
-  private formatResponseCertificate(certificate: string, maxLength: number = 64): string {
-    let cert = '-----BEGIN CERTIFICATE-----\n';
-    let numOfLines = Math.floor(certificate.length / maxLength);
-    for (let i = 0; i < numOfLines + 1; i++) {
-      cert += certificate.substr(i * maxLength, maxLength);
-      if (i !== numOfLines) {
-        cert += "\n";
-      }
-    }
-    cert += '\n';
-    cert += '-----END CERTIFICATE-----';
-    return cert;
-  }
-
   // public keys can be derived from private keys, a private key may be passed instead of a public key.
-  private verifySignature(clientPrivateKey: string, node: string, envelopeSignatureValue: string): boolean {
+  private verifySignature(certificate: string, node: string, envelopeSignatureValue: string): boolean {
     const verifier = createVerify(this.SIGNATURE_METHOD);
     verifier.update(node);
-    return verifier.verify(clientPrivateKey, envelopeSignatureValue, 'base64');
+    return verifier.verify(certificate, envelopeSignatureValue, 'base64');
   }
 
 }

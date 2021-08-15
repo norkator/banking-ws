@@ -171,6 +171,27 @@ function GetUuid(prefix: string | undefined) {
 }
 
 
+/**
+ * Add begin, end tags and split it to PEM like 64 char/line
+ * @param certificate
+ * @param maxLength
+ * @constructor
+ */
+function FormatResponseCertificate(certificate: string, maxLength: number = 64): string {
+  let cert = '-----BEGIN CERTIFICATE-----\n';
+  let numOfLines = Math.floor(certificate.length / maxLength);
+  for (let i = 0; i < numOfLines + 1; i++) {
+    cert += certificate.substr(i * maxLength, maxLength);
+    if (i !== numOfLines) {
+      cert += "\n";
+    }
+  }
+  cert += '\n';
+  cert += '-----END CERTIFICATE-----';
+  return cert;
+}
+
+
 export {
   LoadFileAsString,
   GetWSDL,
@@ -185,4 +206,5 @@ export {
   CanonicalizeWithDomParser,
   Canonicalize,
   GetUuid,
+  FormatResponseCertificate,
 }

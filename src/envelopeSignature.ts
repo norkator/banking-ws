@@ -2,7 +2,7 @@
  * This class canonicalize, sign and appends right nodes into envelope basically creating ready to send envelope
  */
 import {createHash, createSign, createVerify} from 'crypto';
-import {Canonicalize, CanonicalizeWithDomParser, GetUuid} from './utils';
+import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetUuid} from './utils';
 import * as xmlBuilder from 'xmlbuilder';
 import {DOMParser} from 'xmldom';
 import * as moment from 'moment';
@@ -155,19 +155,20 @@ class EnvelopeSignature {
   }
 
 
-  public async validateEnvelopeSignature(envelopeXml: string, clientPrivateKey: string | undefined): Promise<boolean> {
+  public async validateEnvelopeSignature(envelopeXml: string): Promise<boolean> {
     try {
       const doc = new DOMParser().parseFromString(envelopeXml, 'text/xml');
       const signedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc);
       const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
       let canonicalizeSignedInfoXml = await Canonicalize(signedInfoNode[0], this.CANONICALIZE_METHOD_RESPONSE);
-      // console.log(
-      //   this.verifySignature(
-      //     Base64DecodeStr(''),
-      //     canonicalizeSignedInfoXml,
-      //     signatureValue)
-      // );
-      return true;
+
+      const X509Certificate = xpath.select("//*[local-name()='BinarySecurityToken']", doc)[0].textContent;
+      const formattedCertificate = FormatResponseCertificate(X509Certificate);
+
+      return this.verifySignature(
+        formattedCertificate,
+        canonicalizeSignedInfoXml,
+        signatureValue);
     } catch (e) {
       throw new Error('validateEnvelopeSignature has failed - ' + e);
     }
@@ -199,10 +200,10 @@ class EnvelopeSignature {
   }
 
   // public keys can be derived from private keys, a private key may be passed instead of a public key.
-  private verifySignature(clientPrivateKey: string, node: string, envelopeSignatureValue: string): boolean {
+  private verifySignature(certificate: string, node: string, envelopeSignatureValue: string): boolean {
     const verifier = createVerify(this.SIGNATURE_METHOD);
     verifier.update(node);
-    return verifier.verify(clientPrivateKey, envelopeSignatureValue);
+    return verifier.verify(certificate, envelopeSignatureValue, 'base64');
   }
 
 }
