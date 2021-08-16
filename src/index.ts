@@ -2,19 +2,23 @@
 
 import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XTInterface
+  GetCertificateInterface, XLFileDescriptor, XLInterface, XTInterface
 } from './interfaces';
-import {Base64DecodeStr, Base64EncodeStr} from './utils';
+import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
+import {XLApplicationRequest} from './sepa_payment/XLApplicationRequest';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
 import {CertRequestEnvelope} from './get_certificate/certRequestEnvelope';
 import {CertApplicationResponse} from './get_certificate/certApplicationResponse';
 import {XTApplicationResponse} from './bank_statement/XTApplicationResponse';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
+import {XLApplicationResponse} from './sepa_payment/XLApplicationResponse';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
+import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
+import * as path from 'path';
 
 
 /**
@@ -124,6 +128,9 @@ async function BankStatement(xt: XTInterface): Promise<string> {
     },
     httpsAgent: agent,
   });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test_response_original.xml'))
+  // };
   const xtResponse = new XTApplicationResponse(xt, response.data);
   return await xtResponse.parseBody();
 }
@@ -133,8 +140,29 @@ async function BankStatement(xt: XTInterface): Promise<string> {
  * Initiate outgoing SEPA payment with using pain.001.001.02 standard
  * @constructor
  */
-async function SEPAPayment() {
-  // Todo...
+async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
+  const xlRequest = new XLApplicationRequest(xl);
+  const body = await xlRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('XLApplicationRequest returned empty body from createXmlBody');
+  }
+  const applicationRequest = Base64EncodeStr(body);
+  const xlRequestEnvelope = new XLRequestEnvelope(xl, applicationRequest);
+  const agent = new https.Agent({
+    ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA)
+  });
+  // const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
+  //   headers: {
+  //     'Content-Type': 'text/xml',
+  //     SOAPAction: '',
+  //   },
+  //   httpsAgent: agent,
+  // });
+  const response = {
+    data: LoadFileAsString(path.join(__dirname + '/../' + 'sepa_response_test.xml'))
+  };
+  const xlResponse = new XLApplicationResponse(xl, response.data);
+  return await xlResponse.parseBody();
 }
 
 
@@ -142,6 +170,6 @@ export {
   CreateOwnCertificate,
   GetCertificate,
   RenewCertificate,
-  SEPAPayment,
   BankStatement,
+  SEPAPayment,
 }
