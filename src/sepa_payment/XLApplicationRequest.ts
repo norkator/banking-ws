@@ -5,6 +5,7 @@ import * as xmlBuilder from 'xmlbuilder';
 import {XLInterface} from '../interfaces';
 import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
+import {FileTypes} from '../constants';
 import {XL} from './XL';
 
 
@@ -49,7 +50,7 @@ class XLApplicationRequest {
         'TransactionCount': this.xl.sepa.GrpHdr.NbOfTxs,
         'SoftwareId': this.getSoftwareId(),
         'CustomerExtension': '',
-        'FileType': 'XL',
+        'FileType': FileTypes.XL,
         'Content': {
           '#text': xlContent
         },

@@ -151,16 +151,16 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   const agent = new https.Agent({
     ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA)
   });
-  // const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
-  //   headers: {
-  //     'Content-Type': 'text/xml',
-  //     SOAPAction: '',
-  //   },
-  //   httpsAgent: agent,
-  // });
-  const response = {
-    data: LoadFileAsString(path.join(__dirname + '/../' + 'sepa_response_test.xml'))
-  };
+  const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'sepa_response_test.xml'))
+  // };
   const xlResponse = new XLApplicationResponse(xl, response.data);
   return await xlResponse.parseBody();
 }

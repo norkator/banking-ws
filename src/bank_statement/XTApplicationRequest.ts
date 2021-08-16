@@ -1,9 +1,10 @@
 'use strict';
 
-import {Base64DecodeStr, CleanUpCertificate, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, CleanUpCertificate} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
 import {XTInterface} from '../interfaces';
 import * as xmlBuilder from 'xmlbuilder';
+import {FileTypes} from '../constants';
 
 
 /**
@@ -42,7 +43,7 @@ class XTApplicationRequest {
         'ExecutionSerial': this.xt.ExecutionSerial,
         'Compression': false,
         'SoftwareId': this.getSoftwareId(),
-        'FileType': 'XT',
+        'FileType': FileTypes.XT,
         // 'Signature': '', append node here
       }
     };
