@@ -23,6 +23,7 @@ Table of contents
     * [Renew certificate](#renew-certificate)
     * [Bank Statement](#bank-statement)
     * [SEPA Payment](#sepa-payment)
+    * [SEPA Errors](#sepa-errors)
     
 
 
@@ -442,5 +443,50 @@ Is a object of FileDescriptor.
   AmountTotal: '500.0',
   TransactionCount: '1',
   Deletable: 'false'
+}
+```
+
+
+SEPA errors
+-----
+Returns list of SEPA-XML errors | pain.002.001.02 or .03 related to payments.
+```typescript
+import * as moment from 'moment';
+import {XPInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
+import {SEPAErrors} from './src/index';
+
+const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const BANK_CERTIFICATE = "base64-content-here";
+const CLIENT_CERTIFICATE = "base64-content-here";
+const CLIENT_PRIVATE_KEY = "base64-content-here";
+
+const userParams: UserParamsInterface = {
+  bank: 'Samlink',
+  environment: 'PRODUCTION',
+  customerId: '12345678',
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+};
+const xp: XPInterface = {
+  userParams: userParams,
+  requestUrl: 'https://185.251.49.57/services/CorporateFileService',
+  RequestId: '123456',
+  Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
+  ExecutionSerial: '123456',
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
+  Base64EncodedBankCsr: BANK_CERTIFICATE,
+  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
+  language: "FI",
+};
+const sepaErrors = await SEPAErrors(xp);
+console.log(sepaErrors);
+```
+
+
+#### Expected response
+Todo...
+```json5
+{
+  
 }
 ```
