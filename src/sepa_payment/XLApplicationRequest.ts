@@ -5,7 +5,7 @@ import * as xmlBuilder from 'xmlbuilder';
 import {XLInterface} from '../interfaces';
 import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
-import {FileTypes} from '../constants';
+import {Commands, FileTypes} from '../constants';
 import {XL} from './XL';
 
 
@@ -40,7 +40,7 @@ class XLApplicationRequest {
         '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
         '@xsi:schemaLocation': 'http://bxd.fi/xmldata/',
         'CustomerId': this.xl.userParams.customerId,
-        'Command': 'UploadFile',
+        'Command': Commands.uploadFile,
         'Timestamp': this.xl.Timestamp,
         'Environment': this.xl.userParams.environment,
         'TargetId': 'NONE',

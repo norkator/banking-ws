@@ -1,8 +1,8 @@
-const Operations = {
-  uploadFile: 'uploadFile',
-  downloadFileList: 'downloadFileList',
-  downloadFile: 'downloadFile',
-  deleteFile: 'deleteFile',
+const Commands = {
+  uploadFile: 'UploadFile',
+  downloadFileList: 'DownloadFileList',
+  downloadFile: 'DownloadFile',
+  deleteFile: 'DeleteFile',
 };
 
 const StatusValues = {
@@ -19,7 +19,7 @@ const FileTypes = {
 
 
 export {
-  Operations,
+  Commands,
   StatusValues,
   FileTypes,
 }
