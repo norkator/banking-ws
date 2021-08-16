@@ -17,7 +17,7 @@ class XL {
   }
 
 
-  public async createSepaXmlMessage(): Promise<string | undefined> {
+  public async createSepaXmlMessage(): Promise<string> {
     let xlObj: any = {
       'Document': {
         '@xmlns': 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03',
