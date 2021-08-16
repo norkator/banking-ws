@@ -222,3 +222,15 @@ export interface XLInterface {
     }
   }
 }
+
+
+export interface XLFileDescriptor {
+  FileReference: string;
+  TargetId: string;
+  FileType: string;
+  FileTimestamp: string;
+  Status: string;
+  AmountTotal: string;
+  TransactionCount: string;
+  Deletable: string;
+}

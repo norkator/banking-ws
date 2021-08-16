@@ -2,7 +2,7 @@
 
 import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XLInterface, XTInterface
+  GetCertificateInterface, XLFileDescriptor, XLInterface, XTInterface
 } from './interfaces';
 import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
@@ -140,7 +140,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
  * Initiate outgoing SEPA payment with using pain.001.001.02 standard
  * @constructor
  */
-async function SEPAPayment(xl: XLInterface): Promise<string> {
+async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   const xlRequest = new XLApplicationRequest(xl);
   const body = await xlRequest.createXmlBody();
   if (body === undefined) {

@@ -430,9 +430,16 @@ console.log(sepaPayment);
 
 
 #### Expected response
-In progress...
+Is a object of FileDescriptor.
 ```json5
 {
-  
+  FileReference: '530253',
+  TargetId: 'NONE',
+  FileType: 'XL',
+  FileTimestamp: '2021-08-15T21:29:48.497+03:00',
+  Status: 'WFP',
+  AmountTotal: '500.0',
+  TransactionCount: '1',
+  Deletable: 'false'
 }
 ```
