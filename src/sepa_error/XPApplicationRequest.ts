@@ -3,7 +3,7 @@
 // @ts-ignore
 import * as xmlBuilder from 'xmlbuilder';
 import {XPInterface} from '../interfaces';
-import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
+import {Base64DecodeStr, CleanUpCertificate} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
 import {Commands, FileTypes} from '../constants';
 
@@ -38,14 +38,8 @@ class XPApplicationRequest {
         'TargetId': 'NONE',
         'ExecutionSerial': this.xp.ExecutionSerial, // not in use
         'Compression': false,
-        'AmountTotal': this.xp.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt,
-        'TransactionCount': this.xp.sepa.GrpHdr.NbOfTxs,
         'SoftwareId': this.getSoftwareId(),
-        'CustomerExtension': '',
-        'FileType': FileTypes.xp,
-        'Content': {
-          '#text': xpContent
-        },
+        'FileType': FileTypes.XP,
         // 'Signature': '', append node here
       }
     };
