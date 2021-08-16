@@ -283,6 +283,7 @@ In progress...
 
 SEPA payment
 -----
+Instructions for populating all fields, see [ISO20022_maksut.pdf](./documents/ISO20022_maksut.pdf).
 ```typescript
 import * as moment from 'moment';
 import {XLInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
