@@ -2,7 +2,7 @@
 
 import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XLFileDescriptor, XLInterface, XTInterface
+  GetCertificateInterface, XLFileDescriptor, XLInterface, XPInterface, XTInterface
 } from './interfaces';
 import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
@@ -19,6 +19,8 @@ import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
 import * as path from 'path';
+import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
+import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
 
 
 /**
@@ -166,10 +168,39 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
 }
 
 
+/**
+ * Return SEPA errors with DownloadFileList command
+ * @constructor
+ */
+async function SEPAErrors(xp: XPInterface): Promise<XLFileDescriptor> {
+  const xpRequest = new XPApplicationRequest(xp);
+  const body = await xpRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('XPApplicationRequest returned empty body from createXmlBody');
+  }
+  const applicationRequest = Base64EncodeStr(body);
+  const xpRequestEnvelope = new XPRequestEnvelope(xp, applicationRequest);
+  const agent = new https.Agent({
+    ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA)
+  });
+  const response = await axios.post(xp.requestUrl, await xpRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  // const xpResponse = new XPApplicationResponse(xp, response.data);
+  // return await xpResponse.parseBody();
+  return response.data;
+}
+
+
 export {
   CreateOwnCertificate,
   GetCertificate,
   RenewCertificate,
   BankStatement,
   SEPAPayment,
+  SEPAErrors,
 }
