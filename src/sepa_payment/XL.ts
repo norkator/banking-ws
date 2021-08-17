@@ -10,7 +10,7 @@ import {XLInterface} from '../interfaces';
  */
 class XL {
 
-  xl: XLInterface;
+  private readonly xl: XLInterface;
 
   constructor(xl: XLInterface) {
     this.xl = xl;
@@ -18,7 +18,7 @@ class XL {
 
 
   public async createSepaXmlMessage(): Promise<string> {
-    let xlObj: any = {
+    const xlObj = {
       'Document': {
         '@xmlns': 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03',
         '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',

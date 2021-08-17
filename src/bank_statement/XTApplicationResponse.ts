@@ -1,6 +1,6 @@
 'use strict';
 
-import {parseString} from 'xml2js';
+import {convertableToString, parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
 import {XTInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
@@ -18,7 +18,7 @@ class XTApplicationResponse {
 
   public async parseBody(): Promise<string> {
     // parse, handle application response envelope
-    const envelopeXML: any = await this.parseXml(this.response);
+    const envelopeXML: convertableToString = await this.parseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
     const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
@@ -52,7 +52,7 @@ class XTApplicationResponse {
     }
 
     // parse, handle response itself
-    const xml: any = await this.parseXml(applicationResponseXML);
+    const xml: convertableToString = await this.parseXml(applicationResponseXML);
     const ns2CertApplicationResponse = xml['ApplicationResponse'];
 
     const ResponseCode = ns2CertApplicationResponse['ResponseCode'][0];

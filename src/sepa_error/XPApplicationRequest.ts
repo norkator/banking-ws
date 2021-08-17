@@ -26,7 +26,7 @@ class XPApplicationRequest {
     }
     const bankCertificate = CleanUpCertificate(Base64DecodeStr(this.xp.Base64EncodedBankCsr));
 
-    let obj: any = {
+    const obj = {
       'ApplicationRequest': {
         '@xmlns': 'http://bxd.fi/xmldata/',
         '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -44,7 +44,7 @@ class XPApplicationRequest {
       }
     };
 
-    let requestXml: string = xmlBuilder.create(obj).end({pretty: false});
+    const requestXml: string = xmlBuilder.create(obj).end({pretty: false});
 
     const ars = new ApplicationRequestSignature();
     const signature = await ars.createSignature({
@@ -54,9 +54,9 @@ class XPApplicationRequest {
     });
 
     // @ts-ignore
-    obj.ApplicationRequest["Signature"] = signature["Signature"];
+    obj.ApplicationRequest['Signature'] = signature['Signature'];
     // noinspection UnnecessaryLocalVariableJS
-    let xml: string = xmlBuilder.create(obj).end({pretty: false});
+    const xml: string = xmlBuilder.create(obj).end({pretty: false});
 
     // console.log(xml);
     // process.exit(0);

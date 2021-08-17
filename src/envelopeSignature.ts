@@ -6,6 +6,7 @@ import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetU
 import * as xmlBuilder from 'xmlbuilder';
 import {DOMParser} from 'xmldom';
 import * as moment from 'moment';
+import {convertableToString} from "xml2js";
 
 const xpath = require('xpath');
 
@@ -34,7 +35,7 @@ class EnvelopeSignature {
    * @param binarySecurityToken, Base64EncodedBankCsr
    */
   public async constructEnvelopeWithSignature(
-    bodyNode: { [name: string]: Object }, bodyUuid: string, signingKey: string, binarySecurityToken: string
+    bodyNode: { [name: string]: convertableToString }, bodyUuid: string, signingKey: string, binarySecurityToken: string
   ): Promise<string> {
     const timeStampNode = {
       'wsu:Timestamp': {
@@ -48,8 +49,8 @@ class EnvelopeSignature {
     const canonicalizeTimeSampNodeXml = await CanonicalizeWithDomParser(timeStampNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
 
-    let bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
-    let canonicalizeBodyNodeXml = await CanonicalizeWithDomParser(bodyNodeXml, this.CANONICALIZE_METHOD_REQUEST);
+    const bodyNodeXml: string = xmlBuilder.create(bodyNode, {headless: true}).end({pretty: false});
+    const canonicalizeBodyNodeXml = await CanonicalizeWithDomParser(bodyNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
     const signedInfoNode = {
       'ds:SignedInfo': {
@@ -92,7 +93,7 @@ class EnvelopeSignature {
     const signedInfoNodeXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
     const canonicalizeSignedInfoNodeXml = await CanonicalizeWithDomParser(signedInfoNodeXml, this.CANONICALIZE_METHOD_REQUEST);
 
-    let envelopeObject = {
+    const envelopeObject = {
       'soapenv:Envelope': {
         '@xmlns:cor': 'http://bxd.fi/CorporateFileService',
         '@xmlns:mod': 'http://model.bxd.fi',
@@ -144,11 +145,11 @@ class EnvelopeSignature {
     };
 
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["#text"].unshift({'wsu:Timestamp': timeStampNode["wsu:Timestamp"]});
+    envelopeObject['soapenv:Envelope']['soapenv:Header']['wsse:Security']['#text'].unshift({'wsu:Timestamp': timeStampNode['wsu:Timestamp']});
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Body"] = bodyNode["soapenv:Body"];
+    envelopeObject['soapenv:Envelope']['soapenv:Body'] = bodyNode['soapenv:Body'];
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["#text"][2]["ds:Signature"]["#text"].unshift({'ds:SignedInfo': signedInfoNode["ds:SignedInfo"]});
+    envelopeObject['soapenv:Envelope']['soapenv:Header']['wsse:Security']['#text'][2]['ds:Signature']['#text'].unshift({'ds:SignedInfo': signedInfoNode['ds:SignedInfo']});
 
 
     return xmlBuilder.create(envelopeObject).end({pretty: false});
@@ -158,11 +159,11 @@ class EnvelopeSignature {
   public async validateEnvelopeSignature(envelopeXml: string): Promise<boolean> {
     try {
       const doc = new DOMParser().parseFromString(envelopeXml, 'text/xml');
-      const signedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc);
-      const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
-      let canonicalizeSignedInfoXml = await Canonicalize(signedInfoNode[0], this.CANONICALIZE_METHOD_RESPONSE);
+      const signedInfoNode = xpath.select('//*[local-name()=\'SignedInfo\']', doc);
+      const signatureValue = xpath.select('//*[local-name()=\'SignatureValue\']', doc)[0].textContent;
+      const canonicalizeSignedInfoXml = await Canonicalize(signedInfoNode[0], this.CANONICALIZE_METHOD_RESPONSE);
 
-      const X509Certificate = xpath.select("//*[local-name()='BinarySecurityToken']", doc)[0].textContent;
+      const X509Certificate = xpath.select('//*[local-name()=\'BinarySecurityToken\']', doc)[0].textContent;
       const formattedCertificate = FormatResponseCertificate(X509Certificate);
 
       return this.verifySignature(

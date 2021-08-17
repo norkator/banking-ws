@@ -6,6 +6,7 @@ import {createHash, createSign, createVerify} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
 import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate} from './utils';
 import {DOMParser} from 'xmldom';
+import {convertableToString} from 'xml2js';
 
 const xpath = require('xpath');
 
@@ -16,14 +17,14 @@ class ApplicationRequestSignature {
   private readonly SIGNATURE_METHOD = 'rsa-sha1';
   private readonly DIGEST_METHOD = 'sha1';
 
-  constructor() {
-  }
+  // constructor() {
+  // }
 
   /**
    * Constructs signature, digest and other nodes
    * @param ars, ApplicationRequestSignatureInterface requirements
    */
-  public async createSignature(ars: ApplicationRequestSignatureInterface): Promise<Object> {
+  public async createSignature(ars: ApplicationRequestSignatureInterface): Promise<convertableToString> {
     const canonicalRequestXml = await CanonicalizeWithDomParser(ars.requestXml, this.CANONICALIZE_METHOD);
 
     const signedInfoNode = {
@@ -59,7 +60,7 @@ class ApplicationRequestSignature {
     const signedInfoXml: string = xmlBuilder.create(signedInfoNode, {headless: true}).end({pretty: false});
     const canonicalSignedInfoXml = await CanonicalizeWithDomParser(signedInfoXml, this.CANONICALIZE_METHOD);
 
-    let signature = {
+    const signature = {
       'Signature': {
         '@xmlns': 'http://www.w3.org/2000/09/xmldsig#',
         '#text': [
@@ -87,7 +88,7 @@ class ApplicationRequestSignature {
     };
 
     // @ts-ignore
-    signature["Signature"]["#text"].unshift({'SignedInfo': signedInfoNode["SignedInfo"]});
+    signature['Signature']['#text'].unshift({'SignedInfo': signedInfoNode['SignedInfo']});
 
     return signature;
   }
@@ -100,11 +101,11 @@ class ApplicationRequestSignature {
   public async validateSignature(xml: string): Promise<boolean> {
     try {
       const doc = new DOMParser().parseFromString(xml, 'text/xml');
-      const signatureValue = xpath.select("//*[local-name()='SignatureValue']", doc)[0].textContent;
-      const X509Certificate = xpath.select("//*[local-name()='X509Certificate']", doc)[0].textContent;
+      const signatureValue = xpath.select('//*[local-name()=\'SignatureValue\']', doc)[0].textContent;
+      const X509Certificate = xpath.select('//*[local-name()=\'X509Certificate\']', doc)[0].textContent;
       const formattedCertificate = FormatResponseCertificate(X509Certificate);
 
-      const SignedInfoNode = xpath.select("//*[local-name()='SignedInfo']", doc)[0];
+      const SignedInfoNode = xpath.select('//*[local-name()=\'SignedInfo\']', doc)[0];
       const canonicalize = await Canonicalize(SignedInfoNode, this.CANONICALIZE_METHOD);
 
       return this.verifySignature(

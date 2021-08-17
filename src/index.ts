@@ -4,7 +4,7 @@ import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
   GetCertificateInterface, XLFileDescriptor, XLInterface, XPInterface, XTInterface
 } from './interfaces';
-import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
+import {Base64DecodeStr, Base64EncodeStr} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
 import {XLApplicationRequest} from './sepa_payment/XLApplicationRequest';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
@@ -16,11 +16,10 @@ import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XLApplicationResponse} from './sepa_payment/XLApplicationResponse';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
-import * as https from 'https';
-import axios from 'axios';
-import * as path from 'path';
 import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
 import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
+import * as https from 'https';
+import axios from 'axios';
 
 
 /**
@@ -62,7 +61,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   // };
   // console.log(response.data);
   const car = new CertApplicationResponse(gc, response.data);
-  return car.parseBody();
+  return await car.parseBody();
 }
 
 
@@ -93,12 +92,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
   // };
   const car = new CertApplicationResponse(gc, response.data);
-  await car.parseBody();
-  if (car.isValid()) {
-    return car.getCertificate()
-  } else {
-    throw new Error('Response is not valid!')
-  }
+  return await car.parseBody();
 }
 
 

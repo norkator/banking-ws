@@ -34,8 +34,8 @@ class CertRequestEnvelope {
       }
     };
 
-    let xml: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
-    return xml.end({pretty: true});
+    const xml: string = xmlBuilder.create(envelopeObject).end({pretty: true});
+    return xml;
   }
 
 }
