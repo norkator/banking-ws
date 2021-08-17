@@ -1,7 +1,7 @@
 'use strict';
 
 import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils';
-import {XLFileDescriptor, XPInterface} from '../interfaces';
+import {XPFileDescriptor, XPInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';
 
@@ -15,7 +15,7 @@ class XPApplicationResponse {
     this.response = response;
   }
 
-  public async parseBody(): Promise<XLFileDescriptor> {
+  public async parseBody(): Promise<XPFileDescriptor[]> {
     // parse, handle application response envelope
     // eslint-disable-nexp-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
@@ -60,10 +60,23 @@ class XPApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    console.log(xml);
-    process.exit(0);
+    // Todo.. later with more than one descriptor, parse them all
+    const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
+    const fileDescriptors: XPFileDescriptor[] = [];
 
-    return undefined;
+    fileDescriptors.push({
+      FileReference: fd['FileReference'][0],
+      TargetId: fd['TargetId'][0],
+      UserFilename: fd['UserFilename'][0],
+      ParentFileReference: fd['ParentFileReference'][0],
+      FileType: fd['FileType'][0],
+      FileTimestamp: fd['FileTimestamp'][0],
+      Status: fd['Status'][0],
+      ForwardedTimestamp: fd['ForwardedTimestamp'][0],
+      Deletable: fd['Deletable'][0],
+    });
+
+    return fileDescriptors;
   }
 
 }
