@@ -4,6 +4,7 @@ import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
   GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
 } from './interfaces';
+// eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
 import {XLApplicationRequest} from './sepa_payment/XLApplicationRequest';
@@ -14,14 +15,15 @@ import {XTApplicationResponse} from './bank_statement/XTApplicationResponse';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XLApplicationResponse} from './sepa_payment/XLApplicationResponse';
+import {XPApplicationResponse} from './sepa_error/XPApplicationResponse';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
 import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
 import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
-import {XPApplicationResponse} from "./sepa_error/XPApplicationResponse";
-import * as path from "path";
+// eslint-disable-next-line  @typescript-eslint/no-unused-vars
+import * as path from 'path';
 
 
 /**

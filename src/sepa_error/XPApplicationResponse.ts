@@ -17,7 +17,7 @@ class XPApplicationResponse {
 
   public async parseBody(): Promise<XPFileDescriptor[]> {
     // parse, handle application response envelope
-    // eslint-disable-nexp-line  @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
@@ -52,7 +52,7 @@ class XPApplicationResponse {
     }
 
     // parse, handle response itself
-    // eslint-disable-nexp-line  @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const xml: any = await ParseXml(applicationResponseXML);
     const ns2CertApplicationResponse = xml['ApplicationResponse'];
 

@@ -156,7 +156,12 @@ function FormatResponseCertificate(certificate: string, maxLength = 64): string 
   return cert;
 }
 
-
+/**
+ * Parse string xml into object like form
+ * @param xmlString, xml response data
+ * @constructor
+ */
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 async function ParseXml(xmlString: string): Promise<any> {
   return await new Promise((resolve, reject) => parseString(xmlString, (err, jsonData) => {
     if (err) {
