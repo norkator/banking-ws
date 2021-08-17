@@ -57,12 +57,12 @@ class XTApplicationRequest {
     });
 
     // @ts-ignore
-    obj.ApplicationRequest["Signature"] = signature["Signature"];
+    obj.ApplicationRequest['Signature'] = signature['Signature'];
     // noinspection UnnecessaryLocalVariableJS
     let xml: string = xmlBuilder.create(obj).end({pretty: false});
 
     // console.log(xml);
-    // fs.writeFileSync("signed.xml", xml)
+    // fs.writeFileSync('signed.xml', xml)
     // process.exit(0);
 
     return xml;

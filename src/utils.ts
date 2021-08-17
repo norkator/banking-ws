@@ -75,13 +75,13 @@ function RemoveWhiteSpacesAndNewLines(content: string): string {
  * Get expiration date for certificate
  * @param pem
  */
-function x509ExpirationDate(pem: string): Promise<any> {
-  return new Promise((resolve, reject) => {
+function x509ExpirationDate(pem: string): Promise<string> {
+  return new Promise((resolve) => {
     try {
       openssl(['x509', '-enddate', '-noout', '-in', {
         name: 'temp_cert.pem',
         buffer: Buffer.from(pem)
-      }], function (err: string, buffer: any) {
+      }], function (err: string, buffer: Buffer) {
         // console.log(err.toString(), buffer.toString());
         const res = buffer.toString().replace('\n', '').split('=');
         // @ts-ignore
@@ -130,7 +130,7 @@ function Canonicalize(doc: Node, kind: string): Promise<string> {
  * @param prefix could be like TS-uuid
  * @constructor
  */
-function GetUuid(prefix: string | undefined) {
+function GetUuid(prefix: string | undefined): string {
   return prefix ? prefix + '-' + uuidv4() : uuidv4();
 }
 
@@ -141,9 +141,9 @@ function GetUuid(prefix: string | undefined) {
  * @param maxLength
  * @constructor
  */
-function FormatResponseCertificate(certificate: string, maxLength: number = 64): string {
+function FormatResponseCertificate(certificate: string, maxLength = 64): string {
   let cert = '-----BEGIN CERTIFICATE-----\n';
-  let numOfLines = Math.floor(certificate.length / maxLength);
+  const numOfLines = Math.floor(certificate.length / maxLength);
   for (let i = 0; i < numOfLines + 1; i++) {
     cert += certificate.substr(i * maxLength, maxLength);
     if (i !== numOfLines) {

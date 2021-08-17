@@ -62,12 +62,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   // };
   // console.log(response.data);
   const car = new CertApplicationResponse(gc, response.data);
-  await car.parseBody();
-  if (car.isValid()) {
-    return car.getCertificate()
-  } else {
-    throw new Error('Response is not valid!')
-  }
+  return car.parseBody();
 }
 
 
