@@ -6,5 +6,9 @@
     "esModuleInterop": false,
     "skipLibCheck": true,
     "moduleResolution": "node"
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
