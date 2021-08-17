@@ -25,7 +25,8 @@ class CertApplicationResponse {
 
   public async parseBody(): Promise<CertificateInterface> {
     // parse, handle application response envelope
-    const envelopeXML: JSON = await this.parseXml(this.response);
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    const envelopeXML: any = await this.parseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
     const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
@@ -57,7 +58,8 @@ class CertApplicationResponse {
     }
 
     // parse, handle response itself
-    const xml: JSON = await this.parseXml(applicationResponseXML);
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    const xml: any = await this.parseXml(applicationResponseXML);
     const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
     const customerId = ns2CertApplicationResponse['CustomerId'][0];
