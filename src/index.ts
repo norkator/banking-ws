@@ -2,9 +2,9 @@
 
 import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XLFileDescriptor, XLInterface, XPInterface, XTInterface
+  GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
 } from './interfaces';
-import {Base64DecodeStr, Base64EncodeStr} from './utils';
+import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
 import {XLApplicationRequest} from './sepa_payment/XLApplicationRequest';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';
@@ -20,6 +20,8 @@ import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
 import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
+import {XPApplicationResponse} from "./sepa_error/XPApplicationResponse";
+import * as path from "path";
 
 
 /**
@@ -161,7 +163,7 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
  * Return SEPA errors with DownloadFileList command
  * @constructor
  */
-async function SEPAErrors(xp: XPInterface): Promise<XLFileDescriptor> {
+async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
   const xpRequest = new XPApplicationRequest(xp);
   const body = await xpRequest.createXmlBody();
   if (body === undefined) {
@@ -179,9 +181,11 @@ async function SEPAErrors(xp: XPInterface): Promise<XLFileDescriptor> {
     },
     httpsAgent: agent,
   });
-  // const xpResponse = new XPApplicationResponse(xp, response.data);
-  // return await xpResponse.parseBody();
-  return response.data;
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'xp_response.xml'))
+  // };
+  const xpResponse = new XPApplicationResponse(xp, response.data);
+  return await xpResponse.parseBody();
 }
 
 
