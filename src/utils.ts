@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import {Buffer} from 'buffer';
 import {DOMParser} from 'xmldom';
 import * as xmlC14n from 'xml-c14n';
+import {parseString} from "xml2js";
 
 
 /**
@@ -156,6 +157,27 @@ function FormatResponseCertificate(certificate: string, maxLength = 64): string 
 }
 
 
+async function ParseXml(xmlString: string): Promise<any> {
+  return await new Promise((resolve, reject) => parseString(xmlString, (err, jsonData) => {
+    if (err) {
+      reject(err);
+    }
+    resolve(jsonData);
+  }));
+}
+
+/**
+ * Since only '0' is successful, will throw error with every other and use its own response texp
+ * @param rc
+ * @param responseText
+ */
+function HandleResponseCode(rc: string, responseText: string): void {
+  if (rc === '5' || rc === '6' || rc === '7' || rc === '8' || rc === '12' || rc === '26' || rc === '30') {
+    throw new Error(responseText);
+  }
+}
+
+
 export {
   LoadFileAsString,
   Base64DecodeStr,
@@ -168,4 +190,6 @@ export {
   Canonicalize,
   GetUuid,
   FormatResponseCertificate,
+  ParseXml,
+  HandleResponseCode,
 }

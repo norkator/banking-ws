@@ -1,7 +1,12 @@
 'use strict';
 
-import {parseString} from 'xml2js';
-import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines, x509ExpirationDate} from '../utils';
+import {
+  Base64DecodeStr,
+  HandleResponseCode,
+  ParseXml,
+  RemoveWhiteSpacesAndNewLines,
+  x509ExpirationDate
+} from '../utils';
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
 import {EnvelopeSignature} from "../envelopeSignature";
 import {ApplicationRequestSignature} from "../signature";
@@ -26,7 +31,7 @@ class CertApplicationResponse {
   public async parseBody(): Promise<CertificateInterface> {
     // parse, handle application response envelope
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const envelopeXML: any = await this.parseXml(this.response);
+    const envelopeXML: any = await ParseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
     const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
@@ -59,7 +64,7 @@ class CertApplicationResponse {
 
     // parse, handle response itself
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const xml: any = await this.parseXml(applicationResponseXML);
+    const xml: any = await ParseXml(applicationResponseXML);
     const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
     const customerId = ns2CertApplicationResponse['CustomerId'][0];
@@ -69,7 +74,7 @@ class CertApplicationResponse {
 
     const ResponseCode = ns2CertApplicationResponse['ResponseCode'][0];
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
-    CertApplicationResponse.handleResponseCode(ResponseCode, ResponseText);
+    HandleResponseCode(ResponseCode, ResponseText);
 
 
     const Certificate = ns2CertApplicationResponse['Certificates'][0]['Certificate'][0];
@@ -82,26 +87,6 @@ class CertApplicationResponse {
     };
 
     return this.certificate;
-  }
-
-  private async parseXml(xmlString: string): Promise<JSON> {
-    return await new Promise((resolve, reject) => parseString(xmlString, (err, jsonData) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(jsonData);
-    }));
-  }
-
-  /**
-   * Since only '0' is successful, will throw error with every other and use its own response text
-   * @param rc
-   * @param responseText
-   */
-  private static handleResponseCode(rc: string, responseText: string): void {
-    if (rc === '5' || rc === '6' || rc === '7' || rc === '8' || rc === '12' || rc === '26' || rc === '30') {
-      throw new Error(responseText);
-    }
   }
 
 
