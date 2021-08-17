@@ -4,8 +4,8 @@
 name: Node.js Package
 
 on:
-  push: # disable this one after tests
-    branches: [ main ]
+  # push: # disable this one after tests
+  #   branches: [ main ]
   release:
     types: [created]
 
