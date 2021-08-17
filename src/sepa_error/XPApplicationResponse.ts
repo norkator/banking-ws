@@ -60,20 +60,20 @@ class XPApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    // Todo.. later with more than one descriptor, parse them all
-    const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
+    const fds = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'];
     const fileDescriptors: XPFileDescriptor[] = [];
-
-    fileDescriptors.push({
-      FileReference: fd['FileReference'][0],
-      TargetId: fd['TargetId'][0],
-      UserFilename: fd['UserFilename'][0],
-      ParentFileReference: fd['ParentFileReference'][0],
-      FileType: fd['FileType'][0],
-      FileTimestamp: fd['FileTimestamp'][0],
-      Status: fd['Status'][0],
-      ForwardedTimestamp: fd['ForwardedTimestamp'][0],
-      Deletable: fd['Deletable'][0],
+    fds.forEach((fd: XPFileDescriptor) => {
+      fileDescriptors.push({
+        FileReference: fd['FileReference'][0],
+        TargetId: fd['TargetId'][0],
+        UserFilename: fd['UserFilename'][0],
+        ParentFileReference: fd['ParentFileReference'][0],
+        FileType: fd['FileType'][0],
+        FileTimestamp: fd['FileTimestamp'][0],
+        Status: fd['Status'][0],
+        ForwardedTimestamp: fd['ForwardedTimestamp'][0],
+        Deletable: fd['Deletable'][0],
+      });
     });
 
     return fileDescriptors;
