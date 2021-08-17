@@ -1,13 +1,15 @@
 'use strict';
 
-import {Builder, parseString} from 'xml2js';
+import {parseString} from 'xml2js';
 import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines, x509ExpirationDate} from '../utils';
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
+import {EnvelopeSignature} from "../envelopeSignature";
+import {ApplicationRequestSignature} from "../signature";
 
 class CertApplicationResponse {
 
+  private readonly gc: GetCertificateInterface;
   private readonly response: string;
-  private readonly customerId: string;
 
   private certificate: CertificateInterface = {
     Name: undefined,
@@ -15,16 +17,27 @@ class CertApplicationResponse {
     CertificateFormat: undefined,
     ExpirationDateTime: undefined
   };
-  private isValidMessage: boolean = false;
 
   constructor(gc: GetCertificateInterface, response: string) {
+    this.gc = gc;
     this.response = response;
-    this.customerId = gc.userParams.customerId;
   }
 
-  public async parseBody(): Promise<void> {
+  public async parseBody(): Promise<CertificateInterface> {
     // parse, handle application response envelope
-    const envelopeXML: any = await this.parseXml(this.response);
+    const envelopeXML: JSON = await this.parseXml(this.response);
+
+    const envelopeSignature = new EnvelopeSignature();
+    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
+    if (!envelopeValid) {
+      throw {
+        RequestId: this.gc.RequestId,
+        Timestamp: this.gc.Timestamp,
+        SoftwareId: this.gc.SoftwareId,
+        error: new Error('Cert application request envelope did not pass signature verification')
+      };
+    }
+
     const envelope = envelopeXML['soapenv:Envelope'];
     const body = envelope['soapenv:Body'];
     const getCertificateOut = body[0]['cer:getCertificateout'];
@@ -32,12 +45,23 @@ class CertApplicationResponse {
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
+    const signature = new ApplicationRequestSignature();
+    const validResponse = await signature.validateSignature(applicationResponseXML);
+    if (!validResponse) {
+      throw {
+        RequestId: this.gc.RequestId,
+        Timestamp: this.gc.Timestamp,
+        SoftwareId: this.gc.SoftwareId,
+        error: new Error('Cert application response did not pass signature verification')
+      };
+    }
+
     // parse, handle response itself
-    const xml: any = await this.parseXml(applicationResponseXML);
+    const xml: JSON = await this.parseXml(applicationResponseXML);
     const ns2CertApplicationResponse = xml['CertApplicationResponse'];
 
     const customerId = ns2CertApplicationResponse['CustomerId'][0];
-    if (customerId !== this.customerId) {
+    if (customerId !== this.gc.userParams.customerId) {
       throw new Error('Customer id does not match with cert application response customer id');
     }
 
@@ -55,32 +79,10 @@ class CertApplicationResponse {
       ExpirationDateTime: await CertApplicationResponse.getCertificateExpirationDate(cert)
     };
 
-    const Signature = ns2CertApplicationResponse['Signature'][0];
-    const SignatureValue = Signature['SignatureValue'][0];
-
-    const builder = new Builder({rootName: 'Signature'});
-    await this.verifySignature(applicationResponseXML, builder.buildObject(Signature));
-  }
-
-
-  private async verifySignature(xml: string, signature: string): Promise<void> {
-    if (this.certificate.Certificate !== undefined) {
-      const formatted = Base64DecodeStr(this.certificate.Certificate);
-      this.isValidMessage = true; // Todo, implement signature verification
-    } else {
-      this.isValidMessage = false;
-    }
-  }
-
-  public isValid(): boolean {
-    return this.isValidMessage;
-  }
-
-  public getCertificate(): CertificateInterface {
     return this.certificate;
   }
 
-  private async parseXml(xmlString: string) {
+  private async parseXml(xmlString: string): Promise<JSON> {
     return await new Promise((resolve, reject) => parseString(xmlString, (err, jsonData) => {
       if (err) {
         reject(err);
@@ -108,20 +110,6 @@ class CertApplicationResponse {
 
 }
 
-// @ts-ignore
-function MyKeyInfo(keyContents): void {
-  // @ts-ignore
-  this.getKeyInfo = function (key: string, prefix: string): string {
-    prefix = prefix || '';
-    prefix = prefix ? prefix + ':' : prefix;
-    return "<" + prefix + "X509Data></" + prefix + "X509Data>"
-  };
-  // @ts-ignore
-  this.getKey = function (): string {
-    //you can use the keyInfo parameter to extract the key in any way you want
-    return keyContents
-  }
-}
 
 export {
   CertApplicationResponse
