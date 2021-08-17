@@ -5,11 +5,15 @@ const Commands = {
   deleteFile: 'DeleteFile',
 };
 
-const StatusValues = {
-  NEW: 'NEW',
-  DLD: 'DLD',
-  ALL: 'ALL',
-};
+const StatusValues = [
+  {name: 'WFP', description: 'Waiting for processing'},
+  {name: 'WFC', description: 'Waiting for confirmation'},
+  {name: 'FWD', description: 'Forwarded to processing'},
+  {name: 'DLD', description: 'Downloaded'},
+  {name: 'DEL', description: 'Deleted'},
+  {name: 'NEW', description: 'New file'},
+  {name: 'KIN', description: 'Key-in'},
+];
 
 const FileTypes = {
   XL: 'XL', // pain.001.001.02 ja .03 | SEPA-XML –tilisiirto (lähetys)
