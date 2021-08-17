@@ -234,3 +234,30 @@ export interface XLFileDescriptor {
   TransactionCount: string;
   Deletable: string;
 }
+
+
+export interface XPInterface {
+  userParams: UserParamsInterface;
+  requestUrl: string;
+  RequestId: string;
+  Timestamp: string;
+  SoftwareId: SoftwareIdInterface;
+  ExecutionSerial: string;
+  Base64EncodedBankCsr: string;
+  Base64EncodedClientCsr: string;
+  Base64EncodedClientPrivateKey?: string;
+  language: Language;
+}
+
+
+export interface XPFileDescriptor {
+  FileReference: string;
+  TargetId: string;
+  UserFilename: string;
+  ParentFileReference: string;
+  FileType: string;
+  FileTimestamp: string;
+  Status: string;
+  ForwardedTimestamp: string;
+  Deletable: string;
+}

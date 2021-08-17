@@ -2,7 +2,7 @@
 
 import * as xmlBuilder from 'xmlbuilder'
 import * as moment from 'moment';
-import {Base64DecodeStr, CleanUpCertificate, GetUuid, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils';
 import {GetCertificateInterface} from '../interfaces';
 import {createHash, createSign} from 'crypto';
 
@@ -91,7 +91,7 @@ class CertRenewRequestEnvelope {
       },
     };
 
-    let envelopeObject = {
+    const envelopeObject = {
       'soapenv:Envelope': {
         '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
         '@xmlns:opc': 'http://mlp.op.fi/OPCertificateService',
@@ -129,15 +129,14 @@ class CertRenewRequestEnvelope {
     };
 
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["wsu:Timestamp"] = timeStampNode["wsu:Timestamp"];
+    envelopeObject['soapenv:Envelope']['soapenv:Header']['wsse:Security']['wsu:Timestamp'] = timeStampNode['wsu:Timestamp'];
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Body"] = bodyNode["soapenv:Body"];
+    envelopeObject['soapenv:Envelope']['soapenv:Body'] = bodyNode['soapenv:Body'];
     // @ts-ignore
-    envelopeObject["soapenv:Envelope"]["soapenv:Header"]["wsse:Security"]["ds:Signature"]["ds:SignedInfo"] = signedInfoNode["ds:SignedInfo"];
+    envelopeObject['soapenv:Envelope']['soapenv:Header']['wsse:Security']['ds:Signature']['ds:SignedInfo'] = signedInfoNode['ds:SignedInfo'];
 
 
-    let xml_: xmlBuilder.XMLElement = xmlBuilder.create(envelopeObject);
-    const xml = xml_.end({pretty: true});
+    const xml: string = xmlBuilder.create(envelopeObject).end({pretty: true});
 
     // console.log(xml);
     // process.exit(0);

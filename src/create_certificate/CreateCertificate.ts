@@ -38,7 +38,7 @@ class CreateCertificate {
             buffer: Buffer.from(this.getConfiguration(), 'utf-8')
           }, '-out', this.CSR_NAME, '-new', '-newkey', 'rsa:2048',
           '-nodes', '-keyout', this.PRIVATE_KEY_NAME,
-        ], function (err: string, buffer: any) {
+        ], function (err: string, buffer: Buffer) {
           console.log(err.toString(), buffer.toString());
           resolve(true);
         });

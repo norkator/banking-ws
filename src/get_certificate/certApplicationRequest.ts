@@ -1,6 +1,6 @@
 'use strict';
 
-import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate, LoadFileFromPath} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
 import {GetCertificateInterface} from '../interfaces';
 import * as xmlBuilder from 'xmlbuilder';
@@ -17,7 +17,8 @@ class CertApplicationRequest {
   public async createXmlBody(): Promise<string | undefined> {
     const csr = Base64DecodeStr(this.gc.Base64EncodedClientCsr);
 
-    let certRequestObj: any = {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    const certRequestObj: any = {
       'CertApplicationRequest': {
         '@xmlns': 'http://op.fi/mlp/xmldata/',
         'CustomerId': this.gc.userParams.customerId,
@@ -63,13 +64,13 @@ class CertApplicationRequest {
       });
 
       // @ts-ignore
-      certRequestObj.CertApplicationRequest["Signature"] = signature["Signature"];
+      certRequestObj.CertApplicationRequest['Signature'] = signature['Signature'];
       // noinspection UnnecessaryLocalVariableJS
-      let xml: string = xmlBuilder.create(certRequestObj).end({pretty: false});
+      const xml: string = xmlBuilder.create(certRequestObj).end({pretty: false});
 
 
       // console.log(xml);
-      // fs.writeFileSync("signed.xml", xml)
+      // fs.writeFileSync('signed.xml', xml)
       // process.exit(0);
       return xml;
     }

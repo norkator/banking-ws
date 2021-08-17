@@ -2,8 +2,9 @@
 
 import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XLFileDescriptor, XLInterface, XTInterface
+  GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
 } from './interfaces';
+// eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
 import {XLApplicationRequest} from './sepa_payment/XLApplicationRequest';
@@ -14,10 +15,14 @@ import {XTApplicationResponse} from './bank_statement/XTApplicationResponse';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XLApplicationResponse} from './sepa_payment/XLApplicationResponse';
+import {XPApplicationResponse} from './sepa_error/XPApplicationResponse';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
+import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
+import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
 import * as https from 'https';
 import axios from 'axios';
+// eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import * as path from 'path';
 
 
@@ -60,12 +65,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   // };
   // console.log(response.data);
   const car = new CertApplicationResponse(gc, response.data);
-  await car.parseBody();
-  if (car.isValid()) {
-    return car.getCertificate()
-  } else {
-    throw new Error('Response is not valid!')
-  }
+  return await car.parseBody();
 }
 
 
@@ -96,12 +96,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
   // };
   const car = new CertApplicationResponse(gc, response.data);
-  await car.parseBody();
-  if (car.isValid()) {
-    return car.getCertificate()
-  } else {
-    throw new Error('Response is not valid!')
-  }
+  return await car.parseBody();
 }
 
 
@@ -166,10 +161,41 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
 }
 
 
+/**
+ * Return SEPA errors with DownloadFileList command
+ * @constructor
+ */
+async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
+  const xpRequest = new XPApplicationRequest(xp);
+  const body = await xpRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('XPApplicationRequest returned empty body from createXmlBody');
+  }
+  const applicationRequest = Base64EncodeStr(body);
+  const xpRequestEnvelope = new XPRequestEnvelope(xp, applicationRequest);
+  const agent = new https.Agent({
+    ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA)
+  });
+  const response = await axios.post(xp.requestUrl, await xpRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'xp_response.xml'))
+  // };
+  const xpResponse = new XPApplicationResponse(xp, response.data);
+  return await xpResponse.parseBody();
+}
+
+
 export {
   CreateOwnCertificate,
   GetCertificate,
   RenewCertificate,
   BankStatement,
   SEPAPayment,
+  SEPAErrors,
 }

@@ -1,9 +1,7 @@
-import * as mocha from 'mocha';
+// import * as mocha from 'mocha';
 import * as chai from 'chai';
 import {GetCertificateInterface, SoftwareIdInterface} from '../interfaces';
 import {CertApplicationRequest} from './certApplicationRequest';
-import {Base64EncodeStr, LoadFileAsString} from '../utils';
-import * as path from 'path';
 
 const expect = chai.expect;
 describe('CertApplicationRequest', async () => {
