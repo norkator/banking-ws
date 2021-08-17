@@ -8,7 +8,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended" // Uses the recommended rules from the @typescript-eslint/eslint-plugin
   ],
   rules: {
-    "quotes": [2, "single", {"avoidEscape": true}],
+    // "quotes": [2, "single", {"avoidEscape": true}], // not working
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/ban-ts-comment': 0,
   }
