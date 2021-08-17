@@ -6,7 +6,6 @@ import {createHash, createSign, createVerify} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
 import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate} from './utils';
 import {DOMParser} from 'xmldom';
-import {convertableToString} from 'xml2js';
 
 const xpath = require('xpath');
 
@@ -24,7 +23,8 @@ class ApplicationRequestSignature {
    * Constructs signature, digest and other nodes
    * @param ars, ApplicationRequestSignatureInterface requirements
    */
-  public async createSignature(ars: ApplicationRequestSignatureInterface): Promise<convertableToString> {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  public async createSignature(ars: ApplicationRequestSignatureInterface): Promise<any> {
     const canonicalRequestXml = await CanonicalizeWithDomParser(ars.requestXml, this.CANONICALIZE_METHOD);
 
     const signedInfoNode = {

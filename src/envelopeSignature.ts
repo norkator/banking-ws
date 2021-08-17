@@ -6,7 +6,6 @@ import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetU
 import * as xmlBuilder from 'xmlbuilder';
 import {DOMParser} from 'xmldom';
 import * as moment from 'moment';
-import {convertableToString} from "xml2js";
 
 const xpath = require('xpath');
 
@@ -35,7 +34,8 @@ class EnvelopeSignature {
    * @param binarySecurityToken, Base64EncodedBankCsr
    */
   public async constructEnvelopeWithSignature(
-    bodyNode: { [name: string]: convertableToString }, bodyUuid: string, signingKey: string, binarySecurityToken: string
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    bodyNode: { [name: string]: any }, bodyUuid: string, signingKey: string, binarySecurityToken: string
   ): Promise<string> {
     const timeStampNode = {
       'wsu:Timestamp': {
