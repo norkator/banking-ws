@@ -1,6 +1,6 @@
 {
   "name": "banking-ws",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Library to construct, validate and make corporate banking web service request with SOAP",
   "repository": "https://github.com/norkator/banking-ws.git",
   "bugs": {
@@ -9,7 +9,7 @@
   "author": "Martin Kankaanranta <55850510+norkator@users.noreply.github.com>",
   "homepage": "https://github.com/norkator/banking-ws#readme",
   "license": "AGPL-3.0",
-  "private": true,
+  "private": false,
   "main": "dist/lib/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/lib/index.d.js",
