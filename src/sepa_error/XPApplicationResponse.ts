@@ -7,8 +7,8 @@ import {ApplicationRequestSignature} from '../signature';
 
 class XPApplicationResponse {
 
-  private readonly response: string;
   private readonly xp: XPInterface;
+  private readonly response: string;
 
   constructor(xp: XPInterface, response: string) {
     this.xp = xp;
@@ -57,8 +57,8 @@ class XPApplicationResponse {
     const ns2CertApplicationResponse = xml['ApplicationResponse'];
 
     const ResponseCode = ns2CertApplicationResponse['ResponseCode'][0];
-    const ResponseTexp = ns2CertApplicationResponse['ResponseTexp'][0];
-    HandleResponseCode(ResponseCode, ResponseTexp);
+    const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
+    HandleResponseCode(ResponseCode, ResponseText);
 
     console.log(xml);
     process.exit(0);

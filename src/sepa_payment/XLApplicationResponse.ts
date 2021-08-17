@@ -1,9 +1,8 @@
 'use strict';
 
-import {parseString} from 'xml2js';
 import {XLFileDescriptor, XLInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
-import {Base64DecodeStr, RemoveWhiteSpacesAndNewLines} from '../utils';
+import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils';
 import {ApplicationRequestSignature} from '../signature';
 
 class XLApplicationResponse {
@@ -19,7 +18,7 @@ class XLApplicationResponse {
   public async parseBody(): Promise<XLFileDescriptor> {
     // parse, handle application response envelope
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const envelopeXML: any = await this.parseXml(this.response);
+    const envelopeXML: any = await ParseXml(this.response);
 
     const envelopeSignature = new EnvelopeSignature();
     const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
@@ -53,12 +52,12 @@ class XLApplicationResponse {
 
     // parse, handle response itself
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const xml: any = await this.parseXml(applicationResponseXML);
+    const xml: any = await ParseXml(applicationResponseXML);
 
     const ns2CertApplicationResponse = xml['ApplicationResponse'];
     const ResponseCode = ns2CertApplicationResponse['ResponseCode'][0];
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
-    this.handleResponseCode(ResponseCode, ResponseText);
+    HandleResponseCode(ResponseCode, ResponseText);
 
 
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
