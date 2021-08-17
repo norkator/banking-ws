@@ -21,7 +21,8 @@
     "build:umd": "webpack",
     "test": "TS_NODE_PROJECT='./tsconfig.base.json' mocha --reporter spec --require ts-node/register src/**/*.test.ts --forbid-only --bail",
     "test:windows": "SET TS_NODE_PROJECT=./tsconfig.base.json&& mocha --reporter spec --require ts-node/register src/**/*.test.ts --forbid-only --bail",
-    "check:errors": "tsc --noEmit -p tsconfig.base.json"
+    "check:errors": "tsc --noEmit -p tsconfig.base.json",
+    "lint": "eslint '*/**/*.{js,ts,tsx}'"
   },
   "files": [
     "lib",
