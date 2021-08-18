@@ -124,6 +124,9 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   const agent = new https.Agent({
     ca: Base64DecodeStr(xt.userParams.Base64EncodedRootCA)
   });
+  if (xt.mockResponse) {
+    return 'mock response not defined for xt message'
+  }
   const response = await axios.post(xt.requestUrl, await xtRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
@@ -154,6 +157,10 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   const agent = new https.Agent({
     ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA)
   });
+  if (xl.mockResponse) {
+    const xlResponse = new XLApplicationResponse(xl, undefined);
+    return xlResponse.mockResponse();
+  }
   const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
