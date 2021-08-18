@@ -191,6 +191,10 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
   const agent = new https.Agent({
     ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA)
   });
+  if (xp.mockResponse) {
+    const xpResponse = new XPApplicationResponse(xp, undefined);
+    return xpResponse.mockResponse();
+  }
   const response = await axios.post(xp.requestUrl, await xpRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
