@@ -265,3 +265,22 @@ export interface XPFileDescriptor {
   ForwardedTimestamp: string;
   Deletable: string;
 }
+
+
+export interface STATUSInterface {
+  userParams: UserParamsInterface;
+  requestUrl: string;
+  RequestId: string;
+  Timestamp: string;
+  SoftwareId: SoftwareIdInterface;
+  ExecutionSerial: string;
+  Base64EncodedBankCsr: string;
+  Base64EncodedClientCsr: string;
+  Base64EncodedClientPrivateKey?: string;
+  language: Language;
+  FileReferences: FileReferencesInterface[];
+}
+
+export interface FileReferencesInterface {
+  FileReference: string;
+}
