@@ -53,6 +53,10 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   const agent = new https.Agent({
     ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
   });
+  if (gc.mockResponse) {
+    const car = new CertApplicationResponse(gc, undefined);
+    return car.mockResponse();
+  }
   const response = await axios.post(gc.requestUrl, certRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
