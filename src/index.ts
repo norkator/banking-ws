@@ -54,7 +54,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
     ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
   });
   if (gc.mockResponse) {
-    const car = new CertApplicationResponse(gc, undefined);
+    const car = new CertApplicationResponse(gc, '');
     return car.mockResponse();
   }
   const response = await axios.post(gc.requestUrl, certRequestEnvelope.createXmlBody(), {
@@ -90,7 +90,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
   });
   if (gc.mockResponse) {
-    const car = new CertApplicationResponse(gc, undefined);
+    const car = new CertApplicationResponse(gc, '');
     return car.mockResponse();
   }
   const response = await axios.post(gc.requestUrl, await certRenewRequestEnvelope.createXmlBody(), {
@@ -158,7 +158,7 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
     ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA)
   });
   if (xl.mockResponse) {
-    const xlResponse = new XLApplicationResponse(xl, undefined);
+    const xlResponse = new XLApplicationResponse(xl, '');
     return xlResponse.mockResponse();
   }
   const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
@@ -192,7 +192,7 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
     ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA)
   });
   if (xp.mockResponse) {
-    const xpResponse = new XPApplicationResponse(xp, undefined);
+    const xpResponse = new XPApplicationResponse(xp, '');
     return xpResponse.mockResponse();
   }
   const response = await axios.post(xp.requestUrl, await xpRequestEnvelope.createXmlBody(), {
