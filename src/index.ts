@@ -221,6 +221,7 @@ async function SEPAStatus(status: STATUSInterface): Promise<XPFileDescriptor[]> 
   // };
   // const xpResponse = new XPApplicationResponse(xp, response.data);
   // return await xpResponse.parseBody();
+  console.log(response.data);
   return undefined;
 }
 
