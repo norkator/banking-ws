@@ -25,11 +25,13 @@ class STATUSApplicationRequest {
     }
     const bankCertificate = CleanUpCertificate(Base64DecodeStr(this.status.Base64EncodedBankCsr));
 
-    const fileReferences = [];
+    if (this.status.FileReferences.length === 0) {
+      throw new Error('No FileReferences defined. FileReferences are key for finding payments from bank system.')
+    }
+
+    const references = [];
     this.status.FileReferences.forEach((fr: FileReferencesInterface) => {
-      fileReferences.push({
-        'FileReference': fr.FileReference
-      })
+      references.push(fr.FileReference);
     });
 
     const obj = {
@@ -41,7 +43,9 @@ class STATUSApplicationRequest {
         'Command': Commands.downloadFile,
         'Timestamp': this.status.Timestamp,
         'Environment': this.status.userParams.environment,
-        'FileReferences': fileReferences,
+        'FileReferences': {
+          'FileReference': references
+        },
         'Encryption': false,
         'Compression': false,
         'SoftwareId': this.getSoftwareId(),
@@ -62,9 +66,9 @@ class STATUSApplicationRequest {
     // noinspection UnnecessaryLocalVariableJS
     const xml: string = xmlBuilder.create(obj).end({pretty: false});
 
-    console.log(xml);
+    // console.log(xml);
     // fs.writeFileSync('signed.xml', xml)
-    process.exit(0);
+    // process.exit(0);
 
     return xml;
   }
