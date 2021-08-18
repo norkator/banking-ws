@@ -2,7 +2,7 @@
 
 import {
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
+  GetCertificateInterface, STATUSInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
 } from './interfaces';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
@@ -24,6 +24,8 @@ import * as https from 'https';
 import axios from 'axios';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import * as path from 'path';
+import {STATUSApplicationRequest} from "./sepa_status/STATUSApplicationRequest";
+import {STATUSRequestEnvelope} from "./sepa_status/STATUSRequestEnvelope";
 
 
 /**
@@ -191,6 +193,38 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
 }
 
 
+/**
+ * ...
+ * @param status
+ * @constructor
+ */
+async function SEPAStatus(status: STATUSInterface): Promise<XPFileDescriptor[]> {
+  const statusRequest = new STATUSApplicationRequest(status);
+  const body = await statusRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('STATUSApplicationRequest returned empty body from createXmlBody');
+  }
+  const applicationRequest = Base64EncodeStr(body);
+  const statusRequestEnvelope = new STATUSRequestEnvelope(status, applicationRequest);
+  const agent = new https.Agent({
+    ca: Base64DecodeStr(status.userParams.Base64EncodedRootCA)
+  });
+  const response = await axios.post(status.requestUrl, await statusRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  // const response = {
+  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'xp_response.xml'))
+  // };
+  // const xpResponse = new XPApplicationResponse(xp, response.data);
+  // return await xpResponse.parseBody();
+  return undefined;
+}
+
+
 export {
   CreateOwnCertificate,
   GetCertificate,
@@ -198,4 +232,5 @@ export {
   BankStatement,
   SEPAPayment,
   SEPAErrors,
+  SEPAStatus,
 }
