@@ -29,7 +29,7 @@
     "dist/esm"
   ],
   "devDependencies": {
-    "@types/chai": "4.2.21",
+    "@types/chai": "4.2.22",
     "@types/mocha": "9.0.0",
     "@types/moment": "2.13.0",
     "@types/node": "16.9.4",
