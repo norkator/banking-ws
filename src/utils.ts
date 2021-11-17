@@ -6,7 +6,7 @@ import * as openssl from 'openssl-nodejs';
 // @ts-ignore
 import * as moment from 'moment';
 import {Buffer} from 'buffer';
-import {DOMParser} from 'xmldom';
+import {DOMParser} from '@xmldom/xmldom';
 import * as xmlC14n from 'xml-c14n';
 import {parseString} from "xml2js";
 

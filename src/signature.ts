@@ -5,7 +5,7 @@ import {ApplicationRequestSignatureInterface} from './interfaces';
 import {createHash, createSign, createVerify} from 'crypto';
 import * as xmlBuilder from 'xmlbuilder';
 import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate} from './utils';
-import {DOMParser} from 'xmldom';
+import {DOMParser} from '@xmldom/xmldom';
 
 const xpath = require('xpath');
 
