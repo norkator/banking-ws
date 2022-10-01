@@ -54,7 +54,7 @@
     "axios": "0.27.2",
     "moment": "2.29.4",
     "openssl-nodejs": "1.0.5",
-    "uuid": "8.3.2",
+    "uuid": "9.0.0",
     "xml-c14n": "0.0.6",
     "xml2js": "0.4.23",
     "xmlbuilder": "15.1.1",
