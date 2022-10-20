@@ -1,73 +1,83 @@
 # Banking-ws
 
-<b>Work in progress for long time!</b>
+<b>Currently work in progress!</b>  
 
 Library to construct, validate and make corporate banking web service request with SOAP.
 
 Supported banks
 -----
-* Banks supported by Samlink.
 
+* Banks supported by Samlink.
 
 Table of contents
 =================
+
 * [Resources](#resources)
-    * [Links](#links)
-    * [Documents](#documents)
+  * [Links](#links)
+  * [Documents](#documents)
 * [Installing](#installing)
 * [Terminology](#terminology)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
-    * [Generate new certificate](#generate-new-certificate)
-    * [Get certificate](#get-certificate)
-    * [Renew certificate](#renew-certificate)
-    * [Bank Statement](#bank-statement)
-    * [SEPA Payment](#sepa-payment)
-    * [SEPA Errors](#sepa-errors)
-    
-
+  * [Generate new certificate](#generate-new-certificate)
+  * [Get certificate](#get-certificate)
+  * [Renew certificate](#renew-certificate)
+  * [Bank Statement](#bank-statement)
+  * [SEPA Payment](#sepa-payment)
+  * [SEPA Errors](#sepa-errors)
 
 Resources
 ============
 
 Links
 -----
-* [http://xsd2xml.com/](http://xsd2xml.com/) is handy for converting `xsd` schemas to `xml` samples.  
-* [Sepa XML validation](https://www.mobilefish.com/services/sepa_xml_validation/sepa_xml_validation.php) is handy for validating SEPA `pain` messages.
-* [Chilkat - xmlDsigVerify](https://tools.chilkat.io/xmlDsigVerify.cshtml) lifesaver with XML signature  verification. The only tool which gave confidence.
+
+* [http://xsd2xml.com/](http://xsd2xml.com/) is handy for converting `xsd` schemas to `xml` samples.
+* [Sepa XML validation](https://www.mobilefish.com/services/sepa_xml_validation/sepa_xml_validation.php) is handy for
+  validating SEPA `pain` messages.
+* [Chilkat - xmlDsigVerify](https://tools.chilkat.io/xmlDsigVerify.cshtml) lifesaver with XML signature verification.
+  The only tool which gave confidence.
 
 Documents
 -----
-See under `./documents` folder.
+Documentation about bank statements and schemas is under `./documents` folder.
 
 
 
 Installing
 ============
-1. Mac and Linux already has OpenSSL pre installed but with Windows you need to download binary somewhere like [here](https://slproweb.com/products/Win32OpenSSL.html).
-    * Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
+
+1. Mac and Linux already has OpenSSL pre installed but with Windows you need to download binary somewhere
+   like [here](https://slproweb.com/products/Win32OpenSSL.html).
+  * Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
 2. Install npm package via:
     ```shell script
     yarn add banking-ws
     ```
-    or
+   or
     ```shell script
     npm install banking-ws
     ``` 
-
+   
+3. In case of developing / testing this library make sure that global 
+   ts-node is at latest version
+   ```shell script
+   npm install -g ts-node@latest
+   ```
 
 Terminology
 ============
-* `SAMLINK_TEST_ROOT_CA` is used with axios ca config at Samlink test side. Taken from Samlink documentation provided with customerId.
-* `BANK_CERTIFICATE` is a base64 encoded certificate get after initial GetCertificate command and new ones after RenewCertificate.
+
+* `SAMLINK_TEST_ROOT_CA` is used with axios ca config at Samlink test side. Taken from Samlink documentation provided
+  with customerId.
+* `BANK_CERTIFICATE` is a base64 encoded certificate get after initial GetCertificate command and new ones after
+  RenewCertificate.
 * `CLIENT_CERTIFICATE` is signing certificate you have created with OpenSSL.
 * `CLIENT_PRIVATE_KEY` is private key for upper signing certificate you created with OpenSSL
 
-
 Getting started
 ============
-You need certificates from your bank which is got with get certificate request. 
-To make request you first need: 
+You need certificates from your bank which is got with get certificate request. To make request you first need:
 
 * Your own generated signing certificate.
 * Private key for your signing certificate.
@@ -92,10 +102,9 @@ signing.key  (CLIENT_PRIVATE_KEY)
 ```
 
 ### Getting test credentials and firewall rule
+
 * You cannot use this without Samlink opening firewall rule to allow you making request behind your public ip.
 * You need to ask Samlink for customer id and one time use transfer key.
-
-
 
 Examples
 ============
@@ -106,7 +115,9 @@ Generate new certificate
 -----
 
 #### Creating
+
 Note that `customerId` must be exact Samlink customer id.
+
 ```typescript
 import {CreatedCertificateInterface} from './src/interfaces';
 import {CreateOwnCertificate} from './src/index';
@@ -125,20 +136,22 @@ CreateOwnCertificate({
 ```
 
 #### Expected response
+
 ```json5
 {
   clientCertificate: 'base64-encoded-content',
   clientPrivateKey: 'base64-encoded-content'
 }
 ```
-You can decode `clientCertificate` and then its pem base64 and then see 
-that your given parameters exists.
+
+You can decode `clientCertificate` and then its pem base64 and then see that your given parameters exists.
 
 
 Get certificate
 -----
 
 #### Making request
+
 ```typescript
 import * as moment from 'moment'
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -172,7 +185,9 @@ console.log(certificate);
 ```
 
 #### Expected response
+
 This certificate is later used with `BANK_CERTIFICATE` variable.
+
 ```json5
 {
   Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
@@ -181,19 +196,20 @@ This certificate is later used with `BANK_CERTIFICATE` variable.
   ExpirationDateTime: '<certificate-expiration-date>'
 }
 ```
-Certificate should be renewed with Renew Certificate method before it's expired. 
 
-You can see X509v3 certificate details after Base64 decoding response certificate and then
-using OpenSSL to view it:
+Certificate should be renewed with Renew Certificate method before it's expired.
+
+You can see X509v3 certificate details after Base64 decoding response certificate and then using OpenSSL to view it:
+
 ```shell script
 openssl x509 -in certificate_file_name.extension -text
 ```
-
 
 Renew certificate
 -----
 
 #### Making request
+
 ```typescript
 import * as moment from 'moment';
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -229,6 +245,7 @@ console.log(certificate);
 ```
 
 #### Expected response
+
 ```json5
 {
   Name: 'SURNAME=<your-customer-id>, CN=<your-company-name>, O=<>, C=<country>',
@@ -237,12 +254,14 @@ console.log(certificate);
   ExpirationDateTime: '<certificate-expiration-date>'
 }
 ```
-Certificate should be renewed with Renew Certificate method before it's expired. 
+
+Certificate should be renewed with Renew Certificate method before it's expired.
 
 
 
 Bank statement
 -----
+
 ```typescript
 import * as moment from 'moment';
 import {XTInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -278,19 +297,19 @@ const bankStatement = await BankStatement(xt);
 console.log(bankStatement);
 ```
 
-
 #### Expected response
+
 In progress...
+
 ```json5
 {
-  
 }
 ```
-
 
 SEPA payment
 -----
 Instructions for populating all fields, see [ISO20022_maksut.pdf](./documents/ISO20022_maksut.pdf).
+
 ```typescript
 import * as moment from 'moment';
 import {XLInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -437,9 +456,10 @@ const sepaPayment = await SEPAPayment(xl);
 console.log(sepaPayment);
 ```
 
-
 #### Expected response
+
 Is a object of FileDescriptor.
+
 ```json5
 {
   FileReference: '530253',
@@ -453,10 +473,10 @@ Is a object of FileDescriptor.
 }
 ```
 
-
 SEPA errors
 -----
 Returns list of SEPA-XML errors | pain.002.001.02 or .03 related to payments.
+
 ```typescript
 import * as moment from 'moment';
 import {XPInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -490,9 +510,10 @@ const sepaErrors = await SEPAErrors(xp);
 console.log(sepaErrors);
 ```
 
-
 #### Expected response
+
 Following array sample is example when you have two SEPA payments sent to bank system.
+
 ```json5
 [
   {
@@ -519,5 +540,7 @@ Following array sample is example when you have two SEPA payments sent to bank s
   }
 ]
 ```
+
 Return is always an array. Either empty or populated like in sample.
+
 * `ParentFileReference` is our side SEPA message used reference.
