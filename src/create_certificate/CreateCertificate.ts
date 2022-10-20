@@ -2,10 +2,10 @@
 
 import {CreateCertificateInterface, CreatedCertificateInterface} from '../interfaces';
 import {Buffer} from 'buffer';
-// @ts-ignore
-import * as openssl from 'openssl-nodejs';
-import {Base64EncodeStr, LoadFileAsString} from "../utils";
-import * as path from "path";
+
+const openssl = require('openssl-nodejs');
+import {Base64EncodeStr, LoadFileAsString} from '../utils';
+import * as path from 'path';
 
 
 class CreateCertificate {
