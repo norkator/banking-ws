@@ -50,7 +50,7 @@
     "webpack-cli": "4.10.0"
   },
   "dependencies": {
-    "@xmldom/xmldom": "0.8.3",
+    "@xmldom/xmldom": "0.8.5",
     "axios": "1.1.3",
     "moment": "2.29.4",
     "openssl-nodejs": "1.0.5",
