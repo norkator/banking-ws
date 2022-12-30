@@ -79,8 +79,8 @@ Getting started
 ============
 You need certificates from your bank which is got with get certificate request. To make request you first need:
 
-* Your own generated signing certificate.
-* Private key for your signing certificate.
+* Your own generated signing certificate (`CLIENT_CERTIFICATE`).
+* Private key for your signing certificate (`CLIENT_PRIVATE_KEY`).
 
 Then you need to get your bank to sign your signing/encryption certificate(s). For this you need to make
 
@@ -94,7 +94,7 @@ You can generate your certificate signing requests with `openssl`
 openssl req -out signing.csr -new -newkey rsa:2048 -nodes -keyout signing.key
 ```
 
-After this, you should have following files:
+After this, you should have the following files:
 
 ```
 signing.csr  (CLIENT_CERTIFICATE)
