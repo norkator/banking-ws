@@ -4,32 +4,35 @@ import {CreateOwnCertificate, CheckOwnCertificate} from '../index';
 import {CreateCertificateInterface, CreatedCertificateInterface} from '../interfaces';
 import {Base64DecodeStr} from '../utils';
 
+const cc: CreateCertificateInterface = {
+  twoLetterCountryCode: 'FI',
+  stateOrProvince: 'Test province',
+  city: 'Test city',
+  companyName: 'Test company',
+  companyUnitName: 'Test company unit',
+  customerId: '12345678',
+  emailAddress: 'test.case@example.com',
+}
+
 const expect = chai.expect;
 describe('CreateCertificate', async () => {
 
   it('should create certificate and contain expected structure', async () => {
-    const cc: CreateCertificateInterface = {
-      twoLetterCountryCode: 'FI',
-      stateOrProvince: 'Test province',
-      city: 'Test city',
-      companyName: 'Test company',
-      companyUnitName: 'Test company unit',
-      customerId: '12345678',
-      emailAddress: 'test.case@example.com',
-    }
-
     const certificate: CreatedCertificateInterface = await CreateOwnCertificate(cc);
 
     expect(certificate.clientCertificate).to.not.equal(null);
     expect(certificate.clientPrivateKey).to.not.equal(null);
 
-    // check content structure
     const decodedClientCert = Base64DecodeStr(certificate.clientCertificate);
     console.info(decodedClientCert);
     expect(decodedClientCert).contain('-----BEGIN CERTIFICATE REQUEST-----');
     expect(decodedClientCert).contain('-----END CERTIFICATE REQUEST-----');
+  });
 
-    // check decoded certificate info
+
+  it('should create certificate and contain expected infomation', async () => {
+    const certificate: CreatedCertificateInterface = await CreateOwnCertificate(cc);
+
     const certInfo = await CheckOwnCertificate(cc);
     console.info(certInfo);
     expect(certInfo).contain('Subject: C=FI, ST=Test province, L=Test city, O=Test company, OU=Test company unit, CN=12345678/emailAddress=test.case@example.com');
