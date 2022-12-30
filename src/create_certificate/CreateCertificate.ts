@@ -28,6 +28,10 @@ class CreateCertificate {
     } as CreatedCertificateInterface;
   }
 
+  public async checkCertificate(): Promise<string | null> {
+    return await this.check();
+  }
+
   private async create() {
     return new Promise((resolve, reject) => {
       try {
@@ -44,6 +48,24 @@ class CreateCertificate {
         });
       } catch (e) {
         reject(e);
+      }
+    });
+  }
+
+  private async check(): Promise<string | null> {
+    return new Promise((resolve, reject) => {
+      const csr = LoadFileAsString(path.join(__dirname + '/../../openssl/' + this.CSR_NAME));
+      try {
+        openssl([
+          'req', '-text', '-noout', '-verify', '-in', {
+            name: 'signing.csr',
+            buffer: Buffer.from(csr, 'utf-8')
+          },
+        ], function (err: string, buffer: Buffer) {
+          resolve(buffer.toString());
+        });
+      } catch (e) {
+        reject(null);
       }
     });
   }
@@ -80,9 +102,9 @@ emailAddress = ` + this.cc.emailAddress + `
 `;
   }
 
-
 }
 
+
 export {
-  CreateCertificate
+  CreateCertificate,
 };

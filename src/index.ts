@@ -38,6 +38,16 @@ async function CreateOwnCertificate(cc: CreateCertificateInterface): Promise<Cre
 
 
 /**
+ * Check just created certificate function meant for test cases and external testing
+ * @constructor
+ */
+async function CheckOwnCertificate(cc: CreateCertificateInterface): Promise<string | null> {
+  const ownCertificate = new CreateCertificate(cc);
+  return await ownCertificate.checkCertificate();
+}
+
+
+/**
  * Initial certificate get function to get certificate with one time use transfer key
  * @param gc interface describes mandatory parameters
  * @constructor
@@ -212,6 +222,7 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
 
 export {
   CreateOwnCertificate,
+  CheckOwnCertificate,
   GetCertificate,
   RenewCertificate,
   BankStatement,
