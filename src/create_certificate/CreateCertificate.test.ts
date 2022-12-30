@@ -35,7 +35,11 @@ describe('CreateCertificate', async () => {
 
     const certInfo = await CheckOwnCertificate(cc);
     console.info(certInfo);
-    expect(certInfo).contain('Subject: C=FI, ST=Test province, L=Test city, O=Test company, OU=Test company unit, CN=12345678/emailAddress=test.case@example.com');
+    expect(certInfo).contain('Test city');
+    expect(certInfo).contain('Test company');
+    expect(certInfo).contain('Test company unit');
+    expect(certInfo).contain('12345678');
+    expect(certInfo).contain('test.case@example.com');
     expect(certInfo).contain('Signature Algorithm: sha256WithRSAEncryption');
   });
 });
