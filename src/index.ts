@@ -61,7 +61,8 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   const applicationRequest = Base64EncodeStr(body);
   const certRequestEnvelope = new CertRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
   const agent = new https.Agent({
-    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
+    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA),
+    rejectUnauthorized: gc.userParams.rejectUnauthorized || true,
   });
   if (gc.mockResponse) {
     const car = new CertApplicationResponse(gc, '');
@@ -75,9 +76,9 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
     httpsAgent: agent,
   });
   // const response = {
-  //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
+  //   data: LoadFileAsString(path.join(__dirname + '/' + 'test.xml'))
   // };
-  // console.log(response.data);
+  console.info(response.data);
   const car = new CertApplicationResponse(gc, response.data);
   return await car.parseBody();
 }
