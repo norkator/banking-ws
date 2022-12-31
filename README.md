@@ -1,6 +1,6 @@
 # Banking-ws
 
-<b>Currently work in progress!</b>  
+<b>Currently work in progress!</b>
 
 Library to construct, validate and make corporate banking web service request with SOAP.
 
@@ -40,17 +40,17 @@ Links
 
 Documents
 -----
+
 * https://samlink.fi/ohjelmistopalvelut/
-* More documentation about bank statements and schemas is under `./documents` folder.
-
-
 
 Installing
 ============
 
 1. Mac and Linux already has OpenSSL pre installed but with Windows you need to download binary somewhere
    like [here](https://slproweb.com/products/Win32OpenSSL.html).
-  * Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
+
+* Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
+
 2. Install npm package via:
     ```shell script
     yarn add banking-ws
@@ -59,8 +59,8 @@ Installing
     ```shell script
     npm install banking-ws
     ``` 
-   
-3. In case of developing / testing this library make sure that global 
+
+3. In case of developing / testing this library make sure that global
    ts-node is at latest version
    ```shell script
    npm install -g ts-node@latest
@@ -165,7 +165,8 @@ const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA,
+  rejectUnauthorized: true,
 };
 
 const gc: GetCertificateInterface = {
