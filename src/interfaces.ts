@@ -25,7 +25,7 @@ export interface UserParamsInterface {
   environment: Environment;
   customerId: string;
   Base64EncodedRootCA: string;
-  rejectUnauthorized?: boolean;
+  rejectUnauthorized: boolean;
 }
 
 /**
