@@ -40,7 +40,8 @@ Links
 
 Documents
 -----
-Documentation about bank statements and schemas is under `./documents` folder.
+* https://samlink.fi/ohjelmistopalvelut/
+* More documentation about bank statements and schemas is under `./documents` folder.
 
 
 
