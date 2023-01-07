@@ -43,7 +43,7 @@ class CreateCertificate {
           }, '-out', this.CSR_NAME, '-new', '-newkey', 'rsa:2048',
           '-nodes', '-keyout', this.PRIVATE_KEY_NAME,
         ], function (err: string, buffer: Buffer) {
-          console.log(err.toString(), buffer.toString());
+          console.info(err.toString(), buffer.toString());
           resolve(true);
         });
       } catch (e) {

@@ -24,7 +24,7 @@ describe('CreateCertificate', async () => {
     expect(certificate.clientPrivateKey).to.not.equal(null);
 
     const decodedClientCert = Base64DecodeStr(certificate.clientCertificate);
-    console.info(decodedClientCert);
+    // console.info(decodedClientCert);
     expect(decodedClientCert).contain('-----BEGIN CERTIFICATE REQUEST-----');
     expect(decodedClientCert).contain('-----END CERTIFICATE REQUEST-----');
   });
@@ -32,7 +32,7 @@ describe('CreateCertificate', async () => {
 
   it('should create certificate and contain expected infomation', async () => {
     const certInfo = await CheckOwnCertificate(cc);
-    console.info(certInfo);
+    // console.info(certInfo);
     expect(certInfo).contain('Test city');
     expect(certInfo).contain('Test company');
     expect(certInfo).contain('Test company unit');
