@@ -97,7 +97,8 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   const applicationRequest = Base64EncodeStr(body);
   const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc, applicationRequest);
   const agent = new https.Agent({
-    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA)
+    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA),
+    rejectUnauthorized: gc.userParams.rejectUnauthorized
   });
   if (gc.mockResponse) {
     const car = new CertApplicationResponse(gc, '');
@@ -132,7 +133,8 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   const applicationRequest = Base64EncodeStr(body);
   const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
   const agent = new https.Agent({
-    ca: Base64DecodeStr(xt.userParams.Base64EncodedRootCA)
+    ca: Base64DecodeStr(xt.userParams.Base64EncodedRootCA),
+    rejectUnauthorized: xt.userParams.rejectUnauthorized
   });
   if (xt.mockResponse) {
     return 'mock response not defined for xt message'
@@ -165,7 +167,8 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   const applicationRequest = Base64EncodeStr(body);
   const xlRequestEnvelope = new XLRequestEnvelope(xl, applicationRequest);
   const agent = new https.Agent({
-    ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA)
+    ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA),
+    rejectUnauthorized: xl.userParams.rejectUnauthorized
   });
   if (xl.mockResponse) {
     const xlResponse = new XLApplicationResponse(xl, '');
@@ -199,7 +202,8 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
   const applicationRequest = Base64EncodeStr(body);
   const xpRequestEnvelope = new XPRequestEnvelope(xp, applicationRequest);
   const agent = new https.Agent({
-    ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA)
+    ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA),
+    rejectUnauthorized: xp.userParams.rejectUnauthorized
   });
   if (xp.mockResponse) {
     const xpResponse = new XPApplicationResponse(xp, '');

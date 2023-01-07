@@ -226,7 +226,8 @@ const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA,
+  rejectUnauthorized: true,
 };
 
 const gc: GetCertificateInterface = {
@@ -278,7 +279,8 @@ const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA,
+  rejectUnauthorized: true,
 };
 
 const xt: XTInterface = {
@@ -326,7 +328,8 @@ const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA,
+  rejectUnauthorized: true,
 };
 
 const xl: XLInterface = {
@@ -460,7 +463,7 @@ console.log(sepaPayment);
 
 #### Expected response
 
-Is a object of FileDescriptor.
+Is object of FileDescriptor.
 
 ```json5
 {
@@ -493,7 +496,8 @@ const userParams: UserParamsInterface = {
   bank: 'Samlink',
   environment: 'PRODUCTION',
   customerId: '12345678',
-  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA,
+  rejectUnauthorized: true,
 };
 const xp: XPInterface = {
   mockResponse: false,
