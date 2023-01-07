@@ -163,7 +163,6 @@ class EnvelopeSignature {
       const signedInfoNode = xpath.select('//*[local-name()=\'SignedInfo\']', doc);
       const signatureValue = xpath.select('//*[local-name()=\'SignatureValue\']', doc)[0].textContent;
       const canonicalizeSignedInfoXml = await Canonicalize(signedInfoNode[0], this.CANONICALIZE_METHOD_RESPONSE);
-
       const X509Certificate = xpath.select('//*[local-name()=\'BinarySecurityToken\']', doc)[0].textContent;
       const formattedCertificate = FormatResponseCertificate(X509Certificate);
 

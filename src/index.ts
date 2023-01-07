@@ -78,7 +78,6 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   // const response = {
   //   data: LoadFileAsString(path.join(__dirname + '/' + 'test.xml'))
   // };
-  console.info(response.data);
   const car = new CertApplicationResponse(gc, response.data);
   return await car.parseBody();
 }
