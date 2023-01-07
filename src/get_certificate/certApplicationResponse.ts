@@ -78,14 +78,15 @@ class CertApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-
     const Certificate = ns2CertApplicationResponse['Certificates'][0]['Certificate'][0];
     const cert = Certificate['Certificate'][0];
+    const expiration = await CertApplicationResponse.getCertificateExpirationDate(cert);
+
     this.certificate = {
       Name: Certificate['Name'][0],
       Certificate: cert,
       CertificateFormat: Certificate['CertificateFormat'][0],
-      ExpirationDateTime: await CertApplicationResponse.getCertificateExpirationDate(cert)
+      ExpirationDateTime: expiration,
     };
 
     return this.certificate;

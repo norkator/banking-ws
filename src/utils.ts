@@ -1,10 +1,9 @@
 import {v4 as uuidv4} from 'uuid';
 import {OutputEncoding} from './types';
 import {readFileSync} from 'fs';
+const openssl = require('openssl-nodejs');
 // @ts-ignore
-import * as openssl from 'openssl-nodejs';
-// @ts-ignore
-import * as moment from 'moment';
+import moment from 'moment';
 import {Buffer} from 'buffer';
 import {DOMParser} from '@xmldom/xmldom';
 
@@ -78,7 +77,7 @@ function RemoveWhiteSpacesAndNewLines(content: string): string {
  * @param pem
  */
 function x509ExpirationDate(pem: string): Promise<string> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     try {
       openssl(['x509', '-enddate', '-noout', '-in', {
         name: 'temp_cert.pem',
@@ -91,7 +90,7 @@ function x509ExpirationDate(pem: string): Promise<string> {
         resolve(date);
       });
     } catch (e) {
-      return undefined;
+      reject(e);
     }
   });
 }
