@@ -3,7 +3,7 @@
 import * as xmlBuilder from 'xmlbuilder'
 // @ts-ignore
 import moment from 'moment';
-import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils';
+import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils/utils';
 import {GetCertificateInterface} from '../interfaces';
 import {createHash, createSign} from 'crypto';
 

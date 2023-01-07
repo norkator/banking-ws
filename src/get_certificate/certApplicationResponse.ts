@@ -6,7 +6,7 @@ import {
   ParseXml,
   RemoveWhiteSpacesAndNewLines,
   x509ExpirationDate
-} from '../utils';
+} from '../utils/utils';
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';

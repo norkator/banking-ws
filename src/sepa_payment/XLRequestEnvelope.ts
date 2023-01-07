@@ -2,7 +2,7 @@
 
 // @ts-ignore
 import moment from 'moment';
-import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils';
+import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils/utils';
 import {XLInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 

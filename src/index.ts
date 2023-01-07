@@ -5,7 +5,7 @@ import {
   GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
 } from './interfaces';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils';
+import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils/utils';
 import {CreateCertificate} from './create_certificate/CreateCertificate';
 import {XLApplicationRequest} from './sepa_payment/XLApplicationRequest';
 import {CertApplicationRequest} from './get_certificate/certApplicationRequest';

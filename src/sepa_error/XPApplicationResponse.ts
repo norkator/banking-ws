@@ -1,6 +1,6 @@
 'use strict';
 
-import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils';
+import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils/utils';
 import {XPFileDescriptor, XPInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';

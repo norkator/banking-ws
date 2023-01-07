@@ -1,9 +1,10 @@
 import {v4 as uuidv4} from 'uuid';
-import {OutputEncoding} from './types';
+import {OutputEncoding} from '../types';
 import {readFileSync} from 'fs';
 const openssl = require('openssl-nodejs');
 // @ts-ignore
-import moment from 'moment';
+// import moment from 'moment';
+import * as moment from 'moment'
 import {Buffer} from 'buffer';
 import {DOMParser} from '@xmldom/xmldom';
 
@@ -85,8 +86,8 @@ function x509ExpirationDate(pem: string): Promise<string> {
       }], function (err: string, buffer: Buffer) {
         // console.log(err.toString(), buffer.toString());
         const res = buffer.toString().replace('\n', '').split('=');
-        // @ts-ignore
-        const date = moment(res[1], 'MMM D HH:mm:ss yyyy').format('YYYY-MM-DD HH:mm:ss'); // Todo, this date formatting is big question mark
+        // Todo, this date formatting is big question mark
+        const date = moment(res[1], 'MMM D HH:mm:ss yyyy').format('YYYY-MM-DD HH:mm:ss');
         resolve(date);
       });
     } catch (e) {

@@ -4,7 +4,7 @@ import {CreateCertificateInterface, CreatedCertificateInterface} from '../interf
 import {Buffer} from 'buffer';
 
 const openssl = require('openssl-nodejs');
-import {Base64EncodeStr, LoadFileAsString} from '../utils';
+import {Base64EncodeStr, LoadFileAsString} from '../utils/utils';
 import * as path from 'path';
 
 

@@ -2,7 +2,7 @@
  * This class canonicalize, sign and appends right nodes into envelope basically creating ready to send envelope
  */
 import {createHash, createSign, createVerify} from 'crypto';
-import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetUuid} from './utils';
+import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetUuid} from './utils/utils';
 import * as xmlBuilder from 'xmlbuilder';
 import {DOMParser} from '@xmldom/xmldom';
 // @ts-ignore

@@ -1,6 +1,6 @@
 'use strict';
 
-import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
 import {GetCertificateInterface} from '../interfaces';
 import * as xmlBuilder from 'xmlbuilder';

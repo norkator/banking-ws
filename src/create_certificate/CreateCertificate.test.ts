@@ -2,7 +2,7 @@
 import * as chai from 'chai';
 import {CreateOwnCertificate, CheckOwnCertificate} from '../index';
 import {CreateCertificateInterface, CreatedCertificateInterface} from '../interfaces';
-import {Base64DecodeStr} from '../utils';
+import {Base64DecodeStr} from '../utils/utils';
 
 const cc: CreateCertificateInterface = {
   twoLetterCountryCode: 'FI',
@@ -31,8 +31,6 @@ describe('CreateCertificate', async () => {
 
 
   it('should create certificate and contain expected infomation', async () => {
-    const certificate: CreatedCertificateInterface = await CreateOwnCertificate(cc);
-
     const certInfo = await CheckOwnCertificate(cc);
     console.info(certInfo);
     expect(certInfo).contain('Test city');

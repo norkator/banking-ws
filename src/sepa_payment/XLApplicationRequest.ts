@@ -3,7 +3,7 @@
 // @ts-ignore
 import * as xmlBuilder from 'xmlbuilder';
 import {XLInterface} from '../interfaces';
-import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils';
+import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
 import {Commands, FileTypes} from '../constants';
 import {XL} from './XL';

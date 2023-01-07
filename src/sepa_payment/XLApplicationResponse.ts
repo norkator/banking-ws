@@ -2,7 +2,7 @@
 
 import {XLFileDescriptor, XLInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
-import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils';
+import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
 
 class XLApplicationResponse {
