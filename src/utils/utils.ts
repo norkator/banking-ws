@@ -3,8 +3,7 @@ import {OutputEncoding} from '../types';
 import {readFileSync} from 'fs';
 const openssl = require('openssl-nodejs');
 // @ts-ignore
-// import moment from 'moment';
-import * as moment from 'moment'
+import moment from 'moment';
 import {Buffer} from 'buffer';
 import {DOMParser} from '@xmldom/xmldom';
 
