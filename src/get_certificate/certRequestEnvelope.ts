@@ -1,8 +1,7 @@
 'use strict';
 
 import * as xmlBuilder from 'xmlbuilder'
-// @ts-ignore
-import moment from 'moment';
+import * as moment from 'moment';
 
 class CertRequestEnvelope {
 

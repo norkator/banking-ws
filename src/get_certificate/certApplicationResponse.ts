@@ -10,8 +10,7 @@ import {
 import {CertificateInterface, GetCertificateInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';
-// @ts-ignore
-import moment from 'moment';
+import * as moment from 'moment';
 
 class CertApplicationResponse {
 

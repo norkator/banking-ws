@@ -5,8 +5,7 @@ import {createHash, createSign, createVerify} from 'crypto';
 import {Canonicalize, CanonicalizeWithDomParser, FormatResponseCertificate, GetUuid} from './utils/utils';
 import * as xmlBuilder from 'xmlbuilder';
 import {DOMParser} from '@xmldom/xmldom';
-// @ts-ignore
-import moment from 'moment';
+import * as moment from 'moment';
 
 const xpath = require('xpath');
 
