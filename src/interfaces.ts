@@ -1,5 +1,9 @@
 import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language, Country, Code, BIC} from './types';
 
+export interface AxiosAgentInterface {
+  ca?: string;
+  rejectUnauthorized: boolean;
+}
 
 export interface CreateCertificateInterface {
   twoLetterCountryCode: string;
@@ -24,7 +28,7 @@ export interface UserParamsInterface {
   bank: Bank;
   environment: Environment;
   customerId: string;
-  Base64EncodedRootCA: string;
+  Base64EncodedRootCA: string | null;
   rejectUnauthorized: boolean;
 }
 

@@ -1,6 +1,7 @@
 'use strict';
 
 import {
+  AxiosAgentInterface,
   CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
   GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
 } from './interfaces';
@@ -60,10 +61,13 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   }
   const applicationRequest = Base64EncodeStr(body);
   const certRequestEnvelope = new CertRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
-  const agent = new https.Agent({
-    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA),
+  const options: AxiosAgentInterface = {
     rejectUnauthorized: gc.userParams.rejectUnauthorized
-  });
+  }
+  if (gc.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(gc.userParams.Base64EncodedRootCA);
+  }
+  const agent = new https.Agent(options);
   if (gc.mockResponse) {
     const car = new CertApplicationResponse(gc, '');
     return car.mockResponse();
@@ -96,10 +100,13 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   }
   const applicationRequest = Base64EncodeStr(body);
   const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc, applicationRequest);
-  const agent = new https.Agent({
-    ca: Base64DecodeStr(gc.userParams.Base64EncodedRootCA),
+  const options: AxiosAgentInterface = {
     rejectUnauthorized: gc.userParams.rejectUnauthorized
-  });
+  }
+  if (gc.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(gc.userParams.Base64EncodedRootCA);
+  }
+  const agent = new https.Agent(options);
   if (gc.mockResponse) {
     const car = new CertApplicationResponse(gc, '');
     return car.mockResponse();
@@ -132,10 +139,13 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   }
   const applicationRequest = Base64EncodeStr(body);
   const xtRequestEnvelope = new XTRequestEnvelope(xt, applicationRequest);
-  const agent = new https.Agent({
-    ca: Base64DecodeStr(xt.userParams.Base64EncodedRootCA),
+  const options: AxiosAgentInterface = {
     rejectUnauthorized: xt.userParams.rejectUnauthorized
-  });
+  }
+  if (xt.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(xt.userParams.Base64EncodedRootCA);
+  }
+  const agent = new https.Agent(options);
   if (xt.mockResponse) {
     return 'mock response not defined for xt message'
   }
@@ -166,10 +176,13 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   }
   const applicationRequest = Base64EncodeStr(body);
   const xlRequestEnvelope = new XLRequestEnvelope(xl, applicationRequest);
-  const agent = new https.Agent({
-    ca: Base64DecodeStr(xl.userParams.Base64EncodedRootCA),
+  const options: AxiosAgentInterface = {
     rejectUnauthorized: xl.userParams.rejectUnauthorized
-  });
+  }
+  if (xl.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(xl.userParams.Base64EncodedRootCA);
+  }
+  const agent = new https.Agent(options);
   if (xl.mockResponse) {
     const xlResponse = new XLApplicationResponse(xl, '');
     return xlResponse.mockResponse();
@@ -201,10 +214,13 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
   }
   const applicationRequest = Base64EncodeStr(body);
   const xpRequestEnvelope = new XPRequestEnvelope(xp, applicationRequest);
-  const agent = new https.Agent({
-    ca: Base64DecodeStr(xp.userParams.Base64EncodedRootCA),
+  const options: AxiosAgentInterface = {
     rejectUnauthorized: xp.userParams.rejectUnauthorized
-  });
+  }
+  if (xp.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(xp.userParams.Base64EncodedRootCA);
+  }
+  const agent = new https.Agent(options);
   if (xp.mockResponse) {
     const xpResponse = new XPApplicationResponse(xp, '');
     return xpResponse.mockResponse();
