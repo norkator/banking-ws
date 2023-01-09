@@ -27,7 +27,7 @@ Table of contents
   * [Get certificate](#get-certificate)
   * [Renew certificate](#renew-certificate)
   * [Bank Statement](#bank-statement)
-  * [SEPA Payment](#sepa-payment)
+  * [SEPA Payments](#sepa-payments)
   * [SEPA Errors](#sepa-errors)
 
 Resources
@@ -46,6 +46,8 @@ Documents
 -----
 
 * https://samlink.fi/ohjelmistopalvelut/
+* https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
+* https://www.mobilefish.com/services/sepa_xml_validation/sepa_xml_validation.php
 
 Installing
 ============
@@ -215,7 +217,7 @@ Renew certificate
 -----
 
 Note that renew request is made using current still active `BANK_CERTIFICATE` and a new pair of
-your created `CLIENT_CERTIFICATE` and `CLIENT_PRIVATE_KEY`. 
+your created `CLIENT_CERTIFICATE` and `CLIENT_PRIVATE_KEY`.
 You should use this [Generate new certificate](#generate-new-certificate) to make new ones.
 
 #### Making request
@@ -272,6 +274,7 @@ Certificate should be renewed with Renew Certificate method before it's expired.
 
 Bank statement
 -----
+Known as `camt.053.001.02`.
 
 ```typescript
 import * as moment from 'moment';
@@ -318,9 +321,10 @@ In progress...
 }
 ```
 
-SEPA payment
+SEPA payments
 -----
-Instructions for populating all fields, see [ISO20022_maksut.pdf](./documents/ISO20022_maksut.pdf).
+Based on https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
+Where request is called `Pain001.001.03` and returned status response `Pain002.001.03`.
 
 ```typescript
 import * as moment from 'moment';
@@ -488,7 +492,7 @@ Is object of FileDescriptor.
 
 SEPA errors
 -----
-Returns list of SEPA-XML errors | pain.002.001.02 or .03 related to payments.
+Returns list of SEPA-XML errors. Known as `Pain002.001.03` related to earlier section payments.
 
 ```typescript
 import * as moment from 'moment';
