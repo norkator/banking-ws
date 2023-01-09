@@ -1,8 +1,12 @@
 # Banking-ws
 
+![lint-test-build-status](https://github.com/norkator/banking-ws/actions/workflows/lint-test-build.yml/badge.svg)
+![publish-package-status](https://github.com/norkator/banking-ws/actions/workflows/publish-package.yml/badge.svg)
+
 <b>Currently work in progress!</b>
 
-Library to construct, validate and make corporate banking web service request with SOAP.
+This library can create certificates for Samlink banking web service. It can construct and validate SOAP
+messages. Get and renew certificates. Make payment files and ask payment statuses.
 
 Supported banks
 -----
@@ -158,7 +162,7 @@ import * as moment from 'moment'
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {GetCertificate} from './src/index';
 
-const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
 const CLIENT_CERTIFICATE = "base64-content-here";
 
 const userParams: UserParamsInterface = {
@@ -210,6 +214,10 @@ openssl x509 -in certificate_file_name.extension -text
 Renew certificate
 -----
 
+Note that renew request is made using current still active `BANK_CERTIFICATE` and a new pair of
+your created `CLIENT_CERTIFICATE` and `CLIENT_PRIVATE_KEY`. 
+You should use this [Generate new certificate](#generate-new-certificate) to make new ones.
+
 #### Making request
 
 ```typescript
@@ -217,7 +225,7 @@ import * as moment from 'moment';
 import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {RenewCertificate} from './src/index';
 
-const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
 const BANK_CERTIFICATE = "base64-content-here";
 const CLIENT_CERTIFICATE = "base64-content-here";
 const CLIENT_PRIVATE_KEY = "base64-content-here";
@@ -270,7 +278,7 @@ import * as moment from 'moment';
 import {XTInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {BankStatement} from './src/index';
 
-const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
 const BANK_CERTIFICATE = "base64-content-here";
 const CLIENT_CERTIFICATE = "base64-content-here";
 const CLIENT_PRIVATE_KEY = "base64-content-here";
@@ -319,7 +327,7 @@ import * as moment from 'moment';
 import {XLInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {SEPAPayment} from './src/index';
 
-const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
 const BANK_CERTIFICATE = "base64-content-here";
 const CLIENT_CERTIFICATE = "base64-content-here";
 const CLIENT_PRIVATE_KEY = "base64-content-here";
@@ -487,7 +495,7 @@ import * as moment from 'moment';
 import {XPInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
 import {SEPAErrors} from './src/index';
 
-const SAMLINK_TEST_ROOT_CA = "base64-content-here";
+const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
 const BANK_CERTIFICATE = "base64-content-here";
 const CLIENT_CERTIFICATE = "base64-content-here";
 const CLIENT_PRIVATE_KEY = "base64-content-here";
