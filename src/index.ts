@@ -65,7 +65,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
     rejectUnauthorized: gc.userParams.rejectUnauthorized
   }
   if (gc.userParams.Base64EncodedRootCA !== null) {
-    options['ca'] = Base64DecodeStr(gc.userParams.Base64EncodedRootCA);
+    options['ca'] = Base64DecodeStr(gc.userParams.Base64EncodedRootCA || '');
   }
   const agent = new https.Agent(options);
   if (gc.mockResponse) {
@@ -104,7 +104,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     rejectUnauthorized: gc.userParams.rejectUnauthorized
   }
   if (gc.userParams.Base64EncodedRootCA !== null) {
-    options['ca'] = Base64DecodeStr(gc.userParams.Base64EncodedRootCA);
+    options['ca'] = Base64DecodeStr(gc.userParams.Base64EncodedRootCA || '');
   }
   const agent = new https.Agent(options);
   if (gc.mockResponse) {
@@ -143,7 +143,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
     rejectUnauthorized: xt.userParams.rejectUnauthorized
   }
   if (xt.userParams.Base64EncodedRootCA !== null) {
-    options['ca'] = Base64DecodeStr(xt.userParams.Base64EncodedRootCA);
+    options['ca'] = Base64DecodeStr(xt.userParams.Base64EncodedRootCA || '');
   }
   const agent = new https.Agent(options);
   if (xt.mockResponse) {
@@ -180,7 +180,7 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
     rejectUnauthorized: xl.userParams.rejectUnauthorized
   }
   if (xl.userParams.Base64EncodedRootCA !== null) {
-    options['ca'] = Base64DecodeStr(xl.userParams.Base64EncodedRootCA);
+    options['ca'] = Base64DecodeStr(xl.userParams.Base64EncodedRootCA || '');
   }
   const agent = new https.Agent(options);
   if (xl.mockResponse) {
@@ -218,7 +218,7 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
     rejectUnauthorized: xp.userParams.rejectUnauthorized
   }
   if (xp.userParams.Base64EncodedRootCA !== null) {
-    options['ca'] = Base64DecodeStr(xp.userParams.Base64EncodedRootCA);
+    options['ca'] = Base64DecodeStr(xp.userParams.Base64EncodedRootCA || '');
   }
   const agent = new https.Agent(options);
   if (xp.mockResponse) {
