@@ -8,7 +8,7 @@ import {Buffer} from 'buffer';
 import {DOMParser} from '@xmldom/xmldom';
 
 const xmlC14n = require('xml-c14n');
-import {parseString} from "xml2js";
+import {parseString} from 'xml2js';
 
 
 /**
@@ -148,7 +148,7 @@ function FormatResponseCertificate(certificate: string, maxLength = 64): string 
   for (let i = 0; i < numOfLines + 1; i++) {
     cert += certificate.substr(i * maxLength, maxLength);
     if (i !== numOfLines) {
-      cert += "\n";
+      cert += '\n';
     }
   }
   cert += '\n';
