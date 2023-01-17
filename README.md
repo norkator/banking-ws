@@ -366,7 +366,6 @@ const xl: XLInterface = {
     GrpHdr: {
       MsgId: 'MSGID000001',
       CreDtTm: moment().format('YYYY-MM-DDThh:mm:ssZ'),
-      NbOfTxs: 1,
       InitgPty: {
         Nm: 'Origin Company',
         PstlAdr: {
