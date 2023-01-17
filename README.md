@@ -327,6 +327,10 @@ SEPA payments
 Based on https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
 Where request is called `Pain001.001.03` and returned status response `Pain002.001.03`.
 
+Current limitation for this library is that payment information C part = 
+`Credit Transfer Transaction Information` can hold only one transaction. This means that 
+`NbOfTxs` will be same as `PmtInf` array count.
+
 ```typescript
 import * as moment from 'moment';
 import {XLInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
