@@ -1,7 +1,7 @@
 'use strict';
 
 import * as xmlBuilder from 'xmlbuilder';
-import {SEPAPaymentInformationInterface, XLInterface} from '../interfaces';
+import {XLInterface} from '../interfaces';
 
 
 /**
@@ -58,7 +58,7 @@ class XL {
   }
 
   private getPaymentInfos(): any[] {
-    let paymentInfos = [];
+    const paymentInfos = [];
     for (const pmtInf of this.xl.sepa.PmtInf) {
       paymentInfos.push({
         'PmtInfId': pmtInf.PmtInfId,

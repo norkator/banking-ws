@@ -84,8 +84,8 @@ class XLApplicationResponse {
       FileType: 'XL',
       FileTimestamp: '2021-08-15T21:29:48.497+03:00',
       Status: 'WFP',
-      AmountTotal: String(this.xl.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt),
-      TransactionCount: String(this.xl.sepa.GrpHdr.NbOfTxs),
+      AmountTotal: String(0 /*this.xl.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt*/),
+      TransactionCount: String(this.xl.sepa.PmtInf.length),
       Deletable: 'false'
     };
   }
