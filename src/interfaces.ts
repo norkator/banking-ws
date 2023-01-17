@@ -1,4 +1,16 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language, Country, Code, BIC, Status} from './types';
+import {
+  Bank,
+  Currency,
+  Environment,
+  PaymentMethod,
+  ServiceLevel,
+  Command,
+  Language,
+  Country,
+  Code,
+  BIC,
+  Status
+} from './types';
 
 export interface AxiosAgentInterface {
   ca?: string;
@@ -104,7 +116,7 @@ export interface XTInterface {
 
 /**
  * Definitions for XL SEPA message
- * pain.001.001.02
+ * Pain.001.001.03
  */
 export interface XLInterface {
   mockResponse: boolean;
@@ -120,113 +132,117 @@ export interface XLInterface {
   language: Language;
   sepa: {
     CcyOfTrf: Currency; // Currency of transfer
-    GrpHdr: { // Group Header
-      MsgId: string; // Message Identification
-      CreDtTm: string; // Creation Date Time
-      NbOfTxs: number; // Number Of Transactions
-      InitgPty: {
-        Nm: string;
-        PstlAdr: {
-          Ctry: Country;
-          AdrLine: string;
-          AdrLine2: string;
-        },
-        Id: {
-          OrgId: {
-            Othr: {
-              Id: string;
-              SchmeNm: {
-                Cd: Code;
-              }
+    GrpHdr: SEPAGroupHeaderInterface;
+    PmtInf: SEPAPaymentInformationInterface[];
+  };
+}
+
+export interface SEPAGroupHeaderInterface {
+  MsgId: string; // Message Identification
+  CreDtTm: string; // Creation Date Time
+  NbOfTxs: number; // Number Of Transactions
+  InitgPty: {
+    Nm: string;
+    PstlAdr: {
+      Ctry: Country;
+      AdrLine: string;
+      AdrLine2: string;
+    },
+    Id: {
+      OrgId: {
+        Othr: {
+          Id: string;
+          SchmeNm: {
+            Cd: Code;
+          }
+        }
+      }
+    }
+  }
+}
+
+export interface SEPAPaymentInformationInterface {
+  PmtInfId: string;
+  PmtMtd: PaymentMethod;
+  PmtTpInf: {
+    SvcLvl: {
+      Cd: Code;
+    }
+  },
+  ReqdExctnDt: string,
+  Dbtr: {
+    Nm: string;
+    PstlAdr: {
+      Ctry: string;
+      AdrLine: string;
+      AdrLine2: string;
+    },
+    Id: {
+      OrgId: {
+        Othr: {
+          Id: string;
+          SchmeNm: {
+            Cd: Code;
+          }
+        }
+      }
+    }
+  },
+  DbtrAcct: {
+    Id: {
+      IBAN: string;
+    }
+  },
+  DbtrAgt: {
+    FinInstnId: {
+      BIC: BIC;
+    }
+  },
+  ChrgBr: ServiceLevel;
+  CdtTrfTxInf: {
+    PmtId: {
+      InstrId: string;
+      EndToEndId: string;
+    },
+    PmtTpInf: {
+      SvcLvl: {
+        Cd: Code;
+      }
+    },
+    Amt: {
+      InstdAmt: number;
+    },
+    ChrgBr: ServiceLevel;
+    CdtrAgt: {
+      FinInstnId: {
+        BIC: BIC;
+      }
+    },
+    Cdtr: {
+      Nm: string;
+      PstlAdr: {
+        Ctry: string;
+        AdrLine: string;
+        AdrLine2: string;
+      },
+      Id: {
+        OrgId: {
+          Othr: {
+            Id: string;
+            SchmeNm: {
+              Cd: Code;
             }
           }
         }
       }
     },
-    PmtInf: {
-      PmtInfId: string;
-      PmtMtd: PaymentMethod;
-      PmtTpInf: {
-        SvcLvl: {
-          Cd: Code;
-        }
-      },
-      ReqdExctnDt: string,
-      Dbtr: {
-        Nm: string;
-        PstlAdr: {
-          Ctry: string;
-          AdrLine: string;
-          AdrLine2: string;
-        },
-        Id: {
-          OrgId: {
-            Othr: {
-              Id: string;
-              SchmeNm: {
-                Cd: Code;
-              }
-            }
-          }
-        }
-      },
-      DbtrAcct: {
-        Id: {
-          IBAN: string;
-        }
-      },
-      DbtrAgt: {
-        FinInstnId: {
-          BIC: BIC;
-        }
-      },
-      ChrgBr: ServiceLevel;
-      CdtTrfTxInf: {
-        PmtId: {
-          InstrId: string;
-          EndToEndId: string;
-        },
-        PmtTpInf: {
-          SvcLvl: {
-            Cd: Code;
-          }
-        },
-        Amt: {
-          InstdAmt: number;
-        },
-        ChrgBr: ServiceLevel;
-        CdtrAgt: {
-          FinInstnId: {
-            BIC: BIC;
-          }
-        },
-        Cdtr: {
-          Nm: string;
-          PstlAdr: {
-            Ctry: string;
-            AdrLine: string;
-            AdrLine2: string;
-          },
-          Id: {
-            OrgId: {
-              Othr: {
-                Id: string;
-                SchmeNm: {
-                  Cd: Code;
-                }
-              }
-            }
-          }
-        },
-        CdtrAcct: {
-          Id: {
-            IBAN: string;
-          }
-        },
-        RmtInf: {
-          Ustrd: string;
-        }
+    CdtrAcct: {
+      Id: {
+        IBAN: string;
       }
+    },
+    RmtInf: {
+      Ustrd: string;
     }
   }
 }
