@@ -4,7 +4,7 @@
 import moment from 'moment';
 import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils/utils';
 import {XTInterface} from '../interfaces';
-import {EnvelopeSignature} from "../envelopeSignature";
+import {EnvelopeSignature} from '../envelopeSignature';
 
 class XTRequestEnvelope {
 
