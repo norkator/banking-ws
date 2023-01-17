@@ -386,7 +386,7 @@ const xl: XLInterface = {
         }
       }
     },
-    PmtInf: {
+    PmtInf: [{
       PmtInfId: '20210815-12345678912',
       PmtMtd: 'TRF',
       PmtTpInf: {
@@ -470,7 +470,7 @@ const xl: XLInterface = {
           Ustrd: 'Sample invoice 123',
         }
       }
-    }
+    }]
   }
 };
 
