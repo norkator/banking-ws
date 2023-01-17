@@ -6,7 +6,7 @@ import {XLInterface} from '../interfaces';
 
 /**
  * SEPA-XML –bank transfer
- * pain.001.001.02
+ * Pain001.001.03
  */
 class XL {
 
