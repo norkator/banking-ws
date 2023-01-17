@@ -1,7 +1,7 @@
 export type Environment = 'TEST' | 'PRODUCTION';
 export type Bank = 'Samlink';
 export type FileType = 'XL' | 'XT';
-export type Status = 'NEW' | 'DLD' | 'ALL' | '';
+export type Status = 'WFP' | 'WFC' | 'FWD' | 'DLD' | 'DEL' | 'NEW' | 'KIN' |  'ALL' | '';
 export type Currency = 'EUR' | 'USD';
 export type PaymentMethod = 'TRF';
 export type ServiceLevel = 'SLEV';

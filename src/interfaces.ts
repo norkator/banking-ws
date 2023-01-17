@@ -1,4 +1,4 @@
-import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language, Country, Code, BIC} from './types';
+import {Bank, Currency, Environment, PaymentMethod, ServiceLevel, Command, Language, Country, Code, BIC, Status} from './types';
 
 export interface AxiosAgentInterface {
   ca?: string;
@@ -237,7 +237,7 @@ export interface XLFileDescriptor {
   TargetId: string;
   FileType: string;
   FileTimestamp: string;
-  Status: string;
+  Status: Status;
   AmountTotal: string;
   TransactionCount: string;
   Deletable: string;

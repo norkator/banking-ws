@@ -48,6 +48,7 @@ Documents
 * https://samlink.fi/ohjelmistopalvelut/
 * https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
 * https://www.mobilefish.com/services/sepa_xml_validation/sepa_xml_validation.php
+* https://www.finanssiala.fi/wp-content/uploads/2021/03/WebServices_Messages_v110_20200504.pdf
 
 Installing
 ============
@@ -489,6 +490,19 @@ Is object of FileDescriptor.
   Deletable: 'false'
 }
 ```
+
+#### Status terminology
+```
+WFP = Waiting for processing
+WFC = Waiting for confirmation
+FWD = Forwarded to processing
+DLD = Downloaded
+DEL = Deleted
+NEW = New file
+KIN = Key-in
+```
+
+
 
 SEPA errors
 -----
