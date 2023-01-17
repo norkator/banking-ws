@@ -492,6 +492,7 @@ Is object of FileDescriptor.
 ```
 
 #### Status terminology
+
 ```
 WFP = Waiting for processing
 WFC = Waiting for confirmation
@@ -501,8 +502,6 @@ DEL = Deleted
 NEW = New file
 KIN = Key-in
 ```
-
-
 
 SEPA errors
 -----

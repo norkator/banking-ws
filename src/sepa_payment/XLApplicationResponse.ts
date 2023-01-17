@@ -5,6 +5,10 @@ import {EnvelopeSignature} from '../envelopeSignature';
 import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
 
+/**
+ * SEPA-XML –bank transfer response
+ * Pain002.001.03
+ */
 class XLApplicationResponse {
 
   private readonly response: string;
