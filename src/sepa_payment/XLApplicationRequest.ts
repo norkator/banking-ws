@@ -31,10 +31,7 @@ class XLApplicationRequest {
     const xl = new XL(this.xl);
     const xlContent = Base64EncodeStr(await xl.createSepaXmlMessage());
 
-    // console.log(xlContent);
-    // process.exit(0);
-
-    const obj = {
+    const obj: any = {
       'ApplicationRequest': {
         '@xmlns': 'http://bxd.fi/xmldata/',
         '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -46,15 +43,15 @@ class XLApplicationRequest {
         'TargetId': 'NONE',
         'ExecutionSerial': this.xl.ExecutionSerial, // not in use
         'Compression': false,
-        'AmountTotal': this.xl.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt,
-        'TransactionCount': this.xl.sepa.GrpHdr.NbOfTxs,
+        'AmountTotal': this.getAmountTotal(),
+        'TransactionCount': this.xl.sepa.PmtInf.length, // this.xl.sepa.GrpHdr.NbOfTxs,
         'SoftwareId': this.getSoftwareId(),
         'CustomerExtension': '',
         'FileType': FileTypes.XL,
         'Content': {
           '#text': xlContent
         },
-        // 'Signature': '', append node here
+        // 'Signature': '',  node will be appended here
       }
     };
 
@@ -67,18 +64,21 @@ class XLApplicationRequest {
       X509Certificate: bankCertificate
     });
 
-    // @ts-ignore
     obj.ApplicationRequest['Signature'] = signature['Signature'];
-    // noinspection UnnecessaryLocalVariableJS
-    const xml: string = xmlBuilder.create(obj).end({pretty: false});
-
-    // console.log(xml);
-    // process.exit(0);
-    return xml;
+    return xmlBuilder.create(obj).end({pretty: false});
   }
 
   private getSoftwareId(): string {
     return this.xl.SoftwareId.name + '-' + this.xl.SoftwareId.version;
+  }
+
+  // Todo check decimal requirements!
+  private getAmountTotal(): number {
+    let amountTotal = 0;
+    for (const pmtInf of this.xl.sepa.PmtInf) {
+      amountTotal = amountTotal + pmtInf.CdtTrfTxInf.Amt.InstdAmt;
+    }
+    return amountTotal;
   }
 
 }

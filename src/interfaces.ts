@@ -140,7 +140,7 @@ export interface XLInterface {
 export interface SEPAGroupHeaderInterface {
   MsgId: string; // Message Identification
   CreDtTm: string; // Creation Date Time
-  NbOfTxs: number; // Number Of Transactions
+  // NbOfTxs: number; // Number Of Transactions // comes from payment information array count at them moment
   InitgPty: {
     Nm: string;
     PstlAdr: {

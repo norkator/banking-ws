@@ -1,7 +1,7 @@
 'use strict';
 
 import * as xmlBuilder from 'xmlbuilder';
-import {XLInterface} from '../interfaces';
+import {SEPAPaymentInformationInterface, XLInterface} from '../interfaces';
 
 
 /**
@@ -16,7 +16,6 @@ class XL {
     this.xl = xl;
   }
 
-
   public async createSepaXmlMessage(): Promise<string> {
     const xlObj = {
       'Document': {
@@ -28,7 +27,7 @@ class XL {
           'GrpHdr': {
             'MsgId': this.xl.sepa.GrpHdr.MsgId,
             'CreDtTm': this.xl.sepa.GrpHdr.CreDtTm,
-            'NbOfTxs': this.xl.sepa.GrpHdr.NbOfTxs,
+            'NbOfTxs': this.xl.sepa.PmtInf.length, // this.xl.sepa.GrpHdr.NbOfTxs,
             'InitgPty': {
               'Nm': this.xl.sepa.GrpHdr.InitgPty.Nm,
               'PstlAdr': {
@@ -50,107 +49,114 @@ class XL {
               }
             }
           },
-
-          'PmtInf': {
-            'PmtInfId': this.xl.sepa.PmtInf.PmtInfId,
-            'PmtMtd': this.xl.sepa.PmtInf.PmtMtd,
-            'PmtTpInf': {
-              'SvcLvl': {
-                'Cd': this.xl.sepa.PmtInf.PmtTpInf.SvcLvl.Cd,
-              },
-            },
-            'ReqdExctnDt': this.xl.sepa.PmtInf.ReqdExctnDt,
-
-            'Dbtr': {
-              'Nm': this.xl.sepa.PmtInf.Dbtr.Nm,
-              'PstlAdr': {
-                'Ctry': this.xl.sepa.PmtInf.Dbtr.PstlAdr.Ctry,
-                'AdrLine': [
-                  this.xl.sepa.PmtInf.Dbtr.PstlAdr.AdrLine,
-                  this.xl.sepa.PmtInf.Dbtr.PstlAdr.AdrLine2,
-                ],
-              },
-              'Id': {
-                'OrgId': {
-                  'Othr': {
-                    'Id': this.xl.sepa.PmtInf.Dbtr.Id.OrgId.Othr.Id,
-                    'SchmeNm': {
-                      'Cd': this.xl.sepa.PmtInf.Dbtr.Id.OrgId.Othr.SchmeNm.Cd,
-                    }
-                  }
-                }
-              }
-            },
-            'DbtrAcct': {
-              'Id': {
-                'IBAN': this.xl.sepa.PmtInf.DbtrAcct.Id.IBAN,
-              },
-            },
-            'DbtrAgt': {
-              'FinInstnId': {
-                'BIC': this.xl.sepa.PmtInf.DbtrAgt.FinInstnId.BIC,
-              },
-            },
-            'ChrgBr': this.xl.sepa.PmtInf.ChrgBr,
-            'CdtTrfTxInf': {
-              'PmtId': {
-                'InstrId': this.xl.sepa.PmtInf.CdtTrfTxInf.PmtId.InstrId,
-                'EndToEndId': this.xl.sepa.PmtInf.CdtTrfTxInf.PmtId.EndToEndId,
-              },
-              'PmtTpInf': {
-                'SvcLvl': {
-                  'Cd': this.xl.sepa.PmtInf.PmtTpInf.SvcLvl.Cd,
-                }
-              },
-              'Amt': {
-                'InstdAmt': {
-                  '@Ccy': this.xl.sepa.CcyOfTrf,
-                  '#text': this.xl.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt,
-                },
-              },
-              'ChrgBr': this.xl.sepa.PmtInf.CdtTrfTxInf.ChrgBr,
-              'CdtrAgt': {
-                'FinInstnId': {
-                  'BIC': this.xl.sepa.PmtInf.CdtTrfTxInf.CdtrAgt.FinInstnId.BIC,
-                }
-              },
-              'Cdtr': {
-                'Nm': this.xl.sepa.PmtInf.CdtTrfTxInf.Cdtr.Nm,
-                'PstlAdr': {
-                  'Ctry': this.xl.sepa.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.Ctry,
-                  'AdrLine': [
-                    this.xl.sepa.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine,
-                    this.xl.sepa.PmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine2,
-                  ],
-                },
-                'Id': {
-                  'OrgId': {
-                    'Othr': {
-                      'Id': this.xl.sepa.PmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.Id,
-                      'SchmeNm': {
-                        'Cd': this.xl.sepa.PmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.SchmeNm.Cd,
-                      }
-                    }
-                  }
-                }
-              },
-              'CdtrAcct': {
-                'Id': {
-                  'IBAN': this.xl.sepa.PmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN,
-                }
-              },
-              'RmtInf': {
-                'Ustrd': this.xl.sepa.PmtInf.CdtTrfTxInf.RmtInf.Ustrd,
-              }
-            }
-          },
-
+          'PmtInf': this.getPaymentInfos(),
         }
       }
     };
 
     return xmlBuilder.create(xlObj, {version: '1.0', encoding: 'utf-8'}).end({pretty: false});
   }
+
+  private getPaymentInfos(): any[] {
+    let paymentInfos = [];
+    for (const pmtInf of this.xl.sepa.PmtInf) {
+      paymentInfos.push({
+        'PmtInfId': pmtInf.PmtInfId,
+        'PmtMtd': pmtInf.PmtMtd,
+        'PmtTpInf': {
+          'SvcLvl': {
+            'Cd': pmtInf.PmtTpInf.SvcLvl.Cd,
+          },
+        },
+        'ReqdExctnDt': pmtInf.ReqdExctnDt,
+
+        'Dbtr': {
+          'Nm': pmtInf.Dbtr.Nm,
+          'PstlAdr': {
+            'Ctry': pmtInf.Dbtr.PstlAdr.Ctry,
+            'AdrLine': [
+              pmtInf.Dbtr.PstlAdr.AdrLine,
+              pmtInf.Dbtr.PstlAdr.AdrLine2,
+            ],
+          },
+          'Id': {
+            'OrgId': {
+              'Othr': {
+                'Id': pmtInf.Dbtr.Id.OrgId.Othr.Id,
+                'SchmeNm': {
+                  'Cd': pmtInf.Dbtr.Id.OrgId.Othr.SchmeNm.Cd,
+                }
+              }
+            }
+          }
+        },
+        'DbtrAcct': {
+          'Id': {
+            'IBAN': pmtInf.DbtrAcct.Id.IBAN,
+          },
+        },
+        'DbtrAgt': {
+          'FinInstnId': {
+            'BIC': pmtInf.DbtrAgt.FinInstnId.BIC,
+          },
+        },
+        'ChrgBr': pmtInf.ChrgBr,
+        'CdtTrfTxInf': {
+          'PmtId': {
+            'InstrId': pmtInf.CdtTrfTxInf.PmtId.InstrId,
+            'EndToEndId': pmtInf.CdtTrfTxInf.PmtId.EndToEndId,
+          },
+          'PmtTpInf': {
+            'SvcLvl': {
+              'Cd': pmtInf.PmtTpInf.SvcLvl.Cd,
+            }
+          },
+          'Amt': {
+            'InstdAmt': {
+              '@Ccy': this.xl.sepa.CcyOfTrf,
+              '#text': pmtInf.CdtTrfTxInf.Amt.InstdAmt,
+            },
+          },
+          'ChrgBr': pmtInf.CdtTrfTxInf.ChrgBr,
+          'CdtrAgt': {
+            'FinInstnId': {
+              'BIC': pmtInf.CdtTrfTxInf.CdtrAgt.FinInstnId.BIC,
+            }
+          },
+          'Cdtr': {
+            'Nm': pmtInf.CdtTrfTxInf.Cdtr.Nm,
+            'PstlAdr': {
+              'Ctry': pmtInf.CdtTrfTxInf.Cdtr.PstlAdr.Ctry,
+              'AdrLine': [
+                pmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine,
+                pmtInf.CdtTrfTxInf.Cdtr.PstlAdr.AdrLine2,
+              ],
+            },
+            'Id': {
+              'OrgId': {
+                'Othr': {
+                  'Id': pmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.Id,
+                  'SchmeNm': {
+                    'Cd': pmtInf.CdtTrfTxInf.Cdtr.Id.OrgId.Othr.SchmeNm.Cd,
+                  }
+                }
+              }
+            }
+          },
+          'CdtrAcct': {
+            'Id': {
+              'IBAN': pmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN,
+            }
+          },
+          'RmtInf': {
+            'Ustrd': pmtInf.CdtTrfTxInf.RmtInf.Ustrd,
+          }
+        }
+      });
+    }
+    return paymentInfos;
+  }
+
 
 }
 
