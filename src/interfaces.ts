@@ -124,8 +124,10 @@ export interface XLPaymentInfoValidationResultInterface {
 
 export interface ValidationInfoInterface {
   valid: boolean;
-  code: number;
-  status: string;
+  errors: {
+    code: number;
+    status: string;
+  }[];
 }
 
 /**
