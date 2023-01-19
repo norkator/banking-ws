@@ -15,8 +15,8 @@ class XLValidation {
     const result: XLPaymentInfoValidationResultInterface = {PmtInf: []};
 
     for (const pmtInf of this.xlPmtInfo.PmtInf) {
-      // DbtrAcct
-      // CdtrAcct
+      // pmtInf.DbtrAcct.Id.IBAN// DbtrAcct
+      // pmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN
     }
 
     return null;
