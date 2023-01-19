@@ -2,8 +2,16 @@
 
 import {
   AxiosAgentInterface,
-  CertificateInterface, CreateCertificateInterface, CreatedCertificateInterface,
-  GetCertificateInterface, XLFileDescriptor, XLInterface, XPFileDescriptor, XPInterface, XTInterface
+  CertificateInterface,
+  CreateCertificateInterface,
+  CreatedCertificateInterface,
+  GetCertificateInterface,
+  XLFileDescriptor,
+  XLInterface, XLPaymentInfoValidationInterface,
+  XLPaymentInfoValidationResultInterface,
+  XPFileDescriptor,
+  XPInterface,
+  XTInterface
 } from './interfaces';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import {Base64DecodeStr, Base64EncodeStr, LoadFileAsString} from './utils/utils';
@@ -21,6 +29,7 @@ import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
 import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
 import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
+import {XLValidation} from './sepa_payment/XLValidation';
 import * as https from 'https';
 import axios from 'axios';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
@@ -165,6 +174,16 @@ async function BankStatement(xt: XTInterface): Promise<string> {
 
 
 /**
+ * Validate payment infos before providing them to SEPAPayment
+ * @constructor
+ */
+async function SEPAPaymentInfoValidation(xlPmtInfo: XLPaymentInfoValidationInterface): Promise<XLPaymentInfoValidationResultInterface> {
+  const xlValidation = new XLValidation(xlPmtInfo);
+  return await xlValidation.validatePmtInfos();
+}
+
+
+/**
  * Initiate outgoing SEPA payment with using pain.001.001.02 standard
  * @constructor
  */
@@ -246,6 +265,7 @@ export {
   GetCertificate,
   RenewCertificate,
   BankStatement,
+  SEPAPaymentInfoValidation,
   SEPAPayment,
   SEPAErrors,
 }

@@ -114,6 +114,20 @@ export interface XTInterface {
 }
 
 
+export interface XLPaymentInfoValidationInterface {
+  PmtInf: SEPAPaymentInformationInterface[];
+}
+
+export interface XLPaymentInfoValidationResultInterface {
+  PmtInf: ValidationInfoInterface[];
+}
+
+export interface ValidationInfoInterface {
+  valid: boolean;
+  code: number;
+  status: string;
+}
+
 /**
  * Definitions for XL SEPA message
  * Pain.001.001.03

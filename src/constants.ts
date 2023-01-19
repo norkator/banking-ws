@@ -21,9 +21,16 @@ const FileTypes = {
   XT: 'XT', // XML-tiliote (nouto) | camt.053.001.02
 };
 
+const PaymentInfoValidationStatus = {
+  valid: {
+    code: 1,
+    status: 'valid'
+  },
+}
 
 export {
   Commands,
   StatusValues,
   FileTypes,
+  PaymentInfoValidationStatus,
 }
