@@ -46,7 +46,7 @@ describe('Validators', async () => {
     const invalidDecimals = InstdAmtValidate(500.234);
     expect(invalidDecimals.valid).to.be.false;
     expect(invalidDecimals.reasons[0].code).to.equal(1);
-    expect(invalidDecimals.reasons[0].status).to.equal(`InstdAmt must have two decimals. Given had 3`);
+    expect(invalidDecimals.reasons[0].status).to.equal('InstdAmt must have two decimals. Given had 3');
   });
 
 });
