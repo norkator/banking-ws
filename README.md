@@ -27,6 +27,7 @@ Table of contents
   * [Get certificate](#get-certificate)
   * [Renew certificate](#renew-certificate)
   * [Bank Statement](#bank-statement)
+  * [SEPA Payments info validation](#sepa-payments-info-validation)
   * [SEPA Payments](#sepa-payments)
   * [SEPA Errors](#sepa-errors)
 
@@ -322,12 +323,135 @@ In progress...
 }
 ```
 
+SEPA payments info validation
+-----
+Below is just a mock sample leading to invalid validation result.
+
+```typescript
+import {SEPAPaymentInformationInterface, XLPaymentInfoValidationInterface} from './interfaces';
+import {SEPAPaymentInfoValidation} from './index';
+
+const pmtInf: SEPAPaymentInformationInterface[] = [{
+  PmtInfId: '20210815-12345678912',
+  PmtMtd: 'TRF',
+  PmtTpInf: {
+    SvcLvl: {
+      Cd: 'BANK',
+    }
+  },
+  ReqdExctnDt: '2021-08-15',
+  Dbtr: {
+    Nm: 'Origin Company',
+    PstlAdr: {
+      Ctry: 'FI',
+      AdrLine: 'Test street 123',
+      AdrLine2: 'FI-00100 Helsinki',
+    },
+    Id: {
+      OrgId: {
+        Othr: {
+          Id: '12345678913',
+          SchmeNm: {
+            Cd: 'BANK',
+          }
+        }
+      }
+    }
+  },
+  DbtrAcct: {
+    Id: {
+      IBAN: 'FI1234567891234567',
+    }
+  },
+  DbtrAgt: {
+    FinInstnId: {
+      BIC: 'ITELFIHH',
+    }
+  },
+  ChrgBr: 'SLEV',
+  CdtTrfTxInf: {
+    PmtId: {
+      InstrId: 'InstrId000002',
+      EndToEndId: 'EndToEndId000001',
+    },
+    PmtTpInf: {
+      SvcLvl: {
+        Cd: 'BANK',
+      }
+    },
+    Amt: {
+      InstdAmt: 425.60,
+    },
+    ChrgBr: 'SLEV',
+    CdtrAgt: {
+      FinInstnId: {
+        BIC: 'ITELFIHH',
+      }
+    },
+    Cdtr: {
+      Nm: 'Hello World',
+      PstlAdr: {
+        Ctry: 'FI',
+        AdrLine: 'Test street 321',
+        AdrLine2: 'FI-00200 Helsinki',
+      },
+      Id: {
+        OrgId: {
+          Othr: {
+            Id: '12345678914',
+            SchmeNm: {
+              Cd: 'BANK',
+            }
+          }
+        }
+      }
+    },
+    CdtrAcct: {
+      Id: {
+        IBAN: 'FI1234567891234568',
+      }
+    },
+    RmtInf: {
+      Ustrd: 'Sample invoice 123',
+    }
+  }
+}];
+
+const xlPmtInfo: XLPaymentInfoValidationInterface = {PmtInf: pmtInf}
+const sepaPaymentValidation = await SEPAPaymentInfoValidation(xlPmtInfo);
+console.log(sepaPaymentValidation);
+```
+
+#### Expected response
+
+This example is invalid and errors contains list of issues
+
+```json5
+{
+  PmtInf: [
+    {
+      valid: false,
+      errors: [
+        {
+          code: 6,
+          status: 'WrongAccountBankBranchChecksum'
+        },
+        {
+          code: 5,
+          status: 'WrongIBANChecksum'
+        }
+      ]
+    }
+  ]
+}
+```
+
 SEPA payments
 -----
 Based on https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
 Where request is called `Pain001.001.03` and returned status response `Pain002.001.03`.
 
-Given details are not validated. Use earlier SEPA payment validation method to 
+Given details are not validated. Use earlier SEPA payment validation method to
 validate your payment details.
 
 Current limitation for this library is that payment information C part =
