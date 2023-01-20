@@ -5,7 +5,7 @@ import {
   XLPaymentInfoValidationInterface,
   XLPaymentInfoValidationResultInterface
 } from '../interfaces';
-import {BICValidate, IBANValidate} from '../utils/validators';
+import {BICValidate, IBANValidate, InstdAmtValidate} from '../utils/validators';
 
 class XLValidation {
 
@@ -43,7 +43,11 @@ class XLValidation {
         result.errors = creditorBIC.reasons;
       }
 
-      // Todo define more validators
+      const instructedAmount = InstdAmtValidate(pmtInf.CdtTrfTxInf.Amt.InstdAmt);
+      if (!instructedAmount.valid) {
+        result.valid = false;
+        result.errors = instructedAmount.reasons;
+      }
 
       results.PmtInf.push(result);
     }

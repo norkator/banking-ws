@@ -88,8 +88,19 @@ function BICEnumToString(code: number): string {
   }
 }
 
+function InstdAmtValidate(instdAmt: number): { valid: boolean; reasons: { code: number; status: string; } [] } {
+  const decimalCount = instdAmt.toString().split(".")[1]?.length || 0;
+  return decimalCount <= 2 ? {
+    valid: true, reasons: []
+  } : {
+    valid: false,
+    reasons: [{code: 1, status: `InstdAmt must have two decimals. Given had ${decimalCount}`}]
+  }
+}
+
 
 export {
   IBANValidate,
   BICValidate,
+  InstdAmtValidate,
 }
