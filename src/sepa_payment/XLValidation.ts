@@ -5,7 +5,7 @@ import {
   XLPaymentInfoValidationInterface,
   XLPaymentInfoValidationResultInterface
 } from '../interfaces';
-import {validateIBAN, ValidateIBANResult, ValidationErrorsIBAN} from 'ibantools';
+import {BICValidate, IBANValidate} from '../utils/validators';
 
 class XLValidation {
 
@@ -21,68 +21,35 @@ class XLValidation {
     for (const pmtInf of this.xlPmtInfo.PmtInf) {
       const result: ValidationInfoInterface = {valid: true, errors: []}
 
-      const debtorIBAN = this.IBANValidate(pmtInf.DbtrAcct.Id.IBAN);
+      const debtorIBAN = IBANValidate(pmtInf.DbtrAcct.Id.IBAN);
       if (!debtorIBAN.valid) {
         result.valid = false;
         result.errors = debtorIBAN.reasons;
       }
+      const debtorBIC = BICValidate(pmtInf.DbtrAgt.FinInstnId.BIC);
+      if (!debtorBIC.valid) {
+        result.valid = false;
+        result.errors = debtorBIC.reasons;
+      }
 
-      const creditorIBAN = this.IBANValidate(pmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN);
+      const creditorIBAN = IBANValidate(pmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN);
       if (!creditorIBAN.valid) {
         result.valid = false;
         result.errors = creditorIBAN.reasons;
       }
+      const creditorBIC = BICValidate(pmtInf.CdtTrfTxInf.CdtrAgt.FinInstnId.BIC);
+      if (!creditorBIC.valid) {
+        result.valid = false;
+        result.errors = creditorBIC.reasons;
+      }
+
+      // Todo define more validators
 
       results.PmtInf.push(result);
     }
 
     return results;
   }
-
-  private IBANValidate(iban: string): { valid: boolean; reasons: { code: number; status: string; } [] } {
-    const ibanResult: ValidateIBANResult = validateIBAN(iban);
-    if (!ibanResult.valid) {
-      return {
-        valid: false,
-        reasons: this.getIbanInvalidReasons(ibanResult.errorCodes),
-      }
-    } else {
-      return {valid: true, reasons: []};
-    }
-  }
-
-  private getIbanInvalidReasons(errorCodes: ValidationErrorsIBAN[]): { code: number; status: string; }[] {
-    const reasons: { code: number; status: string; }[] = [];
-    errorCodes.forEach(errorCode => {
-      reasons.push({
-        code: errorCode,
-        status: this.IBANEnumToString(errorCode)
-      })
-    });
-    return reasons;
-  }
-
-  private IBANEnumToString(code: number): string {
-    switch (code) {
-      case 0:
-        return 'NoIBANProvided';
-      case 1:
-        return 'NoIBANCountry';
-      case 2:
-        return 'WrongBBANLength';
-      case 3:
-        return 'WrongBBANFormat';
-      case 4:
-        return 'ChecksumNotNumber';
-      case 5:
-        return 'WrongIBANChecksum';
-      case 6:
-        return 'WrongAccountBankBranchChecksum';
-      default:
-        return '';
-    }
-  }
-
 
 }
 
