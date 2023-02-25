@@ -20,8 +20,8 @@ class CreateCertificate {
 
   public async createCertificate(): Promise<CreatedCertificateInterface> {
     await this.create();
-    const csr = LoadFileAsString(path.join(__dirname + '/../../openssl/' + this.CSR_NAME));
-    const privateKey = LoadFileAsString(path.join(__dirname + '/../../openssl/' + this.PRIVATE_KEY_NAME));
+    const csr = LoadFileAsString(path.join('./openssl/' + this.CSR_NAME));
+    const privateKey = LoadFileAsString(path.join('./openssl/' + this.PRIVATE_KEY_NAME));
     return {
       clientCertificate: Base64EncodeStr(csr),
       clientPrivateKey: Base64EncodeStr(privateKey)
