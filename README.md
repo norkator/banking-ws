@@ -20,6 +20,7 @@ Table of contents
   * [Links](#links)
   * [Documents](#documents)
 * [Installing](#installing)
+* [Docker sample](#docker-sample)
 * [Terminology](#terminology)
 * [Getting Started](#getting-started)
 * [Examples](#examples)
@@ -54,7 +55,7 @@ Documents
 Installing
 ============
 
-1. Mac and Linux already has OpenSSL pre installed but with Windows you need to download binary somewhere
+1. Mac and Linux already has OpenSSL pre-installed but with Windows you need to download binary somewhere
    like [here](https://slproweb.com/products/Win32OpenSSL.html).
 
 * Then add its binary to your system path variable `;C:\Program Files\OpenSSL-Win64\bin`
@@ -73,6 +74,17 @@ Installing
    ```shell script
    npm install -g ts-node@latest
    ```
+
+Docker sample
+============
+Running as docker container could be done in following way:
+
+```dockerfile
+FROM node:18.14.2-alpine
+RUN apk add openssl
+...
+...
+```
 
 Terminology
 ============
@@ -218,7 +230,7 @@ openssl x509 -in certificate_file_name.extension -text
 Renew certificate
 -----
 
-Note that renew request is made using current still active `BANK_CERTIFICATE` and your 
+Note that renew request is made using current still active `BANK_CERTIFICATE` and your
 old `CLIENT_PRIVATE_KEY`. From a new key pair you pass to this call only new `CLIENT_CERTIFICATE`.
 You should use this [Generate new certificate](#generate-new-certificate) to make new ones.
 
