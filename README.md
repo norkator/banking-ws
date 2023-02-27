@@ -218,9 +218,11 @@ openssl x509 -in certificate_file_name.extension -text
 Renew certificate
 -----
 
-Note that renew request is made using current still active `BANK_CERTIFICATE` and a new pair of
-your created `CLIENT_CERTIFICATE` and `CLIENT_PRIVATE_KEY`.
+Note that renew request is made using current still active `BANK_CERTIFICATE` and your 
+old `CLIENT_PRIVATE_KEY`. From a new key pair you pass to this call only new `CLIENT_CERTIFICATE`.
 You should use this [Generate new certificate](#generate-new-certificate) to make new ones.
+
+I have named below variables in "new" and "old" ways which explains what to use and where.
 
 #### Making request
 
@@ -230,9 +232,9 @@ import {GetCertificateInterface, SoftwareIdInterface, UserParamsInterface} from 
 import {RenewCertificate} from './src/index';
 
 const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
-const BANK_CERTIFICATE = "base64-content-here";
-const CLIENT_CERTIFICATE = "base64-content-here";
-const CLIENT_PRIVATE_KEY = "base64-content-here";
+const BANK_CERTIFICATE_OLD = "base64-content-here";
+const CLIENT_CERTIFICATE_NEW = "base64-content-here";
+const CLIENT_PRIVATE_KEY_OLD = "base64-content-here";
 
 const userParams: UserParamsInterface = {
   bank: 'Samlink',
@@ -249,10 +251,10 @@ const gc: GetCertificateInterface = {
   Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
   SoftwareId: {name: 'TEST', version: '0.9.0'} as SoftwareIdInterface,
   Command: 'RenewCertificate',
-  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
-  Base64EncodedBankCsr: BANK_CERTIFICATE,
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE_NEW,
+  Base64EncodedBankCsr: BANK_CERTIFICATE_OLD,
   RequestId: '123456',
-  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
+  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY_OLD,
 };
 
 const certificate = await RenewCertificate(gc);
