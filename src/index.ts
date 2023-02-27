@@ -108,7 +108,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     throw new Error('CertApplicationRequest returned empty body from createXmlBody');
   }
   const applicationRequest = Base64EncodeStr(body);
-  const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc, applicationRequest);
+  const certRenewRequestEnvelope = new CertRenewRequestEnvelope(gc.userParams.customerId, gc.RequestId, applicationRequest);
   const options: AxiosAgentInterface = {
     rejectUnauthorized: gc.userParams.rejectUnauthorized
   }
@@ -120,7 +120,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
     const car = new CertApplicationResponse(gc, '');
     return car.mockResponse();
   }
-  const response = await axios.post(gc.requestUrl, await certRenewRequestEnvelope.createXmlBody(), {
+  const response = await axios.post(gc.requestUrl, certRenewRequestEnvelope.createXmlBody(), {
     headers: {
       'Content-Type': 'text/xml',
       SOAPAction: '',
