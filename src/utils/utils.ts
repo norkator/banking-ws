@@ -182,6 +182,15 @@ function HandleResponseCode(rc: string, responseText: string): void {
   }
 }
 
+/**
+ * Transfers total amount in required format and decimals -> .00
+ * @param paymentAmount
+ * @constructor
+ */
+function GetCdtTrfTxInfAmtInstdAmtTotal(paymentAmount: number): string {
+  return String((Number(paymentAmount)).toFixed(2));
+}
+
 
 export {
   LoadFileAsString,
@@ -197,4 +206,5 @@ export {
   FormatResponseCertificate,
   ParseXml,
   HandleResponseCode,
+  GetCdtTrfTxInfAmtInstdAmtTotal,
 }

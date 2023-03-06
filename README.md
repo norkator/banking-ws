@@ -394,7 +394,7 @@ const pmtInf: SEPAPaymentInformationInterface[] = [{
       }
     },
     Amt: {
-      InstdAmt: 425.60,
+      InstdAmt: '425.60',
     },
     ChrgBr: 'SLEV',
     CdtrAgt: {
@@ -575,7 +575,7 @@ const xl: XLInterface = {
           }
         },
         Amt: {
-          InstdAmt: 500.00,
+          InstdAmt: '500.00',
         },
         ChrgBr: 'SLEV',
         CdtrAgt: {

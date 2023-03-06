@@ -1,6 +1,6 @@
 // import * as mocha from 'mocha';
 import * as chai from 'chai';
-import {Base64DecodeStr, CleanUpCertificate, x509ExpirationDate} from './utils';
+import {Base64DecodeStr, CleanUpCertificate, GetCdtTrfTxInfAmtInstdAmtTotal, x509ExpirationDate} from './utils';
 
 const expect = chai.expect;
 describe('Utils', async () => {
@@ -19,6 +19,13 @@ describe('Utils', async () => {
   it('should determine X509 expiration date', async () => {
     const exp = await x509ExpirationDate(Base64DecodeStr(TEST_ROOT_CA));
     expect(exp).to.equal('2042-08-10 11:34:38');
+  });
+
+  it('should return correct total amounts', async () => {
+    expect(GetCdtTrfTxInfAmtInstdAmtTotal(250)).to.equal('250.00');
+    expect(GetCdtTrfTxInfAmtInstdAmtTotal(5000)).to.equal('5000.00');
+    expect(GetCdtTrfTxInfAmtInstdAmtTotal(1234.50)).to.equal('1234.50');
+    expect(GetCdtTrfTxInfAmtInstdAmtTotal(0.95)).to.equal('0.95');
   });
 
 });

@@ -3,7 +3,7 @@
 // @ts-ignore
 import * as xmlBuilder from 'xmlbuilder';
 import {XLInterface} from '../interfaces';
-import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate} from '../utils/utils';
+import {Base64DecodeStr, Base64EncodeStr, CleanUpCertificate, GetCdtTrfTxInfAmtInstdAmtTotal} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
 import {Commands, FileTypes} from '../constants';
 import {XL} from './XL';
@@ -72,13 +72,13 @@ class XLApplicationRequest {
     return this.xl.SoftwareId.name + '-' + this.xl.SoftwareId.version;
   }
 
-  // Todo check decimal requirements!
-  private getAmountTotal(): number {
+  private getAmountTotal(): string {
     let amountTotal = 0;
     for (const pmtInf of this.xl.sepa.PmtInf) {
-      amountTotal = amountTotal + pmtInf.CdtTrfTxInf.Amt.InstdAmt;
+      amountTotal = amountTotal + Number(pmtInf.CdtTrfTxInf.Amt.InstdAmt);
     }
-    return amountTotal;
+    console.log(amountTotal);
+    return GetCdtTrfTxInfAmtInstdAmtTotal(amountTotal);
   }
 
 }

@@ -226,7 +226,7 @@ export interface SEPAPaymentInformationInterface {
       }
     },
     Amt: {
-      InstdAmt: number;
+      InstdAmt: string;
     },
     ChrgBr: ServiceLevel;
     CdtrAgt: {

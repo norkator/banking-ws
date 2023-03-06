@@ -88,8 +88,8 @@ function BICEnumToString(code: number): string {
   }
 }
 
-function InstdAmtValidate(instdAmt: number): { valid: boolean; reasons: { code: number; status: string; } [] } {
-  const decimalCount = instdAmt.toString().split('.')[1]?.length || 0;
+function InstdAmtValidate(instdAmt: string): { valid: boolean; reasons: { code: number; status: string; } [] } {
+  const decimalCount = instdAmt.split('.')[1]?.length || 0;
   return decimalCount <= 2 ? {
     valid: true, reasons: []
   } : {

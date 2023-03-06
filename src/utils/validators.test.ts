@@ -34,16 +34,16 @@ describe('Validators', async () => {
   });
 
   it('should be valid InstAmt', async () => {
-    const decimals = InstdAmtValidate(500.00);
+    const decimals = InstdAmtValidate('500.00');
     expect(decimals.valid).to.be.true;
-    const decimals2 = InstdAmtValidate(500.25);
+    const decimals2 = InstdAmtValidate('500.25');
     expect(decimals2.valid).to.be.true;
-    const decimals3 = InstdAmtValidate(9999999.50);
+    const decimals3 = InstdAmtValidate('9999999.50');
     expect(decimals3.valid).to.be.true;
   });
 
   it('should be invalid InstAmt', async () => {
-    const invalidDecimals = InstdAmtValidate(500.234);
+    const invalidDecimals = InstdAmtValidate('500.234');
     expect(invalidDecimals.valid).to.be.false;
     expect(invalidDecimals.reasons[0].code).to.equal(1);
     expect(invalidDecimals.reasons[0].status).to.equal('InstdAmt must have two decimals. Given had 3');
