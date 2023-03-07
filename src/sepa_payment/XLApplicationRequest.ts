@@ -77,7 +77,6 @@ class XLApplicationRequest {
     for (const pmtInf of this.xl.sepa.PmtInf) {
       amountTotal = amountTotal + Number(pmtInf.CdtTrfTxInf.Amt.InstdAmt);
     }
-    console.log(amountTotal);
     return GetCdtTrfTxInfAmtInstdAmtTotal(amountTotal);
   }
 
