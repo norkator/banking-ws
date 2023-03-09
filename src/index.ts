@@ -4,7 +4,7 @@ import {
   AxiosAgentInterface,
   CertificateInterface,
   CreateCertificateInterface,
-  CreatedCertificateInterface,
+  CreatedCertificateInterface, DFFileDescriptor, DFInterface,
   GetCertificateInterface,
   XLFileDescriptor,
   XLInterface, XLPaymentInfoValidationInterface,
@@ -34,6 +34,9 @@ import * as https from 'https';
 import axios from 'axios';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import * as path from 'path';
+import {DFApplicationRequest} from "./donwload_file/DFApplicationRequest";
+import {DFRequestEnvelope} from "./donwload_file/DFRequestEnvelope";
+import {DFApplicationResponse} from "./donwload_file/DFApplicationResponse";
 
 
 /**
@@ -259,6 +262,37 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
 }
 
 
+/**
+ * Return file descriptors for requested file references using DownloadFile command
+ * @constructor
+ */
+async function DownloadFile(df: DFInterface): Promise<DFFileDescriptor[]> {
+  const dfRequest = new DFApplicationRequest(df);
+  const body = await dfRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('DFApplicationRequest returned empty body from createXmlBody');
+  }
+  const applicationRequest = Base64EncodeStr(body);
+  const dfRequestEnvelope = new DFRequestEnvelope(df, applicationRequest);
+  const options: AxiosAgentInterface = {
+    rejectUnauthorized: df.userParams.rejectUnauthorized
+  }
+  if (df.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(df.userParams.Base64EncodedRootCA || '');
+  }
+  const agent = new https.Agent(options);
+  const response = await axios.post(df.requestUrl, await dfRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  const dfResponse = new DFApplicationResponse(df, response.data);
+  return await dfResponse.parseBody();
+}
+
+
 export {
   CreateOwnCertificate,
   CheckOwnCertificate,
@@ -268,4 +302,5 @@ export {
   SEPAPaymentInfoValidation,
   SEPAPayment,
   SEPAErrors,
+  DownloadFile,
 }
