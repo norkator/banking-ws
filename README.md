@@ -31,6 +31,7 @@ Table of contents
   * [SEPA Payments info validation](#sepa-payments-info-validation)
   * [SEPA Payments](#sepa-payments)
   * [SEPA Errors](#sepa-errors)
+  * [Download File](#download-file)
 
 Resources
 ============
@@ -719,3 +720,20 @@ Following array sample is example when you have two SEPA payments sent to bank s
 Return is always an array. Either empty or populated like in sample.
 
 * `ParentFileReference` is our side SEPA message used reference.
+
+Download file
+-----
+...
+
+```typescript
+todo
+```
+
+#### Expected response
+
+Following array sample is example when you have two SEPA payments sent to bank system.
+
+```json5
+[
+]
+```
