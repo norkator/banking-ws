@@ -30,13 +30,13 @@ import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
 import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
 import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
 import {XLValidation} from './sepa_payment/XLValidation';
+import {DFApplicationRequest} from './donwload_file/DFApplicationRequest';
+import {DFRequestEnvelope} from './donwload_file/DFRequestEnvelope';
+import {DFApplicationResponse} from './donwload_file/DFApplicationResponse';
 import * as https from 'https';
 import axios from 'axios';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
 import * as path from 'path';
-import {DFApplicationRequest} from "./donwload_file/DFApplicationRequest";
-import {DFRequestEnvelope} from "./donwload_file/DFRequestEnvelope";
-import {DFApplicationResponse} from "./donwload_file/DFApplicationResponse";
 
 
 /**
