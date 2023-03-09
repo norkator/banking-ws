@@ -35,7 +35,11 @@ class DFApplicationRequest {
         'Command': Commands.downloadFile,
         'Timestamp': this.df.Timestamp,
         'Environment': this.df.userParams.environment,
-        'FileReferences': this.df.fileReferences,
+        'FileReferences': {
+          'FileReference': [
+            ...this.df.fileReferences
+          ]
+        },
         'Encryption': false,
         'Compression': false,
         'SoftwareId': this.getSoftwareId(),
