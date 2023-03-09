@@ -34,9 +34,9 @@ class DFApplicationResponse {
     const envelope = envelopeXML['soapenv:Envelope'];
     const body = envelope['soapenv:Body'];
 
-    const getDownloadFileListOut = body[0]['cor:downloadFileListout'];
+    const getDownloadFileOut = body[0]['cor:downloadFileout'];
 
-    const encodedApplicationResponse = getDownloadFileListOut[0]['mod:ApplicationResponse'][0];
+    const encodedApplicationResponse = getDownloadFileOut[0]['mod:ApplicationResponse'][0];
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
