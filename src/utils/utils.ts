@@ -177,8 +177,8 @@ async function ParseXml(xmlString: string): Promise<any> {
  * @param responseText
  */
 function HandleResponseCode(rc: string, responseText: string): void {
-  if (rc === '5' || rc === '6' || rc === '7' || rc === '8' || rc === '12' || rc === '26' || rc === '30') {
-    throw new Error(responseText);
+  if (rc === '5' || rc === '6' || rc === '7' || rc === '8' || rc === '12' || rc === '24' || rc === '26' || rc === '30') {
+    throw new Error(`Code ${rc} / ${responseText}`);
   }
 }
 
