@@ -266,7 +266,7 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
  * Return file descriptors for requested file references using DownloadFile command
  * @constructor
  */
-async function DownloadFile(df: DFInterface): Promise<DFFileDescriptor[]> {
+async function DownloadFile(df: DFInterface): Promise<DFFileDescriptor> {
   const dfRequest = new DFApplicationRequest(df);
   const body = await dfRequest.createXmlBody();
   if (body === undefined) {

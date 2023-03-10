@@ -329,4 +329,5 @@ export interface DFFileDescriptor {
   Status: string;
   ForwardedTimestamp: string;
   Deletable: string;
+  Content: string;
 }

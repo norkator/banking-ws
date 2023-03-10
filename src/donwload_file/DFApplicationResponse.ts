@@ -15,7 +15,7 @@ class DFApplicationResponse {
     this.response = response;
   }
 
-  public async parseBody(): Promise<DFFileDescriptor[]> {
+  public async parseBody(): Promise<DFFileDescriptor> {
     // parse, handle application response envelope
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
@@ -60,23 +60,21 @@ class DFApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    const fds = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'];
-    const fileDescriptors: DFFileDescriptor[] = [];
-    fds.forEach((fd: DFFileDescriptor) => {
-      fileDescriptors.push({
-        FileReference: fd['FileReference'][0],
-        TargetId: fd['TargetId'][0],
-        UserFilename: fd['UserFilename'][0],
-        ParentFileReference: fd['ParentFileReference'][0],
-        FileType: fd['FileType'][0],
-        FileTimestamp: fd['FileTimestamp'][0],
-        Status: fd['Status'][0],
-        ForwardedTimestamp: fd['ForwardedTimestamp'][0],
-        Deletable: fd['Deletable'][0],
-      });
-    });
+    const Content = ns2CertApplicationResponse['Content'][0]; // Todo.. this needs parser developed in other branch
+    const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
 
-    return fileDescriptors;
+    return {
+      FileReference: fd['FileReference'][0],
+      TargetId: fd['TargetId'][0],
+      UserFilename: fd['UserFilename'][0],
+      ParentFileReference: fd['ParentFileReference'][0],
+      FileType: fd['FileType'][0],
+      FileTimestamp: fd['FileTimestamp'][0],
+      Status: fd['Status'][0],
+      ForwardedTimestamp: fd['ForwardedTimestamp'][0],
+      Deletable: fd['Deletable'][0],
+      Content: Content,
+    } as DFFileDescriptor;
   }
 
 }
