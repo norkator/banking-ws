@@ -5,7 +5,7 @@ import * as xmlBuilder from 'xmlbuilder';
 import {DFInterface} from '../interfaces';
 import {Base64DecodeStr, CleanUpCertificate} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
-import {Commands} from '../constants';
+import {Commands, FileTypes} from '../constants';
 
 
 class DFApplicationRequest {
@@ -43,6 +43,7 @@ class DFApplicationRequest {
         'Encryption': false,
         'Compression': false,
         'SoftwareId': this.getSoftwareId(),
+        'FileType': FileTypes.XP,
         // 'Signature': '', append node here
       }
     };
