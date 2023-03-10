@@ -12,12 +12,12 @@ import {
   Status
 } from './types';
 
-export interface AxiosAgentInterface {
+interface AxiosAgentInterface {
   ca?: string;
   rejectUnauthorized: boolean;
 }
 
-export interface CreateCertificateInterface {
+interface CreateCertificateInterface {
   twoLetterCountryCode: string;
   stateOrProvince: string;
   city: string;
@@ -27,7 +27,7 @@ export interface CreateCertificateInterface {
   emailAddress: string;
 }
 
-export interface CreatedCertificateInterface {
+interface CreatedCertificateInterface {
   clientCertificate: string;
   clientPrivateKey: string;
 }
@@ -36,7 +36,7 @@ export interface CreatedCertificateInterface {
  * User environment params like secrets
  * used with each and every functionality
  */
-export interface UserParamsInterface {
+interface UserParamsInterface {
   bank: Bank;
   environment: Environment;
   customerId: string;
@@ -48,7 +48,7 @@ export interface UserParamsInterface {
  * User software version params
  * meant to help with bug solving
  */
-export interface SoftwareIdInterface {
+interface SoftwareIdInterface {
   name: string;
   version: string;
 }
@@ -57,7 +57,7 @@ export interface SoftwareIdInterface {
 /**
  * Required parameters needed with application request signature
  */
-export interface ApplicationRequestSignatureInterface {
+interface ApplicationRequestSignatureInterface {
   requestXml: string;
   signingPrivateKey: string;
   X509Certificate?: string;
@@ -67,7 +67,7 @@ export interface ApplicationRequestSignatureInterface {
 /**
  * Get certificate interface
  */
-export interface GetCertificateInterface {
+interface GetCertificateInterface {
   mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
@@ -87,7 +87,7 @@ export interface GetCertificateInterface {
  * Response certificate from get certificate methods
  * response stored in object which contains below fields
  */
-export interface CertificateInterface {
+interface CertificateInterface {
   Name: string | undefined;
   Certificate: string | undefined; // base64 encoded
   CertificateFormat: string | undefined;
@@ -99,7 +99,7 @@ export interface CertificateInterface {
  * Get bank statement interface
  * camt.053.001.02
  */
-export interface XTInterface {
+interface XTInterface {
   mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
@@ -114,15 +114,15 @@ export interface XTInterface {
 }
 
 
-export interface XLPaymentInfoValidationInterface {
+interface XLPaymentInfoValidationInterface {
   PmtInf: SEPAPaymentInformationInterface[];
 }
 
-export interface XLPaymentInfoValidationResultInterface {
+interface XLPaymentInfoValidationResultInterface {
   PmtInf: ValidationInfoInterface[];
 }
 
-export interface ValidationInfoInterface {
+interface ValidationInfoInterface {
   valid: boolean;
   errors: {
     code: number;
@@ -134,7 +134,7 @@ export interface ValidationInfoInterface {
  * Definitions for XL SEPA message
  * Pain.001.001.03
  */
-export interface XLInterface {
+interface XLInterface {
   mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
@@ -153,7 +153,7 @@ export interface XLInterface {
   };
 }
 
-export interface SEPAGroupHeaderInterface {
+interface SEPAGroupHeaderInterface {
   MsgId: string; // Message Identification
   CreDtTm: string; // Creation Date Time
   // NbOfTxs: number; // Number Of Transactions // comes from payment information array count at them moment
@@ -177,7 +177,7 @@ export interface SEPAGroupHeaderInterface {
   }
 }
 
-export interface SEPAPaymentInformationInterface {
+interface SEPAPaymentInformationInterface {
   PmtInfId: string;
   PmtMtd: PaymentMethod;
   PmtTpInf: {
@@ -264,7 +264,7 @@ export interface SEPAPaymentInformationInterface {
 }
 
 
-export interface XLFileDescriptor {
+interface XLFileDescriptor {
   FileReference: string;
   TargetId: string;
   FileType: string;
@@ -276,7 +276,7 @@ export interface XLFileDescriptor {
 }
 
 
-export interface XPInterface {
+interface XPInterface {
   mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
@@ -291,7 +291,7 @@ export interface XPInterface {
 }
 
 
-export interface XPFileDescriptor {
+interface XPFileDescriptor {
   FileReference: string;
   TargetId: string;
   UserFilename: string;
@@ -303,31 +303,59 @@ export interface XPFileDescriptor {
   Deletable: string;
 }
 
-
-export interface DFInterface {
-  mockResponse: boolean;
-  userParams: UserParamsInterface;
-  requestUrl: string;
-  RequestId: string;
-  Timestamp: string;
-  SoftwareId: SoftwareIdInterface;
-  ExecutionSerial: string;
-  Base64EncodedBankCsr: string;
-  Base64EncodedClientCsr: string;
-  Base64EncodedClientPrivateKey?: string;
-  language: Language;
-  fileReferences: string[];
+interface PaymentStatusReportContent {
+  // CstmrPmtStsRpt: {
+    GrpHdr: {
+        MsgId: string,
+        CreDtTm: Date,
+        InitgPty: {
+            Nm: string
+        },
+        DbtrAgt: {
+            FinInstnId: {
+                BIC: string
+            }
+        }
+    },
+    OrgnlGrpInfAndSts: {
+        OrgnlMsgId: string,
+        OrgnlMsgNmId: string,
+        GrpSts: string
+    },
+    OrgnlPmtInfAndSts: {
+        OrgnlPmtInfId: string,
+        TxInfAndSts: {
+            OrgnlEndToEndId: string,
+            TxSts: string,
+            StsRsnInf: {
+                Rsn: {
+                    Cd: string 
+                },
+                AddtlInf: string
+            }
+        }
+    }
+//  }
 }
 
-export interface DFFileDescriptor {
-  FileReference: string;
-  TargetId: string;
-  UserFilename: string;
-  ParentFileReference: string;
-  FileType: string;
-  FileTimestamp: string;
-  Status: string;
-  ForwardedTimestamp: string;
-  Deletable: string;
-  Content: string;
+export {
+  ApplicationRequestSignatureInterface,
+  AxiosAgentInterface,
+  CertificateInterface,
+  CreateCertificateInterface,
+  CreatedCertificateInterface,
+  GetCertificateInterface,
+  PaymentStatusReportContent,
+  SEPAGroupHeaderInterface,
+  SEPAPaymentInformationInterface,
+  SoftwareIdInterface,
+  UserParamsInterface,
+  ValidationInfoInterface,
+  XLFileDescriptor,
+  XLInterface,
+  XLPaymentInfoValidationInterface,
+  XLPaymentInfoValidationResultInterface,
+  XPFileDescriptor,
+  XPInterface,
+  XTInterface
 }
