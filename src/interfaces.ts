@@ -328,7 +328,7 @@ interface DFFileDescriptor {
   Status: string;
   ForwardedTimestamp: string;
   Deletable: string;
-  Content: string;
+  Content: PaymentStatusReport;
 }
 
 interface CustomerPaymentStatusReport {
