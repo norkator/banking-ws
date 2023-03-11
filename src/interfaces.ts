@@ -303,39 +303,87 @@ interface XPFileDescriptor {
   Deletable: string;
 }
 
-interface PaymentStatusReportContent {
+interface CustomerPaymentStatusReport {
   // CstmrPmtStsRpt: {
     GrpHdr: {
-        MsgId: string,
-        CreDtTm: Date,
+        MsgId: string;
+        CreDtTm: string;
         InitgPty: {
-            Nm: string
+            Nm: string;
         },
         DbtrAgt: {
             FinInstnId: {
-                BIC: string
+                BIC: string;
             }
         }
     },
     OrgnlGrpInfAndSts: {
-        OrgnlMsgId: string,
-        OrgnlMsgNmId: string,
-        GrpSts: string
+        OrgnlMsgId: string;
+        OrgnlMsgNmId: string;
+        GrpSts: string;
     },
     OrgnlPmtInfAndSts: {
-        OrgnlPmtInfId: string,
+        OrgnlPmtInfId: string;
         TxInfAndSts: {
-            OrgnlEndToEndId: string,
-            TxSts: string,
+            OrgnlEndToEndId: string;
+            TxSts: string;
             StsRsnInf: {
                 Rsn: {
-                    Cd: string 
+                    Cd: string;
                 },
-                AddtlInf: string
+                AddtlInf: string;
             }
         }
     }
 //  }
+}
+
+interface PaymentStatusReportContent {
+  GroupHeader: {
+    MessageIdentifier: string;
+    CreateDateTime: Date;
+    InitiatingParty: {
+      Name: string;
+    },
+    DebtorAgent: {
+      FinancialInstitutionIdentification: {
+        BIC: string;
+      }
+    }
+  },
+  OriginalGroupInformationAndStatus: {
+    OriginalMessageIdentification: string;
+    OriginalMessageNameIdentification: string;
+    GroupStatus: string;
+  },
+  OriginalPaymentInformationAndStatus: {
+    OriginalPaymentInformationIdentification: string;
+    TransactionInformationAndStatus: {
+      OriginalEndToEndIdentification: string;
+      TransactionStatus: string;
+      StatusReasonInformation: {
+        Reason: {
+          Code: string;
+        },
+        AdditionalInformation: string;
+      }
+    }
+  }
+}
+
+interface PaymentStatusReport {
+  CreateDateTime: Date;
+  MessageIdentifier: string;
+  OriginalMessageIdentification: string;
+  OriginalPaymentInformationIdentification: string;
+  Status: {
+    GroupStatus: string;
+    TransactionStatus: string,
+    StatusReasonInformationDescription: string;
+    StatusReasonInformationCode: string;
+    AdditionalInformation: string;
+  }
+
 }
 
 export {
@@ -344,7 +392,9 @@ export {
   CertificateInterface,
   CreateCertificateInterface,
   CreatedCertificateInterface,
+  CustomerPaymentStatusReport,
   GetCertificateInterface,
+  PaymentStatusReport,
   PaymentStatusReportContent,
   SEPAGroupHeaderInterface,
   SEPAPaymentInformationInterface,
