@@ -100,7 +100,7 @@ function InstdAmtValidate(instdAmt: string): { valid: boolean; reasons: { code: 
 
 
 export {
-  IBANValidate,
   BICValidate,
+  IBANValidate,
   InstdAmtValidate,
 }
