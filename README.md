@@ -63,7 +63,6 @@ Special thanks for contributing:
 
 * [Maiska123](https://github.com/Maiska123)
 
-
 Installing
 ============
 
@@ -737,14 +736,70 @@ Download file
 ...
 
 ```typescript
-todo
+import * as moment from 'moment';
+import {DFInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
+import {DownloadFile} from './src/index';
+
+const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
+const BANK_CERTIFICATE = "base64-content-here";
+const CLIENT_CERTIFICATE = "base64-content-here";
+const CLIENT_PRIVATE_KEY = "base64-content-here";
+
+const userParams: UserParamsInterface = {
+  bank: 'Samlink',
+  environment: 'PRODUCTION',
+  customerId: '12345678',
+  Base64EncodedRootCA: SAMLINK_TEST_ROOT_CA,
+  rejectUnauthorized: true,
+};
+const df: DFInterface = {
+  mockResponse: false,
+  userParams: userParams,
+  requestUrl: 'https://185.251.49.57/services/CorporateFileService',
+  RequestId: '123456',
+  Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
+  SoftwareId: {name: 'TEST', version: '0.10.0'} as SoftwareIdInterface,
+  ExecutionSerial: '123456',
+  Base64EncodedClientCsr: CLIENT_CERTIFICATE,
+  Base64EncodedBankCsr: BANK_CERTIFICATE,
+  Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
+  language: 'FI',
+  fileReferences: ['553481']
+};
+
+const fileDescriptors = await DownloadFile(df);
+console.log(fileDescriptors);
 ```
 
 #### Expected response
 
-Following array sample is example when you have two SEPA payments sent to bank system.
+Following is a sample response for requested file reference.
 
 ```json5
-[
-]
+{
+  "FileReference": "553481",
+  "TargetId": "NONE",
+  "UserFilename": "NONE.palaute",
+  "ParentFileReference": "553480",
+  "FileType": "XP",
+  "FileTimestamp": "2023-03-09T18:59:10.193+02:00",
+  "Status": "DLD",
+  "ForwardedTimestamp": "2023-03-09T18:59:10.193+02:00",
+  "Deletable": "false",
+  "Content": {
+    "CreateDateTime": "2023-03-09T16:59:10.183Z",
+    "MessageIdentifier": "01871490_1678381150183",
+    "OriginalMessageIdentification": "MSGID202303",
+    "OriginalPaymentInformationIdentification": "pain.001.001.02",
+    "Status": {
+      "GroupStatus": "ACTC",
+      "TransactionStatus": "-",
+      "StatusReasonInformationDescriptions": [
+        "No Description."
+      ],
+      "StatusReasonInformationCode": "-",
+      "AdditionalInformation": "-"
+    }
+  }
+}
 ```
