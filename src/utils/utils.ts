@@ -147,7 +147,7 @@ function FormatResponseCertificate(certificate: string, maxLength = 64): string 
   let cert = '-----BEGIN CERTIFICATE-----\n';
   const numOfLines = Math.floor(certificate.length / maxLength);
   for (let i = 0; i < numOfLines + 1; i++) {
-    cert += certificate.substr(i * maxLength, maxLength);
+    cert += certificate.substring(i * maxLength, (i * maxLength) + maxLength);
     if (i !== numOfLines) {
       cert += '\n';
     }
