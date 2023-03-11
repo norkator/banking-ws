@@ -379,7 +379,7 @@ interface PaymentStatusReport {
   Status: {
     GroupStatus: string;
     TransactionStatus: string,
-    StatusReasonInformationDescription: string;
+    StatusReasonInformationDescriptions: string[];
     StatusReasonInformationCode: string;
     AdditionalInformation: string;
   }

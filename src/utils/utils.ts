@@ -9,6 +9,7 @@ import {DOMParser} from '@xmldom/xmldom';
 
 const xmlC14n = require('xml-c14n');
 import {parseString} from 'xml2js';
+import { ExtStatusCodes } from '../externalcodesets';
 
 
 /**
@@ -191,20 +192,48 @@ function GetCdtTrfTxInfAmtInstdAmtTotal(paymentAmount: number): string {
   return String((Number(paymentAmount)).toFixed(2));
 }
 
+/**
+ * Gets a value from nested item recursively with names of the nodes
+ * @param obj object which has nested structure
+ * @param args arguments on which has treelike structure to get a value
+ * @constructor
+ * @returns value of latest arg given
+ */
+function GetNested(obj: object, ...args: any[]) {
+  return args.reduce((obj, level) => obj && obj[level], obj)
+}
+
+/**
+ * Gets a combination of all matching descriptions from ExtStatusCodes dictionary with given string
+ * @param code query string
+ * @constructor
+ * @returns string[] of all possible matches
+ */
+ function GetExternalStatusCodeDescriptions(code: string): string[] {
+  const z: string[] = [];
+  for(const key in ExtStatusCodes) {
+    if  ( key.match(code) ) z.push(ExtStatusCodes[key])
+  }
+  
+  return z
+}
+
 
 export {
-  LoadFileAsString,
   Base64DecodeStr,
   Base64EncodeStr,
-  LoadFileFromPath,
+  Canonicalize,
+  CanonicalizeWithDomParser,
   CleanUpCertificate,
+  FormatResponseCertificate,
+  GetCdtTrfTxInfAmtInstdAmtTotal,
+  GetExternalStatusCodeDescriptions,
+  GetNested,
+  GetUuid,
+  HandleResponseCode,
+  LoadFileAsString,
+  LoadFileFromPath,
+  ParseXml,
   RemoveWhiteSpacesAndNewLines,
   x509ExpirationDate,
-  CanonicalizeWithDomParser,
-  Canonicalize,
-  GetUuid,
-  FormatResponseCertificate,
-  ParseXml,
-  HandleResponseCode,
-  GetCdtTrfTxInfAmtInstdAmtTotal,
 }
