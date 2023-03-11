@@ -19,6 +19,7 @@ Table of contents
 * [Resources](#resources)
   * [Links](#links)
   * [Documents](#documents)
+* [Contributors](#contributors)
 * [Installing](#installing)
 * [Docker sample](#docker-sample)
 * [Terminology](#terminology)
@@ -54,6 +55,14 @@ Documents
 * https://www.finanssiala.fi/wp-content/uploads/2021/03/WebServices_Messages_v110_20200504.pdf
 * https://www.finanssiala.fi/en/topics/payment-services-in-finland/payment-technical-documents/
 * https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO20022_Payment_Guide.pdf
+
+Contributors
+============
+
+Special thanks for contributing:
+
+* [Maiska123](https://github.com/Maiska123)
+
 
 Installing
 ============
