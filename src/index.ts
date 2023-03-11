@@ -24,12 +24,12 @@ import {XTApplicationResponse} from './bank_statement/XTApplicationResponse';
 import {CertRenewRequestEnvelope} from './get_certificate/certRenewRequestEnvelope';
 import {XTApplicationRequest} from './bank_statement/XTApplicationRequest';
 import {XLApplicationResponse} from './sepa_payment/XLApplicationResponse';
-import {XPApplicationResponse} from './sepa_error/XPApplicationResponse';
 import {XTRequestEnvelope} from './bank_statement/XTRequestEnvelope';
 import {XLRequestEnvelope} from './sepa_payment/XLRequestEnvelope';
-import {XPApplicationRequest} from './sepa_error/XPApplicationRequest';
-import {XPRequestEnvelope} from './sepa_error/XPRequestEnvelope';
 import {XLValidation} from './sepa_payment/XLValidation';
+import {XPDFLApplicationRequest} from './download_file_list/XPDFLApplicationRequest';
+import {XPDFLRequestEnvelope} from './download_file_list/XPDFLRequestEnvelope';
+import {XPDFLApplicationResponse} from './download_file_list/XPDFLApplicationResponse';
 import {DFApplicationRequest} from './donwload_file/DFApplicationRequest';
 import {DFRequestEnvelope} from './donwload_file/DFRequestEnvelope';
 import {DFApplicationResponse} from './donwload_file/DFApplicationResponse';
@@ -225,17 +225,17 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
 
 
 /**
- * Return SEPA errors with DownloadFileList command
+ * Return list of XP sepa descriptors with DownloadFileList command
  * @constructor
  */
-async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
-  const xpRequest = new XPApplicationRequest(xp);
+async function DownloadFileList(xp: XPInterface): Promise<XPFileDescriptor[]> {
+  const xpRequest = new XPDFLApplicationRequest(xp);
   const body = await xpRequest.createXmlBody();
   if (body === undefined) {
     throw new Error('XPApplicationRequest returned empty body from createXmlBody');
   }
   const applicationRequest = Base64EncodeStr(body);
-  const xpRequestEnvelope = new XPRequestEnvelope(xp, applicationRequest);
+  const xpRequestEnvelope = new XPDFLRequestEnvelope(xp, applicationRequest);
   const options: AxiosAgentInterface = {
     rejectUnauthorized: xp.userParams.rejectUnauthorized
   }
@@ -244,7 +244,7 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
   }
   const agent = new https.Agent(options);
   if (xp.mockResponse) {
-    const xpResponse = new XPApplicationResponse(xp, '');
+    const xpResponse = new XPDFLApplicationResponse(xp, '');
     return xpResponse.mockResponse();
   }
   const response = await axios.post(xp.requestUrl, await xpRequestEnvelope.createXmlBody(), {
@@ -257,7 +257,7 @@ async function SEPAErrors(xp: XPInterface): Promise<XPFileDescriptor[]> {
   // const response = {
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'xp_response.xml'))
   // };
-  const xpResponse = new XPApplicationResponse(xp, response.data);
+  const xpResponse = new XPDFLApplicationResponse(xp, response.data);
   return await xpResponse.parseBody();
 }
 
@@ -301,6 +301,6 @@ export {
   BankStatement,
   SEPAPaymentInfoValidation,
   SEPAPayment,
-  SEPAErrors,
+  DownloadFileList,
   DownloadFile,
 }

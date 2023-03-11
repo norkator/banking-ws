@@ -5,7 +5,7 @@ import {XPFileDescriptor, XPInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';
 
-class XPApplicationResponse {
+class XPDFLApplicationResponse {
 
   private readonly xp: XPInterface;
   private readonly response: string;
@@ -109,5 +109,5 @@ class XPApplicationResponse {
 }
 
 export {
-  XPApplicationResponse
+  XPDFLApplicationResponse
 };

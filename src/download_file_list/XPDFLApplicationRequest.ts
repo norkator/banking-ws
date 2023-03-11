@@ -8,7 +8,7 @@ import {ApplicationRequestSignature} from '../signature';
 import {Commands, FileTypes} from '../constants';
 
 
-class XPApplicationRequest {
+class XPDFLApplicationRequest {
 
   private xp: XPInterface;
 
@@ -39,6 +39,8 @@ class XPApplicationRequest {
         'ExecutionSerial': this.xp.ExecutionSerial, // not in use
         'Compression': false,
         'SoftwareId': this.getSoftwareId(),
+        'ParentFileReference': {
+        },
         'FileType': FileTypes.XP,
         // 'Signature': '', append node here
       }
@@ -70,5 +72,5 @@ class XPApplicationRequest {
 }
 
 export {
-  XPApplicationRequest
+  XPDFLApplicationRequest
 };

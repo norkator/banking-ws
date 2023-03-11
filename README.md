@@ -31,7 +31,7 @@ Table of contents
   * [Bank Statement](#bank-statement)
   * [SEPA Payments info validation](#sepa-payments-info-validation)
   * [SEPA Payments](#sepa-payments)
-  * [SEPA Errors](#sepa-errors)
+  * [Download File List](#download-file-list)
   * [Download File](#download-file)
 
 Resources
@@ -332,7 +332,7 @@ const xt: XTInterface = {
   Base64EncodedClientCsr: CLIENT_CERTIFICATE,
   Base64EncodedBankCsr: BANK_CERTIFICATE,
   Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
-  language: "FI",
+  language: 'FI',
 };
 
 const bankStatement = await BankStatement(xt);
@@ -512,7 +512,7 @@ const xl: XLInterface = {
   Base64EncodedClientCsr: CLIENT_CERTIFICATE,
   Base64EncodedBankCsr: BANK_CERTIFICATE,
   Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
-  language: "FI",
+  language: 'FI',
   sepa: {
     CcyOfTrf: 'EUR',
     GrpHdr: {
@@ -658,14 +658,14 @@ NEW = New file
 KIN = Key-in
 ```
 
-SEPA errors
+Download file list
 -----
-Returns list of SEPA-XML errors. Known as `Pain002.001.03` related to earlier section payments.
+Returns list of SEPA-XML descriptors. Known as `Pain002.001.03` related to earlier section payments.
 
 ```typescript
 import * as moment from 'moment';
 import {XPInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
-import {SEPAErrors} from './src/index';
+import {DownloadFileList} from './src/index';
 
 const SAMLINK_TEST_ROOT_CA = "base64-content-here"; // in production use value: null
 const BANK_CERTIFICATE = "base64-content-here";
@@ -690,10 +690,10 @@ const xp: XPInterface = {
   Base64EncodedClientCsr: CLIENT_CERTIFICATE,
   Base64EncodedBankCsr: BANK_CERTIFICATE,
   Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
-  language: "FI",
+  language: 'FI',
 };
-const sepaErrors = await SEPAErrors(xp);
-console.log(sepaErrors);
+const xpFileList = await DownloadFileList(xp);
+console.log(xpFileList);
 ```
 
 #### Expected response

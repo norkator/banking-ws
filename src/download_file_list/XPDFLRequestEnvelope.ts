@@ -6,7 +6,7 @@ import {Base64DecodeStr, CleanUpCertificate, GetUuid} from '../utils/utils';
 import {XPInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 
-class XPRequestEnvelope {
+class XPDFLRequestEnvelope {
 
   private xp: XPInterface;
   private readonly applicationRequest: string;
@@ -68,5 +68,5 @@ class XPRequestEnvelope {
 }
 
 export {
-  XPRequestEnvelope
+  XPDFLRequestEnvelope
 };
