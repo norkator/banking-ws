@@ -4,6 +4,7 @@ import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLi
 import {DFFileDescriptor, DFInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';
+import {ParseContentFromPaymentStatusReport, ParsePaymentStatusReport} from '../utils/parsers';
 
 class DFApplicationResponse {
 
@@ -60,7 +61,9 @@ class DFApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    const Content = ns2CertApplicationResponse['Content'][0]; // Todo.. this needs parser developed in other branch
+    const Content = ns2CertApplicationResponse['Content'][0];
+    const ParsedContent = await ParseContentFromPaymentStatusReport(Content);
+    const PaymentStatusReport = await ParsePaymentStatusReport(JSON.parse(ParsedContent));
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
 
     return {
@@ -73,7 +76,7 @@ class DFApplicationResponse {
       Status: fd['Status'][0],
       ForwardedTimestamp: fd['ForwardedTimestamp'][0],
       Deletable: fd['Deletable'][0],
-      Content: Content,
+      Content: PaymentStatusReport,
     } as DFFileDescriptor;
   }
 
