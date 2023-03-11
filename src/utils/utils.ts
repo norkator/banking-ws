@@ -9,7 +9,7 @@ import {DOMParser} from '@xmldom/xmldom';
 
 const xmlC14n = require('xml-c14n');
 import {parseString} from 'xml2js';
-import { ExtStatusCodes } from '../externalcodesets';
+import {ExtStatusCodes} from '../externalCodeSets';
 
 
 /**
@@ -214,7 +214,7 @@ function GetNested(obj: object, ...args: any[]) {
   for(const key in ExtStatusCodes) {
     if  ( key.match(code) ) z.push(ExtStatusCodes[key])
   }
-  
+
   return z
 }
 
