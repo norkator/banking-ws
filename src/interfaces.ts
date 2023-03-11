@@ -303,38 +303,66 @@ interface XPFileDescriptor {
   Deletable: string;
 }
 
+interface DFInterface {
+  mockResponse: boolean;
+  userParams: UserParamsInterface;
+  requestUrl: string;
+  RequestId: string;
+  Timestamp: string;
+  SoftwareId: SoftwareIdInterface;
+  ExecutionSerial: string;
+  Base64EncodedBankCsr: string;
+  Base64EncodedClientCsr: string;
+  Base64EncodedClientPrivateKey?: string;
+  language: Language;
+  fileReferences: string[];
+}
+
+interface DFFileDescriptor {
+  FileReference: string;
+  TargetId: string;
+  UserFilename: string;
+  ParentFileReference: string;
+  FileType: string;
+  FileTimestamp: string;
+  Status: string;
+  ForwardedTimestamp: string;
+  Deletable: string;
+  Content: string;
+}
+
 interface CustomerPaymentStatusReport {
   // CstmrPmtStsRpt: {
-    GrpHdr: {
-        MsgId: string;
-        CreDtTm: string;
-        InitgPty: {
-            Nm: string;
-        },
-        DbtrAgt: {
-            FinInstnId: {
-                BIC: string;
-            }
-        }
+  GrpHdr: {
+    MsgId: string;
+    CreDtTm: string;
+    InitgPty: {
+      Nm: string;
     },
-    OrgnlGrpInfAndSts: {
-        OrgnlMsgId: string;
-        OrgnlMsgNmId: string;
-        GrpSts: string;
-    },
-    OrgnlPmtInfAndSts: {
-        OrgnlPmtInfId: string;
-        TxInfAndSts: {
-            OrgnlEndToEndId: string;
-            TxSts: string;
-            StsRsnInf: {
-                Rsn: {
-                    Cd: string;
-                },
-                AddtlInf: string;
-            }
-        }
+    DbtrAgt: {
+      FinInstnId: {
+        BIC: string;
+      }
     }
+  },
+  OrgnlGrpInfAndSts: {
+    OrgnlMsgId: string;
+    OrgnlMsgNmId: string;
+    GrpSts: string;
+  },
+  OrgnlPmtInfAndSts: {
+    OrgnlPmtInfId: string;
+    TxInfAndSts: {
+      OrgnlEndToEndId: string;
+      TxSts: string;
+      StsRsnInf: {
+        Rsn: {
+          Cd: string;
+        },
+        AddtlInf: string;
+      }
+    }
+  }
 //  }
 }
 
@@ -407,5 +435,7 @@ export {
   XLPaymentInfoValidationResultInterface,
   XPFileDescriptor,
   XPInterface,
-  XTInterface
+  XTInterface,
+  DFInterface,
+  DFFileDescriptor,
 }
