@@ -1,7 +1,7 @@
 // import * as mocha from 'mocha';
 import * as chai from 'chai';
-import {Base64DecodeStr } from './utils';
-import { ParseContentFromPaymentStatusReport, ParsePaymentStatusReport } from './parsers';
+import {Base64DecodeStr} from './utils';
+import {ParseContentFromPaymentStatusReport, ParsePaymentStatusReport} from './parsers';
 
 const expect = chai.expect;
 describe('Parsers', async () => {
@@ -30,31 +30,31 @@ describe('Parsers', async () => {
 
   it('should return payment status report with approved structure', async () => {
     const c = await ParseContentFromPaymentStatusReport(PAYMENT_STATUS_REPORT_STRUCTURE_APPROVED);
-    const b = await ParsePaymentStatusReport(JSON.parse(c));
+    const b = await ParsePaymentStatusReport(c);
     expect(b.Status.GroupStatus).to.equal('ACTC');
   });
 
   it('should return payment status report with rejected structure', async () => {
     const c = await ParseContentFromPaymentStatusReport(PAYMENT_STATUS_REPORT_STRUCTURE_REJECTED);
-    const b = await ParsePaymentStatusReport(JSON.parse(c));
+    const b = await ParsePaymentStatusReport(c);
     expect(b.Status.GroupStatus).to.equal('RJCT');
   });
 
   it('should return payment status report with content approved', async () => {
     const c = await ParseContentFromPaymentStatusReport(PAYMENT_STATUS_REPORT_CONTENT_APPROVED);
-    const b = await ParsePaymentStatusReport(JSON.parse(c));
+    const b = await ParsePaymentStatusReport(c);
     expect(b.Status.GroupStatus).to.equal('ACCP');
   });
 
   it('should return payment status report partially approved', async () => {
     const c = await ParseContentFromPaymentStatusReport(PAYMENT_STATUS_REPORT_PARTIALLY_ACCEPTED);
-    const b = await ParsePaymentStatusReport(JSON.parse(c));
+    const b = await ParsePaymentStatusReport(c);
     expect(b.Status.GroupStatus).to.equal('PART');
   });
 
   it('should return payment status report rejected (single transaction)', async () => {
     const c = await ParseContentFromPaymentStatusReport(PAYMENT_STATUS_REPORT_SINGLE_REJECTED);
-    const b = await ParsePaymentStatusReport(JSON.parse(c)); 
+    const b = await ParsePaymentStatusReport(c); 
     expect(b.Status.TransactionStatus).to.equal('RJCT');
   });
 });

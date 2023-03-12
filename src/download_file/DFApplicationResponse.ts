@@ -63,7 +63,7 @@ class DFApplicationResponse {
 
     const Content = ns2CertApplicationResponse['Content'][0];
     const ParsedContent = await ParseContentFromPaymentStatusReport(Content);
-    const PaymentStatusReport = await ParsePaymentStatusReport(JSON.parse(ParsedContent));
+    const PaymentStatusReport = await ParsePaymentStatusReport(ParsedContent);
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
 
     return {
