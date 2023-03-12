@@ -36,7 +36,7 @@ class EnvelopeSignature {
    */
   public async constructEnvelopeWithSignature(
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    bodyNode: { [name: string]: any }, bodyUuid: string, signingKey: string, binarySecurityToken: string
+    bodyNode: {[name: string]: any}, bodyUuid: string, signingKey: string, binarySecurityToken: string
   ): Promise<string> {
     const timeStampNode = {
       'wsu:Timestamp': {
@@ -189,6 +189,7 @@ class EnvelopeSignature {
   private getDigestValue(node: string): string {
     const shaSum = createHash(this.DIGEST_METHOD);
     shaSum.update(node);
+    
     return shaSum.digest('base64');
   }
 
@@ -197,6 +198,7 @@ class EnvelopeSignature {
     sign.update(node);
     sign.end();
     const signature = sign.sign(signingKey);
+    
     return signature.toString('base64');
   }
 
@@ -204,6 +206,7 @@ class EnvelopeSignature {
   private verifySignature(certificate: string, node: string, envelopeSignatureValue: string): boolean {
     const verifier = createVerify(this.SIGNATURE_METHOD);
     verifier.update(node);
+    
     return verifier.verify(certificate, envelopeSignatureValue, 'base64');
   }
 

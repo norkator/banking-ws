@@ -22,6 +22,7 @@ class CreateCertificate {
     await this.create();
     const csr = LoadFileAsString(path.join('./openssl/' + this.CSR_NAME));
     const privateKey = LoadFileAsString(path.join('./openssl/' + this.PRIVATE_KEY_NAME));
+    
     return {
       clientCertificate: Base64EncodeStr(csr),
       clientPrivateKey: Base64EncodeStr(privateKey)
@@ -70,38 +71,38 @@ class CreateCertificate {
     });
   }
 
+
   private getConfiguration(): string {
     return `
-[ ca ]
-default_ca = CA_default
+      [ ca ]
+      default_ca = CA_default
 
-[ req ]
-default_bits = 2048
-default_md = sha256
-prompt = no
-encrypt_key = no
-distinguished_name = req_distinguished_name
+      [ req ]
+      default_bits = 2048
+      default_md = sha256
+      prompt = no
+      encrypt_key = no
+      distinguished_name = req_distinguished_name
 
-[ req_distinguished_name ]
-countryName = ` + this.cc.twoLetterCountryCode + `
-stateOrProvinceName = ` + this.cc.stateOrProvince + `
-localityName = ` + this.cc.city + `
-organizationName = ` + this.cc.companyName + `
-organizationalUnitName = ` + this.cc.companyUnitName + `
-commonName = ` + this.cc.customerId + `
-emailAddress = ` + this.cc.emailAddress + `
+      [ req_distinguished_name ]
+      countryName = ` + this.cc.twoLetterCountryCode + `
+      stateOrProvinceName = ` + this.cc.stateOrProvince + `
+      localityName = ` + this.cc.city + `
+      organizationName = ` + this.cc.companyName + `
+      organizationalUnitName = ` + this.cc.companyUnitName + `
+      commonName = ` + this.cc.customerId + `
+      emailAddress = ` + this.cc.emailAddress + `
 
-[ policy_match ]
-countryName = ` + this.cc.twoLetterCountryCode + `
-stateOrProvinceName = ` + this.cc.stateOrProvince + `
-localityName = ` + this.cc.city + `
-organizationName = ` + this.cc.companyName + `
-organizationalUnitName = ` + this.cc.companyUnitName + `
-commonName = ` + this.cc.customerId + `
-emailAddress = ` + this.cc.emailAddress + `
-`;
+      [ policy_match ]
+      countryName = ` + this.cc.twoLetterCountryCode + `
+      stateOrProvinceName = ` + this.cc.stateOrProvince + `
+      localityName = ` + this.cc.city + `
+      organizationName = ` + this.cc.companyName + `
+      organizationalUnitName = ` + this.cc.companyUnitName + `
+      commonName = ` + this.cc.customerId + `
+      emailAddress = ` + this.cc.emailAddress + `
+      `.match(/^\s*/g)?.[0]; // delete if leading whitespace is not an issue
   }
-
 }
 
 

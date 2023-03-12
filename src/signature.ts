@@ -121,6 +121,7 @@ class ApplicationRequestSignature {
   private getDigestValue(node: string): string {
     const shaSum = createHash(this.DIGEST_METHOD);
     shaSum.update(node);
+    
     return shaSum.digest('base64');
   }
 
@@ -129,6 +130,7 @@ class ApplicationRequestSignature {
     sign.update(node);
     sign.end();
     const signature = sign.sign(signingKey);
+    
     return signature.toString('base64');
   }
 
@@ -136,6 +138,7 @@ class ApplicationRequestSignature {
   private verifySignature(certificate: string, node: string, envelopeSignatureValue: string): boolean {
     const verifier = createVerify(this.SIGNATURE_METHOD);
     verifier.update(node);
+    
     return verifier.verify(certificate, envelopeSignatureValue, 'base64');
   }
 

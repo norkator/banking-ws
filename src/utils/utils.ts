@@ -18,6 +18,7 @@ import {ExtStatusCodes} from '../externalCodeSets';
  */
 function LoadFileAsString(fullPath: string): string {
   const file = readFileSync(fullPath, 'utf-8');
+  
   return Buffer.from(file).toString('utf-8');
 }
 
@@ -46,6 +47,7 @@ function Base64EncodeStr(str: string): string {
  */
 async function LoadFileFromPath(filePath: string, outputEncoding: OutputEncoding): Promise<string> {
   const file = readFileSync(filePath, outputEncoding);
+  
   return Buffer.from(file).toString('utf-8');
 }
 
@@ -154,6 +156,7 @@ function FormatResponseCertificate(certificate: string, maxLength = 64): string 
   }
   cert += '\n';
   cert += '-----END CERTIFICATE-----';
+  
   return cert;
 }
 
