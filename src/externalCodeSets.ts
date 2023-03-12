@@ -1,7 +1,7 @@
 // Simplified and generalized JS Dictionary of all codes from External Code Sets from https://www.iso20022.org/
 // duplicates with different meanings has _ (underscore) and relative numbering afterwards
 
-const ExtStatusCodes: { [key: string]: string } = {
+const ExtStatusCodes: {[key: string]: string} = {
   '0000':  'Transaction is related to business payment',
   '0001':  'Transaction is related to converted (bank) payment.Conversion of physical instrument to electonric form for transmission to the paying bank and where the original paper document does not continue in the clearing process.The instrument rules change upon conversion.',
   '0002':  'Transaction is related to standing order.',

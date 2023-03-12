@@ -7,7 +7,7 @@ import {
   ValidationErrorsIBAN
 } from 'ibantools';
 
-function IBANValidate(iban: string): { valid: boolean; reasons: { code: number; status: string; } [] } {
+function IBANValidate(iban: string): {valid: boolean; reasons: {code: number; status: string;} []} {
   const ibanResult: ValidateIBANResult = validateIBAN(iban);
   if (!ibanResult.valid) {
     return {
@@ -19,14 +19,15 @@ function IBANValidate(iban: string): { valid: boolean; reasons: { code: number; 
   }
 }
 
-function getIbanInvalidReasons(errorCodes: ValidationErrorsIBAN[]): { code: number; status: string; }[] {
-  const reasons: { code: number; status: string; }[] = [];
+function getIbanInvalidReasons(errorCodes: ValidationErrorsIBAN[]): {code: number; status: string;}[] {
+  const reasons: {code: number; status: string;}[] = [];
   errorCodes.forEach(errorCode => {
     reasons.push({
       code: errorCode,
       status: IBANEnumToString(errorCode)
     })
   });
+  
   return reasons;
 }
 
@@ -52,7 +53,7 @@ function IBANEnumToString(code: number): string {
 }
 
 
-function BICValidate(iban: string): { valid: boolean; reasons: { code: number; status: string; } [] } {
+function BICValidate(iban: string): {valid: boolean; reasons: {code: number; status: string;} []} {
   const bicResult: ValidateBICResult = validateBIC(iban);
   if (!bicResult.valid) {
     return {
@@ -64,14 +65,15 @@ function BICValidate(iban: string): { valid: boolean; reasons: { code: number; s
   }
 }
 
-function getBicInvalidReasons(errorCodes: ValidationErrorsBIC[]): { code: number; status: string; }[] {
-  const reasons: { code: number; status: string; }[] = [];
+function getBicInvalidReasons(errorCodes: ValidationErrorsBIC[]): {code: number; status: string;}[] {
+  const reasons: {code: number; status: string;}[] = [];
   errorCodes.forEach(errorCode => {
     reasons.push({
       code: errorCode,
       status: BICEnumToString(errorCode)
     })
   });
+  
   return reasons;
 }
 
@@ -88,8 +90,9 @@ function BICEnumToString(code: number): string {
   }
 }
 
-function InstdAmtValidate(instdAmt: string): { valid: boolean; reasons: { code: number; status: string; } [] } {
+function InstdAmtValidate(instdAmt: string): {valid: boolean; reasons: {code: number; status: string;} []} {
   const decimalCount = instdAmt.split('.')[1]?.length || 0;
+  
   return decimalCount <= 2 ? {
     valid: true, reasons: []
   } : {

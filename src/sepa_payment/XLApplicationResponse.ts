@@ -69,6 +69,7 @@ class XLApplicationResponse {
     if (fd['FileReference'] === undefined) {
       throw new Error(ResponseText);
     }
+    
     return {
       FileReference: fd['FileReference'][0],
       TargetId: fd['TargetId'][0],

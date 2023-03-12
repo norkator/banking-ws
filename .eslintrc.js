@@ -13,6 +13,9 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/ban-ts-comment': 0,
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/object-curly-spacing': 2,
+    'array-bracket-spacing': ['error', 'never'],
+    'newline-before-return': 2,
     'quotes': [2, 'single', {'avoidEscape': true}],
   },
   overrides: [

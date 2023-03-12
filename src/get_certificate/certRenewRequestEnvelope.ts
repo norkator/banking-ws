@@ -36,6 +36,7 @@ class CertRenewRequestEnvelope {
     };
 
     const xml: string = xmlBuilder.create(envelopeObject).end({pretty: true});
+    
     return xml;
   }
 

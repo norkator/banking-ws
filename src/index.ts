@@ -30,9 +30,9 @@ import {XLValidation} from './sepa_payment/XLValidation';
 import {XPDFLApplicationRequest} from './download_file_list/XPDFLApplicationRequest';
 import {XPDFLRequestEnvelope} from './download_file_list/XPDFLRequestEnvelope';
 import {XPDFLApplicationResponse} from './download_file_list/XPDFLApplicationResponse';
-import {DFApplicationRequest} from './donwload_file/DFApplicationRequest';
-import {DFRequestEnvelope} from './donwload_file/DFRequestEnvelope';
-import {DFApplicationResponse} from './donwload_file/DFApplicationResponse';
+import {DFApplicationRequest} from './download_file/DFApplicationRequest';
+import {DFRequestEnvelope} from './download_file/DFRequestEnvelope';
+import {DFApplicationResponse} from './download_file/DFApplicationResponse';
 import * as https from 'https';
 import axios from 'axios';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
@@ -46,6 +46,7 @@ import * as path from 'path';
  */
 async function CreateOwnCertificate(cc: CreateCertificateInterface): Promise<CreatedCertificateInterface> {
   const ownCertificate = new CreateCertificate(cc);
+  
   return await ownCertificate.createCertificate();
 }
 
@@ -56,6 +57,7 @@ async function CreateOwnCertificate(cc: CreateCertificateInterface): Promise<Cre
  */
 async function CheckOwnCertificate(cc: CreateCertificateInterface): Promise<string | null> {
   const ownCertificate = new CreateCertificate(cc);
+  
   return await ownCertificate.checkCertificate();
 }
 
@@ -82,6 +84,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   const agent = new https.Agent(options);
   if (gc.mockResponse) {
     const car = new CertApplicationResponse(gc, '');
+    
     return car.mockResponse();
   }
   const response = await axios.post(gc.requestUrl, certRequestEnvelope.createXmlBody(), {
@@ -95,6 +98,7 @@ async function GetCertificate(gc: GetCertificateInterface): Promise<CertificateI
   //   data: LoadFileAsString(path.join(__dirname + '/' + 'test.xml'))
   // };
   const car = new CertApplicationResponse(gc, response.data);
+  
   return await car.parseBody();
 }
 
@@ -121,6 +125,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   const agent = new https.Agent(options);
   if (gc.mockResponse) {
     const car = new CertApplicationResponse(gc, '');
+    
     return car.mockResponse();
   }
   const response = await axios.post(gc.requestUrl, certRenewRequestEnvelope.createXmlBody(), {
@@ -134,6 +139,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test.xml'))
   // };
   const car = new CertApplicationResponse(gc, response.data);
+  
   return await car.parseBody();
 }
 
@@ -172,6 +178,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'test_response_original.xml'))
   // };
   const xtResponse = new XTApplicationResponse(xt, response.data);
+  
   return await xtResponse.parseBody();
 }
 
@@ -182,6 +189,7 @@ async function BankStatement(xt: XTInterface): Promise<string> {
  */
 async function SEPAPaymentInfoValidation(xlPmtInfo: XLPaymentInfoValidationInterface): Promise<XLPaymentInfoValidationResultInterface> {
   const xlValidation = new XLValidation(xlPmtInfo);
+  
   return await xlValidation.validatePmtInfos();
 }
 
@@ -207,6 +215,7 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   const agent = new https.Agent(options);
   if (xl.mockResponse) {
     const xlResponse = new XLApplicationResponse(xl, '');
+    
     return xlResponse.mockResponse();
   }
   const response = await axios.post(xl.requestUrl, await xlRequestEnvelope.createXmlBody(), {
@@ -220,6 +229,7 @@ async function SEPAPayment(xl: XLInterface): Promise<XLFileDescriptor> {
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'sepa_response_test.xml'))
   // };
   const xlResponse = new XLApplicationResponse(xl, response.data);
+  
   return await xlResponse.parseBody();
 }
 
@@ -245,6 +255,7 @@ async function DownloadFileList(xp: XPInterface): Promise<XPFileDescriptor[]> {
   const agent = new https.Agent(options);
   if (xp.mockResponse) {
     const xpResponse = new XPDFLApplicationResponse(xp, '');
+    
     return xpResponse.mockResponse();
   }
   const response = await axios.post(xp.requestUrl, await xpRequestEnvelope.createXmlBody(), {
@@ -258,6 +269,7 @@ async function DownloadFileList(xp: XPInterface): Promise<XPFileDescriptor[]> {
   //   data: LoadFileAsString(path.join(__dirname + '/../' + 'xp_response.xml'))
   // };
   const xpResponse = new XPDFLApplicationResponse(xp, response.data);
+  
   return await xpResponse.parseBody();
 }
 
@@ -289,6 +301,7 @@ async function DownloadFile(df: DFInterface): Promise<DFFileDescriptor> {
     httpsAgent: agent,
   });
   const dfResponse = new DFApplicationResponse(df, response.data);
+  
   return await dfResponse.parseBody();
 }
 

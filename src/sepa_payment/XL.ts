@@ -1,7 +1,7 @@
 'use strict';
 
 import * as xmlBuilder from 'xmlbuilder';
-import {XLInterface} from '../interfaces';
+import {SEPAPaymentInformationInterface, XLInterface} from '../interfaces';
 
 
 /**
@@ -58,7 +58,7 @@ class XL {
   }
 
   private getPaymentInfos(): any[] {
-    const paymentInfos = [];
+    const paymentInfos: SEPAPaymentInformationInterface[] = [];
     for (const pmtInf of this.xl.sepa.PmtInf) {
       paymentInfos.push({
         'PmtInfId': pmtInf.PmtInfId,
@@ -152,8 +152,9 @@ class XL {
             'Ustrd': pmtInf.CdtTrfTxInf.RmtInf.Ustrd,
           }
         }
-      });
-    }
+      } as unknown as SEPAPaymentInformationInterface);
+    } 
+    
     return paymentInfos;
   }
 

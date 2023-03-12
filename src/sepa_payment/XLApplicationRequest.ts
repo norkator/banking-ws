@@ -65,6 +65,7 @@ class XLApplicationRequest {
     });
 
     obj.ApplicationRequest['Signature'] = signature['Signature'];
+    
     return xmlBuilder.create(obj).end({pretty: false});
   }
 
@@ -77,6 +78,7 @@ class XLApplicationRequest {
     for (const pmtInf of this.xl.sepa.PmtInf) {
       amountTotal = amountTotal + Number(pmtInf.CdtTrfTxInf.Amt.InstdAmt);
     }
+    
     return GetCdtTrfTxInfAmtInstdAmtTotal(amountTotal);
   }
 

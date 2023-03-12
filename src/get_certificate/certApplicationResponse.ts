@@ -105,6 +105,7 @@ class CertApplicationResponse {
 
   private static async getCertificateExpirationDate(cert: string): Promise<string> {
     const decoded = Base64DecodeStr(cert);
+    
     return await x509ExpirationDate(decoded);
   }
 
