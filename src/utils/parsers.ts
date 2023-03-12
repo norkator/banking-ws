@@ -1,5 +1,5 @@
-import { Base64DecodeStr, ParseXml, GetNested, GetExternalStatusCodeDescriptions } from './utils';
-import { PaymentStatusReport } from '../interfaces';
+import {Base64DecodeStr, ParseXml, GetNested, GetExternalStatusCodeDescriptions} from './utils';
+import {PaymentStatusReport} from '../interfaces';
 
 /**
  * Parses content from payment status report
@@ -22,6 +22,8 @@ async function ParseContentFromPaymentStatusReport(contentInBase64: string): Pro
  * @returns PaymentStatusReport
  */
  async function ParsePaymentStatusReport(statusReportObject: any): Promise<PaymentStatusReport> {
+  statusReportObject = JSON.parse(statusReportObject);
+
   let boolExtendedStatus = false;
   
   if (GetNested((statusReportObject as object),'OrgnlPmtInfAndSts','TxInfAndSts')){
