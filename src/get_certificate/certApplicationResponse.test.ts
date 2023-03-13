@@ -11,7 +11,6 @@ describe('CertApplicationResponse', async () => {
 
   it('should return expected certificate details from get certificate response', async () => {
     const gc: GetCertificateInterface = {
-      mockResponse: false,
       userParams: {
         bank: 'Samlink',
         environment: 'PRODUCTION',

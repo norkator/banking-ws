@@ -201,7 +201,6 @@ const userParams: UserParamsInterface = {
 };
 
 const gc: GetCertificateInterface = {
-  mockResponse: false,
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/wsdl/CertificateService.xml',
   Timestamp: new moment().format('YYYY-MM-DDThh:mm:ssZ'),
@@ -268,7 +267,6 @@ const userParams: UserParamsInterface = {
 };
 
 const gc: GetCertificateInterface = {
-  mockResponse: false,
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/wsdl/CertificateService.xml',
   Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
@@ -322,7 +320,6 @@ const userParams: UserParamsInterface = {
 };
 
 const xt: XTInterface = {
-  mockResponse: false,
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',
@@ -502,7 +499,6 @@ const userParams: UserParamsInterface = {
 };
 
 const xl: XLInterface = {
-  mockResponse: false,
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',
@@ -680,7 +676,6 @@ const userParams: UserParamsInterface = {
   rejectUnauthorized: true,
 };
 const xp: XPInterface = {
-  mockResponse: false,
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',
@@ -753,7 +748,6 @@ const userParams: UserParamsInterface = {
   rejectUnauthorized: true,
 };
 const df: DFInterface = {
-  mockResponse: false,
   userParams: userParams,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',

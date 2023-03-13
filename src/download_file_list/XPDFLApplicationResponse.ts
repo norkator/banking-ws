@@ -79,33 +79,6 @@ class XPDFLApplicationResponse {
     return fileDescriptors;
   }
 
-  public mockResponse(): XPFileDescriptor[] {
-    return [
-      {
-        FileReference: '530259',
-        TargetId: 'NONE',
-        UserFilename: 'NONE.palaute',
-        ParentFileReference: '530258',
-        FileType: 'XP',
-        FileTimestamp: '2021-08-17T20:47:39.775+03:00',
-        Status: 'NEW',
-        ForwardedTimestamp: '2021-08-17T20:47:39.775+03:00',
-        Deletable: 'false'
-      },
-      {
-        FileReference: '530254',
-        TargetId: 'NONE',
-        UserFilename: 'NONE.palaute',
-        ParentFileReference: '530253',
-        FileType: 'XP',
-        FileTimestamp: '2021-08-15T21:29:48.349+03:00',
-        Status: 'NEW',
-        ForwardedTimestamp: '2021-08-15T21:29:48.349+03:00',
-        Deletable: 'false'
-      }
-    ]
-  }
-
 }
 
 export {

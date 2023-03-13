@@ -68,7 +68,6 @@ interface ApplicationRequestSignatureInterface {
  * Get certificate interface
  */
 interface GetCertificateInterface {
-  mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
   CurrentWorkingDirectory?: string;
@@ -100,7 +99,6 @@ interface CertificateInterface {
  * camt.053.001.02
  */
 interface XTInterface {
-  mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
   RequestId: string;
@@ -135,7 +133,6 @@ interface ValidationInfoInterface {
  * Pain.001.001.03
  */
 interface XLInterface {
-  mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
   RequestId: string;
@@ -277,7 +274,6 @@ interface XLFileDescriptor {
 
 
 interface XPInterface {
-  mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
   RequestId: string;
@@ -304,7 +300,6 @@ interface XPFileDescriptor {
 }
 
 interface DFInterface {
-  mockResponse: boolean;
   userParams: UserParamsInterface;
   requestUrl: string;
   RequestId: string;
