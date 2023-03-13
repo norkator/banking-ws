@@ -20,6 +20,7 @@ Table of contents
   * [Links](#links)
   * [Documents](#documents)
 * [Contributors](#contributors)
+* [Before release](#before-release)
 * [Installing](#installing)
 * [Docker sample](#docker-sample)
 * [Terminology](#terminology)
@@ -62,6 +63,12 @@ Contributors
 Special thanks for contributing:
 
 * [Maiska123](https://github.com/Maiska123)
+
+Before release
+============
+
+1. Check that dependencies are up-to-date `->` latest.
+2. Increment library version from `package.json` file.
 
 Installing
 ============
@@ -796,4 +803,4 @@ Following is a sample response for requested file reference.
     }
   }
 }
-```
+```__
