@@ -63,13 +63,12 @@ class XLApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
 
     if (fd['FileReference'] === undefined) {
       throw new Error(ResponseText);
     }
-    
+
     return {
       FileReference: fd['FileReference'][0],
       TargetId: fd['TargetId'][0],
@@ -81,20 +80,6 @@ class XLApplicationResponse {
       Deletable: fd['Deletable'][0],
     };
   }
-
-  public mockResponse(): XLFileDescriptor {
-    return {
-      FileReference: '530253',
-      TargetId: 'NONE',
-      FileType: 'XL',
-      FileTimestamp: '2021-08-15T21:29:48.497+03:00',
-      Status: 'WFP',
-      AmountTotal: String(0 /*this.xl.sepa.PmtInf.CdtTrfTxInf.Amt.InstdAmt*/),
-      TransactionCount: String(this.xl.sepa.PmtInf.length),
-      Deletable: 'false'
-    };
-  }
-
 
 }
 

@@ -25,7 +25,6 @@ describe('CertApplicationRequest', async () => {
       '</CertApplicationRequest>';
 
     const gc: GetCertificateInterface = {
-      mockResponse: false,
       userParams: {
         bank: 'Samlink',
         environment: 'PRODUCTION',
@@ -69,7 +68,6 @@ describe('CertApplicationRequest', async () => {
       'ULtCPu9SS0s8Bg//dHEHnEDK4e40PruBOg==</X509Certificate></X509Data></KeyInfo></Signature></CertApplicationRequest>';
 
     const gcr: GetCertificateInterface = {
-      mockResponse: false,
       userParams: {
         bank: 'Samlink',
         environment: 'PRODUCTION',
