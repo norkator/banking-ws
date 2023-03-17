@@ -4,7 +4,7 @@ import {
   AxiosAgentInterface,
   CertificateInterface,
   CreateCertificateInterface,
-  CreatedCertificateInterface, DFFileDescriptor, DFInterface,
+  CreatedCertificateInterface, DelFileInterface, DFFileDescriptor, DFInterface,
   GetCertificateInterface,
   XLFileDescriptor,
   XLInterface, XLPaymentInfoValidationInterface,
@@ -33,6 +33,9 @@ import {XPDFLApplicationResponse} from './download_file_list/XPDFLApplicationRes
 import {DFApplicationRequest} from './download_file/DFApplicationRequest';
 import {DFRequestEnvelope} from './download_file/DFRequestEnvelope';
 import {DFApplicationResponse} from './download_file/DFApplicationResponse';
+import {DelFileApplicationRequest} from './delete_file/DelFileApplicationRequest';
+import {DelFileRequestEnvelope} from './delete_file/DelFileRequestEnvelope';
+import {DelFileApplicationResponse} from './delete_file/DelFileApplicationResponse';
 import * as https from 'https';
 import axios from 'axios';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
@@ -278,8 +281,34 @@ async function DownloadFile(df: DFInterface): Promise<DFFileDescriptor> {
     httpsAgent: agent,
   });
   const dfResponse = new DFApplicationResponse(df, response.data);
-
   return await dfResponse.parseBody();
+}
+
+
+async function DeleteFile(delFile: DelFileInterface): Promise<DFFileDescriptor> {
+  const delFileRequest = new DelFileApplicationRequest(delFile);
+  const body = await delFileRequest.createXmlBody();
+  if (body === undefined) {
+    throw new Error('DelFileApplicationRequest returned empty body from createXmlBody');
+  }
+  const applicationRequest = Base64EncodeStr(body);
+  const delFileRequestEnvelope = new DelFileRequestEnvelope(delFile, applicationRequest);
+  const options: AxiosAgentInterface = {
+    rejectUnauthorized: delFile.userParams.rejectUnauthorized
+  }
+  if (delFile.userParams.Base64EncodedRootCA !== null) {
+    options['ca'] = Base64DecodeStr(delFile.userParams.Base64EncodedRootCA || '');
+  }
+  const agent = new https.Agent(options);
+  const response = await axios.post(delFile.requestUrl, await delFileRequestEnvelope.createXmlBody(), {
+    headers: {
+      'Content-Type': 'text/xml',
+      SOAPAction: '',
+    },
+    httpsAgent: agent,
+  });
+  const delFileResponse = new DelFileApplicationResponse(delFile, response.data);
+  return await delFileResponse.parseBody();
 }
 
 
@@ -293,4 +322,5 @@ export {
   SEPAPayment,
   DownloadFileList,
   DownloadFile,
+  DeleteFile,
 }

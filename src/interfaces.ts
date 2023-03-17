@@ -406,7 +406,20 @@ interface PaymentStatusReport {
     StatusReasonInformationCode: string;
     AdditionalInformation: string;
   }
+}
 
+interface DelFileInterface {
+  userParams: UserParamsInterface;
+  requestUrl: string;
+  RequestId: string;
+  Timestamp: string;
+  SoftwareId: SoftwareIdInterface;
+  ExecutionSerial: string;
+  Base64EncodedBankCsr: string;
+  Base64EncodedClientCsr: string;
+  Base64EncodedClientPrivateKey?: string;
+  language: Language;
+  fileReferences: string[];
 }
 
 export {
@@ -433,4 +446,5 @@ export {
   XTInterface,
   DFInterface,
   DFFileDescriptor,
+  DelFileInterface,
 }
