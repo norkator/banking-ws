@@ -281,6 +281,7 @@ async function DownloadFile(df: DFInterface): Promise<DFFileDescriptor> {
     httpsAgent: agent,
   });
   const dfResponse = new DFApplicationResponse(df, response.data);
+
   return await dfResponse.parseBody();
 }
 
@@ -308,6 +309,7 @@ async function DeleteFile(delFile: DelFileInterface): Promise<DFFileDescriptor> 
     httpsAgent: agent,
   });
   const delFileResponse = new DelFileApplicationResponse(delFile, response.data);
+
   return await delFileResponse.parseBody();
 }
 
