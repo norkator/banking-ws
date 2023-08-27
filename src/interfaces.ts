@@ -9,7 +9,7 @@ import {
   Country,
   Code,
   BIC,
-  Status
+  Status, FileType
 } from './types';
 
 interface AxiosAgentInterface {
@@ -310,6 +310,7 @@ interface DFInterface {
   Base64EncodedClientCsr: string;
   Base64EncodedClientPrivateKey?: string;
   language: Language;
+  fileType: FileType;
   fileReferences: string[];
 }
 
@@ -323,7 +324,7 @@ interface DFFileDescriptor {
   Status: string;
   ForwardedTimestamp: string;
   Deletable: string;
-  Content: PaymentStatusReport;
+  Content: PaymentStatusReport | BankStatement;
 }
 
 interface CustomerPaymentStatusReport {
@@ -406,7 +407,9 @@ interface PaymentStatusReport {
     StatusReasonInformationCode: string;
     AdditionalInformation: string;
   }
+}
 
+interface BankStatement {
 }
 
 export {
@@ -433,4 +436,5 @@ export {
   XTInterface,
   DFInterface,
   DFFileDescriptor,
+  BankStatement,
 }
