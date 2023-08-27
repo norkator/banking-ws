@@ -43,7 +43,7 @@ class DFApplicationRequest {
         'Encryption': false,
         'Compression': false,
         'SoftwareId': this.getSoftwareId(),
-        'FileType': FileTypes.XP,
+        'FileType': this.df.fileType,
         // 'Signature': '', append node here
       }
     };
