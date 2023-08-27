@@ -4,7 +4,8 @@ import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLi
 import {DFFileDescriptor, DFInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';
-import {ParseContentFromPaymentStatusReport, ParsePaymentStatusReport} from '../utils/parsers';
+import {ParseBankStatement, ParseContentFromPaymentStatusReport, ParsePaymentStatusReport} from '../utils/parsers';
+import {FileTypes} from '../constants';
 
 class DFApplicationResponse {
 
@@ -62,9 +63,17 @@ class DFApplicationResponse {
     HandleResponseCode(ResponseCode, ResponseText);
 
     const Content = ns2CertApplicationResponse['Content'][0];
-    const ParsedContent = await ParseContentFromPaymentStatusReport(Content);
-    const PaymentStatusReport = await ParsePaymentStatusReport(ParsedContent);
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
+    const fileType = fd['FileType'][0];
+
+    let parsedContent = null;
+
+    if (fileType === FileTypes.XP) {
+      const ParsedContent = await ParseContentFromPaymentStatusReport(Content);
+      parsedContent = await ParsePaymentStatusReport(ParsedContent);
+    } else if (fileType === FileTypes.XT) {
+      parsedContent = await ParseBankStatement(Content);
+    }
 
     return {
       FileReference: fd['FileReference'][0],
@@ -76,7 +85,7 @@ class DFApplicationResponse {
       Status: fd['Status'][0],
       ForwardedTimestamp: fd['ForwardedTimestamp'][0],
       Deletable: fd['Deletable'][0],
-      Content: PaymentStatusReport,
+      Content: parsedContent,
     } as DFFileDescriptor;
   }
 

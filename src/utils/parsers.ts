@@ -11,7 +11,7 @@ async function ParseContentFromPaymentStatusReport(contentInBase64: string): Pro
   const a = await ParseXml(Base64DecodeStr(contentInBase64));
   let b = JSON.stringify(a['Document']['CstmrPmtStsRpt']);
   b = b.replace(/[\[\]']+/g,''); // remove squarebrackets - no need for PaymentStatusReport
-  
+
   return b
 }
 
@@ -25,7 +25,7 @@ async function ParseContentFromPaymentStatusReport(contentInBase64: string): Pro
   statusReportObject = JSON.parse(statusReportObject);
 
   let boolExtendedStatus = false;
-  
+
   if (GetNested((statusReportObject as object),'OrgnlPmtInfAndSts','TxInfAndSts')){
     boolExtendedStatus = true;
   }
@@ -43,11 +43,20 @@ async function ParseContentFromPaymentStatusReport(contentInBase64: string): Pro
       AdditionalInformation: boolExtendedStatus ? statusReportObject['OrgnlPmtInfAndSts']['TxInfAndSts']['StsRsnInf']['AddtlInf'] : '-'
     }
   }
-  
+
   return statusReport
 }
 
-export { 
+
+async function ParseBankStatement(contentInBase64: string): Promise<any> {
+  const a = await ParseXml(Base64DecodeStr(contentInBase64));
+   // todo bank statement parsing here
+   return null;
+}
+
+
+export {
   ParseContentFromPaymentStatusReport,
   ParsePaymentStatusReport,
+  ParseBankStatement,
 };
