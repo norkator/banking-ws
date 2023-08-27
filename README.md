@@ -3,10 +3,14 @@
 ![lint-test-build-status](https://github.com/norkator/banking-ws/actions/workflows/lint-test-build.yml/badge.svg)
 ![publish-package-status](https://github.com/norkator/banking-ws/actions/workflows/publish-package.yml/badge.svg)
 
-<b>⚠️ This library is work in progress state, and it's not yet production tested ⚠️</b>
+<b>⚠️ This library is work in progress state ⚠️</b>
 
-This library can create certificates for Samlink banking web service. It can construct and validate SOAP
-messages. Get and renew certificates. Make payment files and ask payment statuses.
+This library can:
+* create certificates for Samlink banking web service. 
+* It can construct and validate SOAP messages. 
+* Get and renew certificates. 
+* Make payment files and ask payment statuses which are represented as json. 
+* Request and parse bank statements and represented them as json.
 
 Supported banks
 -----
