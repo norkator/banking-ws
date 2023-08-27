@@ -10,6 +10,9 @@ dist
 # OpenSSL temp folder
 openssl
 
+# Dependency
+yarn.lock
+
 # Debugging related
 src/test.ts
 cert_debug.xml
@@ -23,6 +26,5 @@ test_response.xml
 test_response_original.xml
 sepa_response_test.xml
 xp_response.xml
+tiliote.xml
 
-# Dependency
-yarn.lock
