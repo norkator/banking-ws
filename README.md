@@ -345,12 +345,16 @@ console.log(bankStatement);
 
 #### Expected response
 
-In progress...
+In progress... TODO!
 
 ```json5
 {
 }
 ```
+
+After bank statement response, use download file option to download bank statement file using file reference retrieved
+with this method.
+
 
 SEPA payments info validation
 -----
@@ -735,7 +739,11 @@ Return is always an array. Either empty or populated like in sample.
 
 Download file
 -----
-...
+Allows downloading files using file reference id. Response parsed content is based on used file type. Supported file
+types are:
+
+`XP` = retrieval of sepa payment status for pain.002.001.02 ja .03  
+`XT` = retrieval of bank statement for camt.053.001.02
 
 ```typescript
 import * as moment from 'moment';
@@ -765,6 +773,7 @@ const df: DFInterface = {
   Base64EncodedBankCsr: BANK_CERTIFICATE,
   Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
   language: 'FI',
+  fileType: 'XP',
   fileReferences: ['553481']
 };
 
