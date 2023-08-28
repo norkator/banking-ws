@@ -49,9 +49,10 @@ async function ParseContentFromPaymentStatusReport(contentInBase64: string): Pro
 
 
 async function ParseBankStatement(contentInBase64: string): Promise<any> {
-  const a = await ParseXml(Base64DecodeStr(contentInBase64));
-   // todo bank statement parsing here
-   return null;
+   const a = await ParseXml(Base64DecodeStr(contentInBase64)); // eslint-disable-line @typescript-eslint/no-unused-vars
+  // todo bank statement parsing here
+
+  return null;
 }
 
 

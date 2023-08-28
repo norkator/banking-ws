@@ -5,7 +5,7 @@ import * as xmlBuilder from 'xmlbuilder';
 import {DFInterface} from '../interfaces';
 import {Base64DecodeStr, CleanUpCertificate} from '../utils/utils';
 import {ApplicationRequestSignature} from '../signature';
-import {Commands, FileTypes} from '../constants';
+import {Commands} from '../constants';
 
 
 class DFApplicationRequest {
