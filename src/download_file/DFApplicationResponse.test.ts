@@ -47,6 +47,7 @@ describe('DFApplicationResponse', async () => {
 
 
   it('should return expected bank statement details', async () => {
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
     const dfApplicationResponseMessage = '';
 
     // const df: DFInterface = {
