@@ -797,7 +797,7 @@ console.log(fileDescriptors);
 
 #### Expected response
 
-Following is a sample response for requested file reference.
+Following is a sample response for requested `XP` file reference:
 
 ```json5
 {
@@ -810,7 +810,7 @@ Following is a sample response for requested file reference.
   "Status": "DLD",
   "ForwardedTimestamp": "2023-03-09T18:59:10.193+02:00",
   "Deletable": "false",
-  "Content": {
+  "PaymentStatusReport": {
     "CreateDateTime": "2023-03-09T16:59:10.183Z",
     "MessageIdentifier": "01871490_1678381150183",
     "OriginalMessageIdentification": "MSGID202303",
@@ -824,6 +824,16 @@ Following is a sample response for requested file reference.
       "StatusReasonInformationCode": "-",
       "AdditionalInformation": "-"
     }
-  }
+  },
+  "BankStatement": null,
 }
-```__
+```
+
+Sample response for bank stement `XT` file reference:
+
+TODO
+
+```json5
+{
+}
+```
