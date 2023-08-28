@@ -66,16 +66,7 @@ class DFApplicationResponse {
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
     const fileType = fd['FileType'][0];
 
-    let parsedContent = null;
-
-    if (fileType === FileTypes.XP) {
-      const ParsedContent = await ParseContentFromPaymentStatusReport(Content);
-      parsedContent = await ParsePaymentStatusReport(ParsedContent);
-    } else if (fileType === FileTypes.XT) {
-      parsedContent = await ParseBankStatement(Content);
-    }
-
-    return {
+    let parsedContent = {
       FileReference: fd['FileReference'][0],
       TargetId: fd['TargetId'][0],
       UserFilename: fd['UserFilename'][0],
@@ -85,8 +76,18 @@ class DFApplicationResponse {
       Status: fd['Status'][0],
       ForwardedTimestamp: fd['ForwardedTimestamp'][0],
       Deletable: fd['Deletable'][0],
-      Content: parsedContent,
+      PaymentStatusReport: null,
+      BankStatement: null,
     } as DFFileDescriptor;
+
+    if (fileType === FileTypes.XP) {
+      const c = await ParseContentFromPaymentStatusReport(Content);
+      parsedContent.PaymentStatusReport = await ParsePaymentStatusReport(c);
+    } else if (fileType === FileTypes.XT) {
+      parsedContent.BankStatement = await ParseBankStatement(Content);
+    }
+
+    return parsedContent;
   }
 
 }
