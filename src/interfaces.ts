@@ -100,6 +100,7 @@ interface CertificateInterface {
  */
 interface XTInterface {
   userParams: UserParamsInterface;
+  verifyResponseSignature: boolean;
   requestUrl: string;
   RequestId: string;
   Timestamp: string;
@@ -409,6 +410,17 @@ interface PaymentStatusReport {
   }
 }
 
+interface XTFileDescriptor {
+  FileReference: string;
+  TargetId: string;
+  UserFilename: string;
+  FileType: string;
+  FileTimestamp: string;
+  Status: string;
+  ForwardedTimestamp: string;
+  Deletable: string;
+}
+
 interface BankStatement {
 }
 
@@ -436,5 +448,6 @@ export {
   XTInterface,
   DFInterface,
   DFFileDescriptor,
+  XTFileDescriptor,
   BankStatement,
 }

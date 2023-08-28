@@ -10,7 +10,7 @@ import {
   XLInterface, XLPaymentInfoValidationInterface,
   XLPaymentInfoValidationResultInterface,
   XPFileDescriptor,
-  XPInterface,
+  XPInterface, XTFileDescriptor,
   XTInterface
 } from './interfaces';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
@@ -139,7 +139,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
  * @param xt interface describes mandatory parameters
  * @constructor
  */
-async function BankStatement(xt: XTInterface): Promise<string> {
+async function BankStatement(xt: XTInterface): Promise<XTFileDescriptor> {
   const xtRequest = new XTApplicationRequest(xt);
   const body = await xtRequest.createXmlBody();
   if (body === undefined) {
