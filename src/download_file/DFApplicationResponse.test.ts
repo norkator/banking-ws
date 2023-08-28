@@ -73,7 +73,7 @@ describe('DFApplicationResponse', async () => {
 
     const dfResponse = new DFApplicationResponse(df, dfApplicationResponseMessage);
     const parsed: DFFileDescriptor = await dfResponse.parseBody();
-    console.dir(parsed.BankStatement?.statement);
+    // console.dir(parsed.BankStatement?.statement.statementEntries);
 
     expect(1).to.equal(1);
 

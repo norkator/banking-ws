@@ -451,12 +451,31 @@ interface BankStatement {
     },
     balance: any;
     transactionSummary: {
-      totalEntries: any;
-      totalCreditEntries: any;
-      TotalDebitEntries: any;
+      totalEntries: {
+        numberOfEntries: number;
+      };
+      totalCreditEntries: {
+        numberOfEntries: number;
+        sum: number;
+      };
+      TotalDebitEntries: {
+        numberOfEntries: number;
+        sum: number;
+      };
     };
-    statementEntry: any;
+    statementEntries: StatementEntry[];
   }
+}
+
+interface StatementEntry {
+  amount: any;
+  creditDebitIndicator: any;
+  status: any;
+  bookingDate: any;
+  valueDate: any;
+  accountServicerReference: any;
+  bankTransactionCode: any;
+  NtryDtls: any;
 }
 
 export {
@@ -485,4 +504,5 @@ export {
   DFFileDescriptor,
   XTFileDescriptor,
   BankStatement,
+  StatementEntry,
 }
