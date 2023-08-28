@@ -6,10 +6,11 @@
 <b>⚠️ This library is work in progress state ⚠️</b>
 
 This library can:
-* create certificates for Samlink banking web service. 
-* It can construct and validate SOAP messages. 
-* Get and renew certificates. 
-* Make payment files and ask payment statuses which are represented as json. 
+
+* create certificates for Samlink banking web service.
+* It can construct and validate SOAP messages.
+* Get and renew certificates.
+* Make payment files and ask payment statuses which are represented as json.
 * Request and parse bank statements and represented them as json.
 
 Supported banks
@@ -332,6 +333,7 @@ const userParams: UserParamsInterface = {
 
 const xt: XTInterface = {
   userParams: userParams,
+  verifyResponseSignature: true,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',
   Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),
@@ -349,14 +351,22 @@ console.log(bankStatement);
 
 #### Expected response
 
-In progress... TODO!
+Below is sample of retrieved bank statement details:
 
 ```json5
 {
+  FileReference: '1536794526',
+  TargetId: 'NONE',
+  UserFilename: 'STOL001.OLTCX60H.CAMT053.PS',
+  FileType: 'XT',
+  FileTimestamp: '2023-06-30T21:23:44.678+03:00',
+  Status: 'NEW',
+  ForwardedTimestamp: '2023-06-30T21:23:44.678+03:00',
+  Deletable: 'false'
 }
 ```
 
-After bank statement response, use download file option to download bank statement file using file reference retrieved
+After bank statement response, use download file option to download bank statement file using `FileReference` retrieved
 with this method.
 
 
