@@ -25,6 +25,7 @@ describe('DFApplicationResponse', async () => {
       Base64EncodedClientCsr: '',
       RequestId: '123456',
       language: 'FI',
+      fileType: 'XP',
       fileReferences: ['553481'] // valid 553481
     };
 
