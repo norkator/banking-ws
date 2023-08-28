@@ -325,7 +325,8 @@ interface DFFileDescriptor {
   Status: string;
   ForwardedTimestamp: string;
   Deletable: string;
-  Content: PaymentStatusReport | BankStatement;
+  PaymentStatusReport: PaymentStatusReport | null;
+  BankStatement: BankStatement | null;
 }
 
 interface CustomerPaymentStatusReport {
