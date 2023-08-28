@@ -101,7 +101,7 @@ async function ParseBankStatement(contentInBase64: string): Promise<BankStatemen
 }
 
 function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
-  let entries: StatementEntry[] = [];
+  const entries: StatementEntry[] = [];
   entriesObject.forEach((entry) => {
     entries.push({
       amount: entry['Amt'][0],
@@ -114,6 +114,7 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
       NtryDtls: entry['NtryDtls'][0],
     });
   });
+
   return entries;
 }
 
