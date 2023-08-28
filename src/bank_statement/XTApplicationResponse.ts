@@ -1,7 +1,7 @@
 'use strict';
 
 import {Base64DecodeStr, HandleResponseCode, ParseXml, RemoveWhiteSpacesAndNewLines} from '../utils/utils';
-import {XTInterface} from '../interfaces';
+import {XTFileDescriptor, XTInterface} from '../interfaces';
 import {EnvelopeSignature} from '../envelopeSignature';
 import {ApplicationRequestSignature} from '../signature';
 
@@ -15,20 +15,22 @@ class XTApplicationResponse {
     this.response = response;
   }
 
-  public async parseBody(): Promise<string> {
+  public async parseBody(): Promise<XTFileDescriptor> {
     // parse, handle application response envelope
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
 
-    const envelopeSignature = new EnvelopeSignature();
-    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
-    if (!envelopeValid) {
-      throw {
-        RequestId: this.xt.RequestId,
-        Timestamp: this.xt.Timestamp,
-        SoftwareId: this.xt.SoftwareId,
-        error: new Error('XT response envelope did not pass signature verification')
-      };
+    if (this.xt.verifyResponseSignature) {
+      const envelopeSignature = new EnvelopeSignature();
+      const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
+      if (!envelopeValid) {
+        throw {
+          RequestId: this.xt.RequestId,
+          Timestamp: this.xt.Timestamp,
+          SoftwareId: this.xt.SoftwareId,
+          error: new Error('XT response envelope did not pass signature verification')
+        };
+      }
     }
 
     const envelope = envelopeXML['soapenv:Envelope'];
@@ -40,15 +42,17 @@ class XTApplicationResponse {
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
-    const signature = new ApplicationRequestSignature();
-    const validResponse = await signature.validateSignature(applicationResponseXML);
-    if (!validResponse) {
-      throw {
-        RequestId: this.xt.RequestId,
-        Timestamp: this.xt.Timestamp,
-        SoftwareId: this.xt.SoftwareId,
-        error: new Error('XT application response did not pass signature verification')
-      };
+    if (this.xt.verifyResponseSignature) {
+      const signature = new ApplicationRequestSignature();
+      const validResponse = await signature.validateSignature(applicationResponseXML);
+      if (!validResponse) {
+        throw {
+          RequestId: this.xt.RequestId,
+          Timestamp: this.xt.Timestamp,
+          SoftwareId: this.xt.SoftwareId,
+          error: new Error('XT application response did not pass signature verification')
+        };
+      }
     }
 
     // parse, handle response itself
@@ -60,7 +64,18 @@ class XTApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    return applicationResponseXML;
+    const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
+
+    return {
+      FileReference: fd['FileReference'][0],
+      TargetId: fd['TargetId'][0],
+      UserFilename: fd['UserFilename'][0],
+      FileType: fd['FileType'][0],
+      FileTimestamp: fd['FileTimestamp'][0],
+      Status: fd['Status'][0],
+      ForwardedTimestamp: fd['ForwardedTimestamp'][0],
+      Deletable: fd['Deletable'][0],
+    } as XTFileDescriptor;
   }
 
 
