@@ -66,7 +66,7 @@ class DFApplicationResponse {
     const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
     const fileType = fd['FileType'][0];
 
-    let parsedContent = {
+    const parsedContent = {
       FileReference: fd['FileReference'][0],
       TargetId: fd['TargetId'][0],
       UserFilename: fd['UserFilename'][0],
