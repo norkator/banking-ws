@@ -22,15 +22,17 @@ class DFApplicationResponse {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
 
-    const envelopeSignature = new EnvelopeSignature();
-    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
-    if (!envelopeValid) {
-      throw {
-        RequestId: this.df.RequestId,
-        Timestamp: this.df.Timestamp,
-        SoftwareId: this.df.SoftwareId,
-        error: new Error('DF response envelope did not pass signature verification')
-      };
+    if (this.df.verifyResponseSignature) {
+      const envelopeSignature = new EnvelopeSignature();
+      const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
+      if (!envelopeValid) {
+        throw {
+          RequestId: this.df.RequestId,
+          Timestamp: this.df.Timestamp,
+          SoftwareId: this.df.SoftwareId,
+          error: new Error('DF response envelope did not pass signature verification')
+        };
+      }
     }
 
     const envelope = envelopeXML['soapenv:Envelope'];
@@ -42,15 +44,17 @@ class DFApplicationResponse {
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
-    const signature = new ApplicationRequestSignature();
-    const validResponse = await signature.validateSignature(applicationResponseXML);
-    if (!validResponse) {
-      throw {
-        RequestId: this.df.RequestId,
-        Timestamp: this.df.Timestamp,
-        SoftwareId: this.df.SoftwareId,
-        error: new Error('DF application response did not pass signature verification')
-      };
+    if (this.df.verifyResponseSignature) {
+      const signature = new ApplicationRequestSignature();
+      const validResponse = await signature.validateSignature(applicationResponseXML);
+      if (!validResponse) {
+        throw {
+          RequestId: this.df.RequestId,
+          Timestamp: this.df.Timestamp,
+          SoftwareId: this.df.SoftwareId,
+          error: new Error('DF application response did not pass signature verification')
+        };
+      }
     }
 
     // parse, handle response itself
@@ -70,7 +74,7 @@ class DFApplicationResponse {
       FileReference: fd['FileReference'][0],
       TargetId: fd['TargetId'][0],
       UserFilename: fd['UserFilename'][0],
-      ParentFileReference: fd['ParentFileReference'][0],
+      ParentFileReference: fd['ParentFileReference'] !== undefined ? fd['ParentFileReference'][0] : null,
       FileType: fd['FileType'][0],
       FileTimestamp: fd['FileTimestamp'][0],
       Status: fd['Status'][0],

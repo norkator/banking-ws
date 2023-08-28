@@ -61,6 +61,7 @@ Documents
 * https://www.finanssiala.fi/wp-content/uploads/2021/03/WebServices_Messages_v110_20200504.pdf
 * https://www.finanssiala.fi/en/topics/payment-services-in-finland/payment-technical-documents/
 * https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO20022_Payment_Guide.pdf
+* https://samlink.fi/app/uploads/2023/05/XML-account_statement_camt.053.001.02.pdf
 
 Contributors
 ============
@@ -778,6 +779,7 @@ const userParams: UserParamsInterface = {
 };
 const df: DFInterface = {
   userParams: userParams,
+  verifyResponseSignature: true,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',
   Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),

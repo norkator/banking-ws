@@ -302,6 +302,7 @@ interface XPFileDescriptor {
 
 interface DFInterface {
   userParams: UserParamsInterface;
+  verifyResponseSignature: boolean;
   requestUrl: string;
   RequestId: string;
   Timestamp: string;
@@ -423,6 +424,39 @@ interface XTFileDescriptor {
 }
 
 interface BankStatement {
+  groupHeader: {
+    messageIdentification: string;
+    creationDateTime: string;
+  },
+  statement: {
+    statementId: string;
+    legalSequenceNumber: string;
+    creationDateTime: string;
+    fromToDatetime: {
+      fromDateTime: string;
+      toDateTime: string;
+    };
+    account: {
+      identification: {
+        IBAN: string;
+      };
+      type: string;
+      currency: string;
+      ownerName: string;
+      servicer: {
+        financialInstitutionId: {
+          BIC: string;
+        }
+      };
+    },
+    balance: any;
+    transactionSummary: {
+      totalEntries: any;
+      totalCreditEntries: any;
+      TotalDebitEntries: any;
+    };
+    statementEntry: any;
+  }
 }
 
 export {
