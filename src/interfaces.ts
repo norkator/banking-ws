@@ -9,7 +9,7 @@ import {
   Country,
   Code,
   BIC,
-  Status, FileType
+  Status, FileType, FileStatus
 } from './types';
 
 interface AxiosAgentInterface {
@@ -285,6 +285,7 @@ interface XPInterface {
   Base64EncodedClientCsr: string;
   Base64EncodedClientPrivateKey?: string;
   language: Language;
+  fileStatus: FileStatus;
 }
 
 
