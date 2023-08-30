@@ -11,3 +11,4 @@ export type OutputEncoding = 'utf-8' | 'base64';
 export type PaymentMethod = 'TRF';
 export type ServiceLevel = 'SLEV';
 export type Status = 'WFP' | 'WFC' | 'FWD' | 'DLD' | 'DEL' | 'NEW' | 'KIN' |  'ALL' | '';
+export type FileStatus = 'NEW' | 'DLD' | 'ALL';

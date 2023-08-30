@@ -684,6 +684,8 @@ Download file list
 -----
 Returns list of SEPA-XML descriptors. Known as `Pain002.001.03` related to earlier section payments.
 
+Use `fileStatus` to filter what descriptors are looked for.
+
 ```typescript
 import * as moment from 'moment';
 import {XPInterface, SoftwareIdInterface, UserParamsInterface} from './src/interfaces';
@@ -712,6 +714,7 @@ const xp: XPInterface = {
   Base64EncodedBankCsr: BANK_CERTIFICATE,
   Base64EncodedClientPrivateKey: CLIENT_PRIVATE_KEY,
   language: 'FI',
+  fileStatus: 'NEW',
 };
 const xpFileList = await DownloadFileList(xp);
 console.log(xpFileList);

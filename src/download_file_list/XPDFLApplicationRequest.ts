@@ -42,6 +42,7 @@ class XPDFLApplicationRequest {
         'ParentFileReference': {
         },
         'FileType': FileTypes.XP,
+        'Status': this.xp.fileStatus,
         // 'Signature': '', append node here
       }
     };
