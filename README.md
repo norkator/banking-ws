@@ -705,6 +705,7 @@ const userParams: UserParamsInterface = {
 };
 const xp: XPInterface = {
   userParams: userParams,
+  verifyResponseSignature: true,
   requestUrl: 'https://185.251.49.57/services/CorporateFileService',
   RequestId: '123456',
   Timestamp: moment().format('YYYY-MM-DDThh:mm:ssZ'),

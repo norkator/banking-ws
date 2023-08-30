@@ -276,6 +276,7 @@ interface XLFileDescriptor {
 
 interface XPInterface {
   userParams: UserParamsInterface;
+  verifyResponseSignature: boolean;
   requestUrl: string;
   RequestId: string;
   Timestamp: string;
@@ -293,7 +294,7 @@ interface XPFileDescriptor {
   FileReference: string;
   TargetId: string;
   UserFilename: string;
-  ParentFileReference: string;
+  ParentFileReference: string | null;
   FileType: string;
   FileTimestamp: string;
   Status: string;

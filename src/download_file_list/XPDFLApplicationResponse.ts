@@ -20,15 +20,17 @@ class XPDFLApplicationResponse {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
 
-    const envelopeSignature = new EnvelopeSignature();
-    const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
-    if (!envelopeValid) {
-      throw {
-        RequestId: this.xp.RequestId,
-        Timestamp: this.xp.Timestamp,
-        SoftwareId: this.xp.SoftwareId,
-        error: new Error('XP response envelope did not pass signature verification')
-      };
+    if (this.xp.verifyResponseSignature) {
+      const envelopeSignature = new EnvelopeSignature();
+      const envelopeValid = await envelopeSignature.validateEnvelopeSignature(this.response);
+      if (!envelopeValid) {
+        throw {
+          RequestId: this.xp.RequestId,
+          Timestamp: this.xp.Timestamp,
+          SoftwareId: this.xp.SoftwareId,
+          error: new Error('XP response envelope did not pass signature verification')
+        };
+      }
     }
 
     const envelope = envelopeXML['soapenv:Envelope'];
@@ -40,15 +42,17 @@ class XPDFLApplicationResponse {
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
-    const signature = new ApplicationRequestSignature();
-    const validResponse = await signature.validateSignature(applicationResponseXML);
-    if (!validResponse) {
-      throw {
-        RequestId: this.xp.RequestId,
-        Timestamp: this.xp.Timestamp,
-        SoftwareId: this.xp.SoftwareId,
-        error: new Error('XP application response did not pass signature verification')
-      };
+    if (this.xp.verifyResponseSignature) {
+      const signature = new ApplicationRequestSignature();
+      const validResponse = await signature.validateSignature(applicationResponseXML);
+      if (!validResponse) {
+        throw {
+          RequestId: this.xp.RequestId,
+          Timestamp: this.xp.Timestamp,
+          SoftwareId: this.xp.SoftwareId,
+          error: new Error('XP application response did not pass signature verification')
+        };
+      }
     }
 
     // parse, handle response itself
@@ -67,7 +71,7 @@ class XPDFLApplicationResponse {
         FileReference: fd['FileReference'][0],
         TargetId: fd['TargetId'][0],
         UserFilename: fd['UserFilename'][0],
-        ParentFileReference: fd['ParentFileReference'][0],
+        ParentFileReference: getParentFileReference(fd),
         FileType: fd['FileType'][0],
         FileTimestamp: fd['FileTimestamp'][0],
         Status: fd['Status'][0],
@@ -75,6 +79,13 @@ class XPDFLApplicationResponse {
         Deletable: fd['Deletable'][0],
       });
     });
+
+    function getParentFileReference(fd: XPFileDescriptor): string | null {
+      if (fd['ParentFileReference'] === null) {
+        return null;
+      }
+      return fd['ParentFileReference'] !== undefined ? fd['ParentFileReference'][0] : null
+    }
 
     return fileDescriptors;
   }
