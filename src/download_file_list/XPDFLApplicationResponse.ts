@@ -84,6 +84,7 @@ class XPDFLApplicationResponse {
       if (fd['ParentFileReference'] === null) {
         return null;
       }
+
       return fd['ParentFileReference'] !== undefined ? fd['ParentFileReference'][0] : null
     }
 
