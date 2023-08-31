@@ -1,3 +1,4 @@
+import {CreditDebitIndicator, Domain, FamilyCode, SubFamilyCode} from './../constants';
 import {Base64DecodeStr, ParseXml, GetNested, GetExternalStatusCodeDescriptions} from './utils';
 import {BankStatement, PaymentStatusReport, StatementEntry} from '../interfaces';
 
@@ -104,13 +105,35 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
   const entries: StatementEntry[] = [];
   entriesObject.forEach((entry) => {
     entries.push({
-      amount: entry['Amt'][0],
-      creditDebitIndicator: entry['CdtDbtInd'][0],
+      amount: {
+        value: entry['Amt'][0]['_'],
+        currency:  entry['Amt'][0]['$']['Ccy']
+      },
+      creditDebitIndicator: CreditDebitIndicator[entry['CdtDbtInd'][0]],
       status: entry['Sts'][0],
-      bookingDate : entry['BookgDt'][0],
-      valueDate: entry['ValDt'][0],
+      bookingDate : entry['BookgDt'][0]['Dt'][0],
+      valueDate: entry['ValDt'][0]['Dt'][0],
       accountServicerReference: entry['AcctSvcrRef'][0],
-      bankTransactionCode: entry['BkTxCd'][0],
+      bankTransactionCode: {
+        domain: {
+          bankTransactionCode:  {
+            code: entry['BkTxCd'][0]['Domn'][0]['Cd'][0],
+            desc: Domain[entry['BkTxCd'][0]['Domn'][0]['Cd'][0]]
+          }, 
+          familyCode: {
+            code: entry['BkTxCd'][0]['Domn'][0]['Fmly'][0]['Cd'][0],
+            desc: FamilyCode[entry['BkTxCd'][0]['Domn'][0]['Fmly'][0]['Cd']],
+          },
+          subFamilyCode: {
+            code: entry['BkTxCd'][0]['Domn'][0]['Fmly'][0]['SubFmlyCd'][0],
+            desc: SubFamilyCode[entry['BkTxCd'][0]['Domn'][0]['Fmly'][0]['SubFmlyCd']]
+          }
+        },
+        proprietary: {
+          code: entry['BkTxCd'][0]['Prtry'][0]['Cd'][0],
+          issuer: entry['BkTxCd'][0]['Prtry'][0]['Issr'][0]
+        }
+      },
       NtryDtls: entry['NtryDtls'][0],
     });
   });
