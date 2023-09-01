@@ -1,6 +1,6 @@
-import {CreditDebitIndicator, Domain, FamilyCode, SubFamilyCode} from './../constants';
+import {CodeOrProprietary, CreditDebitIndicator, Domain, FamilyCode, SubFamilyCode} from './../constants';
 import {Base64DecodeStr, ParseXml, GetNested, GetExternalStatusCodeDescriptions} from './utils';
-import {BankStatement, PaymentStatusReport, StatementEntry} from '../interfaces';
+import {BalanceEntry, BankStatement, PaymentStatusReport, StatementDetailEntry, StatementEntry} from '../interfaces';
 
 /**
  * Parses content from payment status report
@@ -82,7 +82,7 @@ async function ParseBankStatement(contentInBase64: string): Promise<BankStatemen
           },
         },
       },
-      balance: BkToCstmrStmt['Stmt'][0]['Bal'],
+      balance: parseStatemenBalanceEntries(BkToCstmrStmt['Stmt'][0]['Bal']),
       transactionSummary: {
         totalEntries: {
           numberOfEntries: Number(ts['TtlNtries'][0]['NbOfNtries'][0]),
@@ -101,9 +101,38 @@ async function ParseBankStatement(contentInBase64: string): Promise<BankStatemen
   };
 }
 
+function parseStatemenBalanceEntries(balanceObject: any[]): BalanceEntry[] {
+  const balanceEntries: BalanceEntry[] = [];
+  balanceObject.forEach((balanceEntry: any) => {
+    balanceEntries.push({ 
+    type: {
+      codeOrProprietary: {
+        code: balanceEntry['Tp'][0]['CdOrPrtry'][0]['Cd'][0], 
+        desc: CodeOrProprietary[balanceEntry['Tp'][0]['CdOrPrtry'][0]['Cd'][0]]
+      }
+    },
+    creditLine: {
+        included: balanceEntry['CdtLine'][0]['Incl'][0],
+        amount: { 
+          value: balanceEntry['CdtLine'][0]['Amt'][0]['_'], 
+          currency: balanceEntry['CdtLine'][0]['Amt'][0]['$']['Ccy']
+        }
+      },
+    amount: { 
+      value: balanceEntry['Amt'][0]['_'], 
+      currency: balanceEntry['Amt'][0]['$']['Ccy']
+    },
+    creditDebitIndicator: balanceEntry['CdtDbtInd'][0],
+    date: balanceEntry['Dt'][0]['Dt'][0]
+    });
+  });
+
+  return balanceEntries;
+}
+
 function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
   const entries: StatementEntry[] = [];
-  entriesObject.forEach((entry) => {
+  entriesObject.forEach((entry: any) => {
     entries.push({
       amount: {
         value: entry['Amt'][0]['_'],
@@ -134,11 +163,46 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
           issuer: entry['BkTxCd'][0]['Prtry'][0]['Issr'][0]
         }
       },
-      NtryDtls: entry['NtryDtls'][0],
+      entryDetails: parseStatemenDetailEntries(entry['NtryDtls']),
     });
   });
 
   return entries;
+}
+
+
+function parseStatemenDetailEntries(detailEntriesObject: any[]): StatementDetailEntry[] {
+  const detailEntries: StatementDetailEntry[] = [];
+  detailEntriesObject.forEach((detailEntry: any) => {
+    detailEntries.push({
+      transactionDetails: {
+          references: { 
+            accountServicerReference: detailEntry['TxDtls'][0]['Refs'][0]['AcctSvcrRef']
+          } ,
+          amountDetails: {
+            transactionAmount: {
+              amount:  { 
+                value:  detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['_'], 
+                currency: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['$']['Ccy'] 
+              } 
+            }
+          },
+          relatedParties: { // This is only in CRDT
+            debtor:  { 
+              name:  detailEntry['TxDtls'][0]['RltdPties'] ? detailEntry['TxDtls'][0]['RltdPties'][0]['Dbtr'][0]['Nm'][0] : null
+            } 
+          },
+          remittanceInformation:  { 
+            unstructured:  detailEntry['TxDtls'][0]['RmtInf'][0]['Ustrd'][0]
+          },
+          relatedDetails:  { 
+            acceptanceDate:  detailEntry['TxDtls'][0]['RltdDts'][0]['AccptncDtTm'][0]
+          } 
+        }
+    });
+  });
+
+  return detailEntries;
 }
 
 

@@ -451,7 +451,7 @@ interface BankStatement {
         }
       };
     },
-    balance: any;
+    balance: BalanceEntry[];
     transactionSummary: {
       totalEntries: {
         numberOfEntries: number;
@@ -469,6 +469,28 @@ interface BankStatement {
   }
 }
 
+interface BalanceEntry {
+  type: {
+    codeOrProprietary: {
+      code: string, 
+      desc: string
+    }
+  },
+  creditLine: {
+      included: boolean,
+      amount: { 
+        value: string, 
+        currency: Currency
+      }
+    },
+  amount: { 
+    value: string, 
+    currency: Currency
+  },
+  creditDebitIndicator: 'DBIT' | 'CRDT',
+  date: string
+}
+
 interface StatementEntry {
   amount: any;
   creditDebitIndicator: any;
@@ -477,7 +499,34 @@ interface StatementEntry {
   valueDate: any;
   accountServicerReference: any;
   bankTransactionCode: any;
-  NtryDtls: any;
+  entryDetails: StatementDetailEntry[];
+}
+
+interface StatementDetailEntry {
+  transactionDetails: {
+    references: {
+      accountServicerReference: string;
+    };
+    amountDetails: {
+      transactionAmount: {
+        amount: {
+          value: string;
+          currency: string;
+        };
+      };
+    };
+    relatedParties?: {
+      debtor: {
+        name: string;
+      };
+    };
+    remittanceInformation: {
+      unstructured: string;
+    };
+    relatedDetails: {
+      acceptanceDate: string;
+    };
+  };
 }
 
 export {
@@ -507,4 +556,6 @@ export {
   XTFileDescriptor,
   BankStatement,
   StatementEntry,
+  StatementDetailEntry,
+  BalanceEntry,
 }

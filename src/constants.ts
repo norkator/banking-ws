@@ -80,7 +80,17 @@ const CreditDebitIndicator: {[key: string]: string} = {
   'DBIT': 'Withdrawal',
   'CRDT': 'Deposit'
 }
+
+
+const CodeOrProprietary: {[key: string]: string} = {
+'OPBD': 'Alkusaldo',
+'PRCD': 'Edellisen kauden loppusaldo',
+'CLAV': 'Käytettävissä oleva loppusaldo sisältäen limiitin',
+'CLBD': 'Loppusaldo'
+}
+
 export {
+  CodeOrProprietary,
   Commands,
   CreditDebitIndicator,
   Domain,
