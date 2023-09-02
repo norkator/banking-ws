@@ -115,9 +115,9 @@ describe('DFApplicationResponse', async () => {
 
     const dfResponse = new DFApplicationResponse(df, dfApplicationResponseMessage);
     const parsed: DFFileDescriptor = await dfResponse.parseBody();
-    // console.dir(parsed.BankStatement?.statement.statementEntries);
-
-    expect(1).to.equal(1);
+    expect(parsed.BankStatement?.groupHeader.messageIdentification).to.equal('20230630450300000000000000000000000');
+    expect(parsed.BankStatement?.statement.statementId).to.equal('20230630450300000000000000000000000');
+    expect(parsed.BankStatement?.statement.balance[0].creditLine.amount.value).to.equal('0');
 
     expect(parsed.PaymentStatusReport).to.equal(null);
   });
