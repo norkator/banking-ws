@@ -82,7 +82,7 @@ async function ParseBankStatement(contentInBase64: string): Promise<BankStatemen
           },
         },
       },
-      balance: parseStatemenBalanceEntries(BkToCstmrStmt['Stmt'][0]['Bal']),
+      balance: parseStatementBalanceEntries(BkToCstmrStmt['Stmt'][0]['Bal']),
       transactionSummary: {
         totalEntries: {
           numberOfEntries: Number(ts['TtlNtries'][0]['NbOfNtries'][0]),
@@ -101,25 +101,25 @@ async function ParseBankStatement(contentInBase64: string): Promise<BankStatemen
   };
 }
 
-function parseStatemenBalanceEntries(balanceObject: any[]): BalanceEntry[] {
+function parseStatementBalanceEntries(balanceObject: any[]): BalanceEntry[] {
   const balanceEntries: BalanceEntry[] = [];
   balanceObject.forEach((balanceEntry: any) => {
-    balanceEntries.push({ 
+    balanceEntries.push({
     type: {
       codeOrProprietary: {
-        code: balanceEntry['Tp'][0]['CdOrPrtry'][0]['Cd'][0], 
+        code: balanceEntry['Tp'][0]['CdOrPrtry'][0]['Cd'][0],
         desc: CodeOrProprietary[balanceEntry['Tp'][0]['CdOrPrtry'][0]['Cd'][0]]
       }
     },
     creditLine: {
         included: balanceEntry['CdtLine'][0]['Incl'][0],
-        amount: { 
-          value: balanceEntry['CdtLine'][0]['Amt'][0]['_'], 
+        amount: {
+          value: balanceEntry['CdtLine'][0]['Amt'][0]['_'],
           currency: balanceEntry['CdtLine'][0]['Amt'][0]['$']['Ccy']
         }
       },
-    amount: { 
-      value: balanceEntry['Amt'][0]['_'], 
+    amount: {
+      value: balanceEntry['Amt'][0]['_'],
       currency: balanceEntry['Amt'][0]['$']['Ccy']
     },
     creditDebitIndicator: balanceEntry['CdtDbtInd'][0],
@@ -148,7 +148,7 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
           bankTransactionCode:  {
             code: entry['BkTxCd'][0]['Domn'][0]['Cd'][0],
             desc: Domain[entry['BkTxCd'][0]['Domn'][0]['Cd'][0]]
-          }, 
+          },
           familyCode: {
             code: entry['BkTxCd'][0]['Domn'][0]['Fmly'][0]['Cd'][0],
             desc: FamilyCode[entry['BkTxCd'][0]['Domn'][0]['Fmly'][0]['Cd']],
@@ -163,7 +163,7 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
           issuer: entry['BkTxCd'][0]['Prtry'][0]['Issr'][0]
         }
       },
-      entryDetails: parseStatemenDetailEntries(entry['NtryDtls']),
+      entryDetails: parseStatementDetailEntries(entry['NtryDtls']),
     });
   });
 
@@ -171,33 +171,33 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
 }
 
 
-function parseStatemenDetailEntries(detailEntriesObject: any[]): StatementDetailEntry[] {
+function parseStatementDetailEntries(detailEntriesObject: any[]): StatementDetailEntry[] {
   const detailEntries: StatementDetailEntry[] = [];
   detailEntriesObject.forEach((detailEntry: any) => {
     detailEntries.push({
       transactionDetails: {
-          references: { 
+          references: {
             accountServicerReference: detailEntry['TxDtls'][0]['Refs'][0]['AcctSvcrRef']
           } ,
           amountDetails: {
             transactionAmount: {
-              amount:  { 
-                value:  detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['_'], 
-                currency: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['$']['Ccy'] 
-              } 
+              amount:  {
+                value:  detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['_'],
+                currency: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['$']['Ccy']
+              }
             }
           },
           relatedParties: { // This is only in CRDT
-            debtor:  { 
+            debtor:  {
               name:  detailEntry['TxDtls'][0]['RltdPties'] ? detailEntry['TxDtls'][0]['RltdPties'][0]['Dbtr'][0]['Nm'][0] : null
-            } 
+            }
           },
-          remittanceInformation:  { 
+          remittanceInformation:  {
             unstructured:  detailEntry['TxDtls'][0]['RmtInf'][0]['Ustrd'][0]
           },
-          relatedDetails:  { 
+          relatedDetails:  {
             acceptanceDate:  detailEntry['TxDtls'][0]['RltdDts'][0]['AccptncDtTm'][0]
-          } 
+          }
         }
     });
   });
