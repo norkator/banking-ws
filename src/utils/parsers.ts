@@ -207,7 +207,7 @@ function parseStatemenDetailEntries(detailEntriesObject: any[]): StatementDetail
 
 
 export {
+  ParseBankStatement,
   ParseContentFromPaymentStatusReport,
   ParsePaymentStatusReport,
-  ParseBankStatement,
 };
