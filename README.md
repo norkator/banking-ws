@@ -74,7 +74,8 @@ Before release
 ============
 
 1. Check that dependencies are up-to-date `->` latest.
-2. Increment library version from `package.json` file.
+2. `npm run test` and `npm run lint` gives no errors.
+3. Increment library version from `package.json` file.
 
 Installing
 ============
