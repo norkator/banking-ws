@@ -64,21 +64,24 @@ class XPDFLApplicationResponse {
     const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    const fds = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'];
+
     const fileDescriptors: XPFileDescriptor[] = [];
-    fds.forEach((fd: XPFileDescriptor) => {
-      fileDescriptors.push({
-        FileReference: fd['FileReference'][0],
-        TargetId: fd['TargetId'][0],
-        UserFilename: fd['UserFilename'][0],
-        ParentFileReference: getParentFileReference(fd),
-        FileType: fd['FileType'][0],
-        FileTimestamp: fd['FileTimestamp'][0],
-        Status: fd['Status'][0],
-        ForwardedTimestamp: fd['ForwardedTimestamp'][0],
-        Deletable: fd['Deletable'][0],
+    if (ns2CertApplicationResponse['FileDescriptors'] !== undefined) {
+      const fds = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'];
+      fds.forEach((fd: XPFileDescriptor) => {
+        fileDescriptors.push({
+          FileReference: fd['FileReference'][0],
+          TargetId: fd['TargetId'][0],
+          UserFilename: fd['UserFilename'][0],
+          ParentFileReference: getParentFileReference(fd),
+          FileType: fd['FileType'][0],
+          FileTimestamp: fd['FileTimestamp'][0],
+          Status: fd['Status'][0],
+          ForwardedTimestamp: fd['ForwardedTimestamp'][0],
+          Deletable: fd['Deletable'][0],
+        });
       });
-    });
+    }
 
     function getParentFileReference(fd: XPFileDescriptor): string | null {
       if (fd['ParentFileReference'] === null) {
