@@ -5,9 +5,13 @@
 
 <b>⚠️ This library is work in progress state ⚠️</b>
 
+```shell script
+npm install banking-ws
+```
+
 This library can:
 
-* create certificates for Samlink banking web service.
+* Create certificates for Samlink banking web service.
 * It can construct and validate SOAP messages.
 * Get and renew certificates.
 * Make payment files and ask payment statuses which are represented as json.
@@ -87,12 +91,12 @@ Installing
 
 2. Install npm package via:
     ```shell script
-    yarn add banking-ws
+    npm install banking-ws
     ```
    or
     ```shell script
-    npm install banking-ws
-    ``` 
+    yarn add banking-ws
+    ```
 
 3. In case of developing / testing this library make sure that global
    ts-node is at latest version
@@ -159,6 +163,7 @@ Below are examples for each step.
 
 Generate new certificate
 -----
+✅ Production tested
 
 #### Creating
 
@@ -195,6 +200,7 @@ You can decode `clientCertificate` and then its pem base64 and then see that you
 
 Get certificate
 -----
+✅ Production tested
 
 #### Making request
 
@@ -253,6 +259,7 @@ openssl x509 -in certificate_file_name.extension -text
 
 Renew certificate
 -----
+⚠️ Staging environment tested
 
 Note that renew request is made using current still active `BANK_CERTIFICATE` and your
 old `CLIENT_PRIVATE_KEY`. From a new key pair you pass to this call only new `CLIENT_CERTIFICATE`.
@@ -313,6 +320,8 @@ Certificate should be renewed with Renew Certificate method before it's expired.
 
 Bank statement
 -----
+✅ Production tested
+
 Known as `camt.053.001.02`.
 
 ```typescript
@@ -374,6 +383,8 @@ with this method.
 
 SEPA payments info validation
 -----
+⚠️ Needs development
+
 Below is just a mock sample leading to invalid validation result.
 
 ```typescript
@@ -497,6 +508,8 @@ This example is invalid and errors contains list of issues
 
 SEPA payments
 -----
+✅ Production tested
+
 Based on https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
 Where request is called `Pain001.001.03` and returned status response `Pain002.001.03`.
 
@@ -683,6 +696,8 @@ KIN = Key-in
 
 Download file list
 -----
+✅ Production tested
+
 Returns list of SEPA-XML descriptors. Known as `Pain002.001.03` related to earlier section payments.
 
 Use `fileStatus` to filter what descriptors are looked for.
@@ -759,6 +774,8 @@ Return is always an array. Either empty or populated like in sample.
 
 Download file
 -----
+✅ Production tested
+
 Allows downloading files using file reference id. Response parsed content is based on used file type. Supported file
 types are:
 
