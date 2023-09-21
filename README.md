@@ -111,9 +111,19 @@ Running as docker container could be done in following way:
 ```dockerfile
 FROM node:18.14.2-alpine
 RUN apk add openssl
-...
-...
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+CMD [ "node", "./src/payment-application.js"]
 ```
+
+this sample assumes that you have payment application having `banking-ws` as dependency.
+OpenSSL is added here since `banking-ws` requires its features to create keys.
 
 Terminology
 ============
