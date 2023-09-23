@@ -24,29 +24,34 @@ class XLValidation {
       const debtorIBAN = IBANValidate(pmtInf.DbtrAcct.Id.IBAN);
       if (!debtorIBAN.valid) {
         result.valid = false;
-        result.errors = debtorIBAN.reasons;
+        debtorIBAN.reasons.forEach(r => result.errors.push(r));
       }
       const debtorBIC = BICValidate(pmtInf.DbtrAgt.FinInstnId.BIC);
       if (!debtorBIC.valid) {
         result.valid = false;
-        result.errors = debtorBIC.reasons;
+        debtorBIC.reasons.forEach(r => result.errors.push(r));
       }
 
       const creditorIBAN = IBANValidate(pmtInf.CdtTrfTxInf.CdtrAcct.Id.IBAN);
       if (!creditorIBAN.valid) {
         result.valid = false;
-        result.errors = creditorIBAN.reasons;
+        creditorIBAN.reasons.forEach(r => result.errors.push(r));
       }
       const creditorBIC = BICValidate(pmtInf.CdtTrfTxInf.CdtrAgt.FinInstnId.BIC);
       if (!creditorBIC.valid) {
         result.valid = false;
-        result.errors = creditorBIC.reasons;
+        creditorBIC.reasons.forEach(r => result.errors.push(r));
       }
 
       const instructedAmount = InstdAmtValidate(pmtInf.CdtTrfTxInf.Amt.InstdAmt);
       if (!instructedAmount.valid) {
         result.valid = false;
-        result.errors = instructedAmount.reasons;
+        instructedAmount.reasons.forEach(r => result.errors.push(r));
+      }
+
+      if (pmtInf.CdtTrfTxInf.PmtId.EndToEndId.length > 30) {
+        result.valid = false;
+        result.errors.push({code: 413, status: 'EndToEndId message too long. Max allowed 30 characters.'})
       }
 
       results.PmtInf.push(result);
