@@ -9,6 +9,8 @@
 npm install banking-ws
 ```
 
+This is javascript library for financial messages using web services mainly targeted for Node.js
+
 This library can:
 
 * Create certificates for Samlink banking web service.
@@ -393,7 +395,7 @@ with this method.
 
 SEPA payments info validation
 -----
-⚠️ Needs development
+⚠️ Developed based on needs
 
 Below is just a mock sample leading to invalid validation result.
 
