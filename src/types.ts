@@ -9,6 +9,6 @@ export type FileStatus = 'NEW' | 'DLD' | 'ALL';
 export type FileType = 'XL' | 'XP' | 'XT';
 export type Language = 'FI' | 'EN' | 'SV';
 export type OutputEncoding = 'utf-8' | 'base64';
-export type PaymentMethod = 'TRF';
+export type PaymentMethod = 'TRF'; // means 'Transfer'
 export type ServiceLevel = 'SLEV';
 export type Status = 'WFP' | 'WFC' | 'FWD' | 'DLD' | 'DEL' | 'NEW' | 'KIN' |  'ALL' | '';
