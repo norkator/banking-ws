@@ -58,24 +58,29 @@ class XTApplicationResponse {
     // parse, handle response itself
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const xml: any = await ParseXml(applicationResponseXML);
-    const ns2CertApplicationResponse = xml['ApplicationResponse'];
+    const applicationResponse = xml['ApplicationResponse'];
 
-    const ResponseCode = ns2CertApplicationResponse['ResponseCode'][0];
-    const ResponseText = ns2CertApplicationResponse['ResponseText'][0];
+    const ResponseCode = applicationResponse['ResponseCode'][0];
+    const ResponseText = applicationResponse['ResponseText'][0];
     HandleResponseCode(ResponseCode, ResponseText);
 
-    const fd = ns2CertApplicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
+    if (applicationResponse['FileDescriptors'] !== undefined) {
+      const fd = applicationResponse['FileDescriptors'][0]['FileDescriptor'][0];
 
-    return {
-      FileReference: fd['FileReference'][0],
-      TargetId: fd['TargetId'][0],
-      UserFilename: fd['UserFilename'][0],
-      FileType: fd['FileType'][0],
-      FileTimestamp: fd['FileTimestamp'][0],
-      Status: fd['Status'][0],
-      ForwardedTimestamp: fd['ForwardedTimestamp'][0],
-      Deletable: fd['Deletable'][0],
-    } as XTFileDescriptor;
+      return {
+        FileReference: fd['FileReference'][0],
+        TargetId: fd['TargetId'][0],
+        UserFilename: fd['UserFilename'][0],
+        FileType: fd['FileType'][0],
+        FileTimestamp: fd['FileTimestamp'][0],
+        Status: fd['Status'][0],
+        ForwardedTimestamp: fd['ForwardedTimestamp'][0],
+        Deletable: fd['Deletable'][0],
+      } as XTFileDescriptor;
+    } else {
+
+      throw new Error("Bank statement request didn't return any content");
+    }
   }
 
 
