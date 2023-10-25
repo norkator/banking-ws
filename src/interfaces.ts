@@ -472,19 +472,19 @@ interface BankStatement {
 interface BalanceEntry {
   type: {
     codeOrProprietary: {
-      code: string, 
+      code: string,
       desc: string
     }
   },
   creditLine: {
-      included: boolean,
-      amount: { 
-        value: string, 
-        currency: Currency
-      }
-    },
-  amount: { 
-    value: string, 
+    included: boolean,
+    amount: {
+      value: string,
+      currency: Currency
+    }
+  },
+  amount: {
+    value: string,
     currency: Currency
   },
   creditDebitIndicator: 'DBIT' | 'CRDT',
@@ -516,9 +516,8 @@ interface StatementDetailEntry {
       };
     };
     relatedParties?: {
-      debtor: {
-        name: string;
-      };
+      type: string | null;
+      name: string | null;
     };
     remittanceInformation: {
       unstructured: string;
