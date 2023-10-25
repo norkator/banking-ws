@@ -1,6 +1,13 @@
-import {CodeOrProprietary, CreditDebitIndicator, Domain, FamilyCode, SubFamilyCode} from './../constants';
+import {CodeOrProprietary, CreditDebitIndicator, Domain, FamilyCode, SubFamilyCode} from '../constants';
 import {Base64DecodeStr, ParseXml, GetNested, GetExternalStatusCodeDescriptions} from './utils';
-import {BalanceEntry, BankStatement, PaymentStatusReport, StatementDetailEntry, StatementEntry} from '../interfaces';
+import {
+  BalanceEntry,
+  BankStatement,
+  PaymentStatusReport,
+  RelatedPartiesInterface,
+  StatementDetailEntry,
+  StatementEntry
+} from '../interfaces';
 
 /**
  * Parses content from payment status report
@@ -203,11 +210,13 @@ function parseStatementDetailEntries(detailEntriesObject: any[]): StatementDetai
 }
 
 
-function parseRelatedParties(rltdPties: any): { type: string | null; name: string | null; } {
+function parseRelatedParties(rltdPties: any): RelatedPartiesInterface {
   try {
     const key = Object.keys(rltdPties[0])[0];
+
     return {type: key, name: rltdPties[0][key][0]['Nm'][0]};
   } catch (e) {
+
     return {type: null, name: null};
   }
 }

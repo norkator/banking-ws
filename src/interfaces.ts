@@ -515,10 +515,7 @@ interface StatementDetailEntry {
         };
       };
     };
-    relatedParties?: {
-      type: string | null;
-      name: string | null;
-    };
+    relatedParties?: RelatedPartiesInterface;
     remittanceInformation: {
       unstructured: string;
     };
@@ -526,6 +523,11 @@ interface StatementDetailEntry {
       acceptanceDate: string;
     };
   };
+}
+
+interface RelatedPartiesInterface {
+  type: string | null;
+  name: string | null;
 }
 
 export {
@@ -557,4 +559,5 @@ export {
   StatementEntry,
   StatementDetailEntry,
   BalanceEntry,
+  RelatedPartiesInterface,
 }
