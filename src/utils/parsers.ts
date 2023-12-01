@@ -181,34 +181,37 @@ function parseStatementEntries(entriesObject: any[]): StatementEntry[] {
 function parseStatementDetailEntries(detailEntriesObject: any[]): StatementDetailEntry[] {
   const detailEntries: StatementDetailEntry[] = [];
   detailEntriesObject.forEach((detailEntry: any) => {
-
-    detailEntries.push({
-      transactionDetails: {
-        references: {
-          accountServicerReference: detailEntry['TxDtls'][0]['Refs'][0]['AcctSvcrRef']
-        },
-        amountDetails: {
-          transactionAmount: {
-            amount: {
-              value: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['_'],
-              currency: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['$']['Ccy']
+    try {
+      detailEntries.push({
+        transactionDetails: {
+          references: {
+            accountServicerReference: detailEntry['TxDtls'][0]['Refs'][0]['AcctSvcrRef']
+          },
+          amountDetails: {
+            transactionAmount: {
+              amount: {
+                value: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['_'],
+                currency: detailEntry['TxDtls'][0]['AmtDtls'][0]['TxAmt'][0]['Amt'][0]['$']['Ccy']
+              }
             }
+          },
+          relatedParties: parseRelatedParties(detailEntry['TxDtls'][0]['RltdPties']),
+          remittanceInformation: {
+            unstructured: parseRemittanceInformation(detailEntry['TxDtls'][0]['RmtInf'][0])
+          },
+          relatedDetails: {
+            acceptanceDate: detailEntry['TxDtls'][0]['RltdDts'][0]['AccptncDtTm'][0]
           }
-        },
-        relatedParties: parseRelatedParties(detailEntry['TxDtls'][0]['RltdPties']),
-        remittanceInformation: {
-          unstructured: detailEntry['TxDtls'][0]['RmtInf'][0]['Ustrd'][0]
-        },
-        relatedDetails: {
-          acceptanceDate: detailEntry['TxDtls'][0]['RltdDts'][0]['AccptncDtTm'][0]
         }
-      }
-    });
+      });
+    } catch (e) {
+      console.error(`Error parsing entryDetails containing: ${JSON.stringify(detailEntry)}`);
+      console.error(e);
+    }
   });
 
   return detailEntries;
 }
-
 
 function parseRelatedParties(rltdPties: any): RelatedPartiesInterface {
   try {
@@ -216,8 +219,23 @@ function parseRelatedParties(rltdPties: any): RelatedPartiesInterface {
 
     return {type: key, name: rltdPties[0][key][0]['Nm'][0]};
   } catch (e) {
-
     return {type: null, name: null};
+  }
+}
+
+function parseRemittanceInformation(rmtInf: any): string {
+  try {
+    if (rmtInf.hasOwnProperty('Ustrd')) {
+      return rmtInf['Ustrd'][0];
+    } else if (rmtInf.hasOwnProperty('Strd')) {
+      return rmtInf['Strd'][0];
+    } else {
+      return '';
+    }
+  } catch (e) {
+    console.error(e);
+
+    return '';
   }
 }
 
