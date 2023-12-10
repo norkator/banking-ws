@@ -670,7 +670,8 @@ const xl: XLInterface = {
         }
       }
     }]
-  }
+  },
+  logResponse: false,
 };
 
 const sepaPayment = await SEPAPayment(xl);

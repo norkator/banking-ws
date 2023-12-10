@@ -149,6 +149,7 @@ interface XLInterface {
     GrpHdr: SEPAGroupHeaderInterface;
     PmtInf: SEPAPaymentInformationInterface[];
   };
+  logResponse?: boolean
 }
 
 interface SEPAGroupHeaderInterface {

@@ -43,6 +43,10 @@ class XLApplicationResponse {
     const cleanedApplicationResponse = RemoveWhiteSpacesAndNewLines(encodedApplicationResponse);
     const applicationResponseXML = Base64DecodeStr(cleanedApplicationResponse);
 
+    if (this.xl.logResponse) {
+      console.log(applicationResponseXML);
+    }
+
     const signature = new ApplicationRequestSignature();
     const validResponse = await signature.validateSignature(applicationResponseXML);
     if (!validResponse) {
