@@ -522,7 +522,7 @@ SEPA payments
 -----
 ✅ Production tested
 
-Based on https://www.samlink.fi/wp-content/uploads/2018/01/Palvelukuvaus_C2B_Pain_03.pdf
+Based on https://samlink.fi/app/uploads/2023/05/Palvelukuvaus_C2B_Pain_03.pdf
 Where request is called `Pain001.001.03` and returned status response `Pain002.001.03`.
 
 Given details are not validated. Use earlier SEPA payment validation method to
