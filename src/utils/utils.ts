@@ -1,6 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 import {OutputEncoding} from '../types';
 import {readFileSync} from 'fs';
+
 const openssl = require('openssl-nodejs');
 // @ts-ignore
 import moment from 'moment';
@@ -18,7 +19,7 @@ import {ExtStatusCodes} from '../externalCodeSets';
  */
 function LoadFileAsString(fullPath: string): string {
   const file = readFileSync(fullPath, 'utf-8');
-  
+
   return Buffer.from(file).toString('utf-8');
 }
 
@@ -47,7 +48,7 @@ function Base64EncodeStr(str: string): string {
  */
 async function LoadFileFromPath(filePath: string, outputEncoding: OutputEncoding): Promise<string> {
   const file = readFileSync(filePath, outputEncoding);
-  
+
   return Buffer.from(file).toString('utf-8');
 }
 
@@ -156,7 +157,7 @@ function FormatResponseCertificate(certificate: string, maxLength = 64): string 
   }
   cert += '\n';
   cert += '-----END CERTIFICATE-----';
-  
+
   return cert;
 }
 
@@ -176,12 +177,13 @@ async function ParseXml(xmlString: string): Promise<any> {
 }
 
 /**
- * Since only '0' is successful, will throw error with every other and use its own response texp
+ * Since only '0' is successful, will throw error with every other and use its own response text
  * @param rc
  * @param responseText
  */
 function HandleResponseCode(rc: string, responseText: string): void {
-  if (rc === '5' || rc === '6' || rc === '7' || rc === '8' || rc === '12' || rc === '24' || rc === '26' || rc === '30') {
+  const validCodes = Array.from({length: 35}, (_, index) => (index + 2).toString());
+  if (validCodes.includes(rc)) {
     throw new Error(`Code ${rc} / ${responseText}`);
   }
 }
@@ -212,10 +214,10 @@ function GetNested(obj: object, ...args: any[]) {
  * @constructor
  * @returns string[] of all possible matches
  */
- function GetExternalStatusCodeDescriptions(code: string): string[] {
+function GetExternalStatusCodeDescriptions(code: string): string[] {
   const z: string[] = [];
-  for(const key in ExtStatusCodes) {
-    if  ( key.match(code) ) z.push(ExtStatusCodes[key])
+  for (const key in ExtStatusCodes) {
+    if (key.match(code)) z.push(ExtStatusCodes[key])
   }
 
   return z
