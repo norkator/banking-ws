@@ -1,6 +1,12 @@
 // import * as mocha from 'mocha';
 import * as chai from 'chai';
-import {Base64DecodeStr, CleanUpCertificate, GetCdtTrfTxInfAmtInstdAmtTotal, x509ExpirationDate} from './utils';
+import {
+  Base64DecodeStr,
+  CleanUpCertificate,
+  GetCdtTrfTxInfAmtInstdAmtTotal,
+  HandleResponseCode,
+  x509ExpirationDate
+} from './utils';
 
 const expect = chai.expect;
 describe('Utils', async () => {
@@ -28,5 +34,25 @@ describe('Utils', async () => {
     expect(GetCdtTrfTxInfAmtInstdAmtTotal(0.95)).to.equal('0.95');
   });
 
-});
+  it('should throw error for invalid response code test 1', async () => {
+    const invalidCode = '2';
+    const responseText = 'SOAP signature error';
+    const testFunction = () => HandleResponseCode(invalidCode, responseText);
+    expect(testFunction).to.throw(Error, `Code ${invalidCode} / ${responseText}`);
+  });
 
+  it('should throw error for invalid response code test 2', async () => {
+    const invalidCode = '32';
+    const responseText = 'Duplicate request rejected';
+    const testFunction = () => HandleResponseCode(invalidCode, responseText);
+    expect(testFunction).to.throw(Error, `Code ${invalidCode} / ${responseText}`);
+  });
+
+  it('should not throw error for response code', async () => {
+    const invalidCode = '0';
+    const responseText = 'OK';
+    const testFunction = () => HandleResponseCode(invalidCode, responseText);
+    expect(testFunction).to.not.throw();
+  });
+
+});
