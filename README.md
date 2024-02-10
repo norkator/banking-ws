@@ -3,8 +3,6 @@
 ![lint-test-build-status](https://github.com/norkator/banking-ws/actions/workflows/lint-test-build.yml/badge.svg)
 ![publish-package-status](https://github.com/norkator/banking-ws/actions/workflows/publish-package.yml/badge.svg)
 
-<b>⚠️ This library is work in progress state ⚠️</b>
-
 ```shell script
 npm install banking-ws
 ```
