@@ -4,6 +4,7 @@ import {
   Base64DecodeStr,
   CleanUpCertificate,
   GetCdtTrfTxInfAmtInstdAmtTotal,
+  GetUuid,
   HandleResponseCode,
   x509ExpirationDate
 } from './utils';
@@ -53,6 +54,12 @@ describe('Utils', async () => {
     const responseText = 'OK';
     const testFunction = () => HandleResponseCode(invalidCode, responseText);
     expect(testFunction).to.not.throw();
+  });
+
+  it('should give uuid with expected prefix', async () => {
+    const uuid = GetUuid('B');
+    expect(uuid).to.contain('B-');
+    expect(uuid.length).to.greaterThan(30);
   });
 
 });
