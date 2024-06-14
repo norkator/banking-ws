@@ -15,7 +15,7 @@ class XTApplicationResponse {
     this.response = response;
   }
 
-  public async parseBody(): Promise<XTFileDescriptor> {
+  public async parseBody(): Promise<XTFileDescriptor | null> {
     // parse, handle application response envelope
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const envelopeXML: any = await ParseXml(this.response);
@@ -79,7 +79,7 @@ class XTApplicationResponse {
       } as XTFileDescriptor;
     } else {
 
-      throw new Error("Bank statement request didn't return any content");
+      return null;
     }
   }
 
