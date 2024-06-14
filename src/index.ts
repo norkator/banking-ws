@@ -10,7 +10,8 @@ import {
   XLInterface, XLPaymentInfoValidationInterface,
   XLPaymentInfoValidationResultInterface,
   XPFileDescriptor,
-  XPInterface, XTFileDescriptor,
+  XPInterface,
+  XTFileDescriptor,
   XTInterface
 } from './interfaces';
 // eslint-disable-next-line  @typescript-eslint/no-unused-vars
@@ -41,8 +42,8 @@ import * as path from 'path';
 
 /**
  * Create your own client side certificate
- * @param cc, certificate parameters
  * @constructor
+ * @param cc
  */
 async function CreateOwnCertificate(cc: CreateCertificateInterface): Promise<CreatedCertificateInterface> {
   const ownCertificate = new CreateCertificate(cc);
@@ -139,7 +140,7 @@ async function RenewCertificate(gc: GetCertificateInterface): Promise<Certificat
  * @param xt interface describes mandatory parameters
  * @constructor
  */
-async function BankStatement(xt: XTInterface): Promise<XTFileDescriptor> {
+async function BankStatement(xt: XTInterface): Promise<XTFileDescriptor | null> {
   const xtRequest = new XTApplicationRequest(xt);
   const body = await xtRequest.createXmlBody();
   if (body === undefined) {
