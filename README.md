@@ -3,6 +3,10 @@
 ![lint-test-build-status](https://github.com/norkator/banking-ws/actions/workflows/lint-test-build.yml/badge.svg)
 ![publish-package-status](https://github.com/norkator/banking-ws/actions/workflows/publish-package.yml/badge.svg)
 
+# ⚠️ Development and maintaining end notice
+
+As of 24.11.2024, this repository will be in archived state and is no longer developed or maintained.
+
 ```shell script
 npm install banking-ws
 ```
